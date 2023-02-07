@@ -1,9 +1,9 @@
 <h3 align="center">Adrians vevside</h3>
+## Link to site
+* [https://adriansvevside.azurewebsites.net/](https://adriansvevside.azurewebsites.net/)
 
 ## General info
 Just a website for me myself and i
-## Related
-* [project-name](#) - Project description
 ## Maintainers
 * [Adrian](https://github.com/vigdals)
 ## License
@@ -14,7 +14,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate leo eli
 const ipsum = lorem('dolor sit');
 ```
 ## API
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate leo elit, id pharetra urna hendrerit nec. Integer hendrerit turpis sapien, vel scelerisque risus fringilla ac.
+Coming soon...
 ### `lorem(ipsum)`
 Type: `type`
 Returns: `type`
