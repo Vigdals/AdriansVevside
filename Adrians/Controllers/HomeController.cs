@@ -13,12 +13,12 @@ namespace Adrians.Controllers
         {
             _logger = logger;
         }
-
+        [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
             return View();
         }
-
+        
         public IActionResult LogHubSite()
         {
             LogHub();
