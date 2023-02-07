@@ -1,0 +1,51 @@
+﻿@using System.Globalization
+@using Adrians.Models;
+@model List<HackerNewsModel>
+
+<h6>Here are the top stories on Hacker News</h6>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover" style="width:600px">
+        <thead class="thead-light">
+            <tr>
+                <th>Score</th>
+                <th>Title</th>
+                <th>By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.score</td>
+                    <td><a href="@item.url">@item.title</a></td>
+                    <td>@item.by</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<tbody id="table-body">
+    <tr>
+        <td colspan="4">Getting top stories... Please wait</td>
+    </tr>
+</tbody>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/api/topstories",
+            type: "GET",
+            success: function (data) {
+                var tableBody = $("#table-body");
+                tableBody.empty();
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    var row = "<tr><td>" + item.score + "</td><td>" + item.title + "</td><td>" + item.url + "</td><td>" + item.by + "</td></tr>";
+                    tableBody.append(row);
+                }
+            }
+        });
+    });
+</script>
