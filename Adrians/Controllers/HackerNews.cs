@@ -16,6 +16,7 @@ namespace Adrians.Controllers
 
             return View(listOfHackerNewsModels);
         }
+
         public List<HackerNewsModel> GetApiInfo()
         {
             var ListOfHackerNewsModels = new List<HackerNewsModel>();
