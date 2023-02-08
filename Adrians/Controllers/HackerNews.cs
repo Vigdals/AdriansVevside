@@ -36,7 +36,7 @@ namespace Adrians.Controllers
 
                 //Wonky that i have to set variables, then trycatch them THEN put them into the model. But it works
                 string url, by, title;
-                int descendants, score;
+                int descendants, score, id;
                 try
                 {
                     url = jsonHackerNewsStory.GetProperty("url").GetString();
@@ -44,8 +44,11 @@ namespace Adrians.Controllers
                     by = jsonHackerNewsStory.GetProperty("by").GetString();
                     score = jsonHackerNewsStory.GetProperty("score").GetInt32();
                     title = jsonHackerNewsStory.GetProperty("title").GetString();
+                    id = jsonHackerNewsStory.GetProperty("id").GetInt32();
                 }
-                catch(KeyNotFoundException) { url = "N/A"; descendants = 0; by = "N/A"; score = 0; title = "N/A"; }
+                catch(KeyNotFoundException) { url = "N/A"; descendants = 0; by = "N/A"; score = 0; title = "N/A";
+                    id = 0;
+                }
 
                 var model = new HackerNewsModel()
                 {
@@ -53,7 +56,8 @@ namespace Adrians.Controllers
                     descendants = descendants,
                     score = score,
                     title = title,
-                    url = url
+                    url = url,
+                    id = id
                 };
                 ListOfHackerNewsModels.Add(model);
             }

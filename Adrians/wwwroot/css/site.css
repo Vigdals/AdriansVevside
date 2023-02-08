@@ -39,3 +39,10 @@ body {
         zoom: 1;
     }
 }
+
+.centerTHIS {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

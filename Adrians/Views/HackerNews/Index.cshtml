@@ -2,28 +2,29 @@
 @using Adrians.Models;
 @model List<HackerNewsModel>
 
-<h6>Here are the top stories on Hacker News</h6>
-
-<div class="table-responsive">
-    <table class="table table-striped table-hover" style="width:600px">
-        <thead class="thead-light">
-            <tr>
-                <th>Score</th>
-                <th>Title</th>
-                <th>By</th>
-            </tr>
+<div>
+    <h6>Top stories on Hacker News</h6>
+  
+    <table class="table table-striped table-hover table-responsive" style="width: 600px">
+        <thead class="thead-dark">
+        <tr>
+            <th>Score</th>
+            <th>Title</th>
+            <th>By</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.score</td>
-                    <td><a href="@item.url">@item.title</a></td>
-                    <td>@item.by</td>
-                </tr>
-            }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a href="https://news.ycombinator.com/item?id= @item.id">@item.score</a></td>
+                <td><a href="@item.url">@item.title</a></td>
+                <td>@item.by</td>
+            </tr>
+        }
         </tbody>
     </table>
+    <p>*Click the score to get to comments</p>
 </div>
 
 <tbody id="table-body">
