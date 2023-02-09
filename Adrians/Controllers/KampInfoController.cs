@@ -12,7 +12,7 @@ namespace Adrians.Controllers
         public IActionResult Index(string stageId)
         {
             Debug.WriteLine(stageId);
-            if (stageId == null)
+            if (string.IsNullOrWhiteSpace(stageId))
             {
                 return View();
             }

@@ -2,7 +2,8 @@
 {
     public class MatchModel
     {
-       public int Id { get; set; }
+        public int Id { get; set; }
+
         public class AwayTeam
         {
             public Logo logo { get; set; }
