@@ -1,0 +1,45 @@
+﻿@model List<Adrians.ViewModels.NifsKampViewModel>
+
+@using (Html.BeginForm("Index", "KampInfo", FormMethod.Post))
+{
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Velg liga
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", "690256")'>Champions League sluttspel</a>
+            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", "683910")'>VM 22 sluttspel</a>
+        </div>
+    </div>
+}
+
+<p> </p>
+@if (Model == null)
+{
+
+}
+else
+{
+    <div>
+        <table class="table table-striped table-hover table-responsive" style="width: 600px">
+            <thead class="thead-dark">
+            <tr>
+                <th>H</th>
+                <th>Resultat</th>
+                <th>B</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.homeTeam</td>
+                    <td>@item.result</td>
+                    <td>@item.awayTeam</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <p>*Click the score to get to comments</p>
+    </div>
+}
