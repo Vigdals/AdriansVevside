@@ -2,26 +2,31 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using Adrians.Data;
 using Adrians.Models;
 
 namespace Adrians.Controllers
 {
     public class AdminController : Controller
     {
+        private ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> _roleManager;
         public AdminController(RoleManager<IdentityRole> roleManager) => _roleManager = roleManager;
 
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         public IActionResult Index()
         {
+            
             var roles = _roleManager.Roles.ToList();
 
-            return View();
+            return View(roles);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+            var role = new IdentityRole();
+
             return View();
         }
 

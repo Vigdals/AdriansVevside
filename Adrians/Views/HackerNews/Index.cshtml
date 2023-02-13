@@ -1,6 +1,4 @@
-﻿@using System.Globalization
-@using Adrians.Models;
-@model List<HackerNewsModel>
+﻿@model List<Adrians.Models.HackerNewsModel>?
 
 <div>
     <h6>Top stories on Hacker News</h6>
@@ -17,7 +15,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td><a href="https://news.ycombinator.com/item?id= @item.id">@item.score</a></td>
+                <td><a href="https://news.ycombinator.com/item?id= @item.score">@item.score</a></td>
                 <td><a href="@item.url">@item.title</a></td>
                 <td>@item.by</td>
             </tr>

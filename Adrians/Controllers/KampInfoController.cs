@@ -38,7 +38,7 @@ namespace Adrians.Controllers
             var jsonResult = ApiCall.DoApiCall(apiEndpoint);
 
             //The most sexy oneliner in the world!
-            //Takes the jsonResult, deserializes it and adds it to my model. Crazy
+            //Takes the jsonResult, deserializes it and adds it to my model. Crazy easy
             var matchModel = JsonSerializer.Deserialize<List<NifsKampModel>>(jsonResult);
             
             return matchModel;
