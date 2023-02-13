@@ -9,7 +9,6 @@ namespace Adrians.Controllers
 {
     public class AdminController : Controller
     {
-        private ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> _roleManager;
         public AdminController(RoleManager<IdentityRole> roleManager) => _roleManager = roleManager;
 

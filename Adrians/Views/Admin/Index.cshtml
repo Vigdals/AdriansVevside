@@ -4,8 +4,7 @@
 
 <h1>Welcome to the admin panel</h1>
 
-
-
-<a href="c:\github\adriansvevside\adrians\views\admin\create.cshtml">Create</a>
-
-<a href="c:\github\adriansvevside\adrians\views\admin\edit.cshtml">Edith</a>
+<div>
+    <a class="dropdown-item" href='@Url.Action("Edit", "Admin")'>Edit</a>
+    <a class="dropdown-item" href='@Url.Action("Create", "Admin")'> Create</a>
+</div>
