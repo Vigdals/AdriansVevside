@@ -12,7 +12,7 @@ namespace Adrians.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         public AdminController(RoleManager<IdentityRole> roleManager) => _roleManager = roleManager;
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Index()
         {
             
