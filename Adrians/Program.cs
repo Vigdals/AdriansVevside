@@ -1,3 +1,4 @@
+global using Adrians.Models;
 using Adrians.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
