@@ -3,11 +3,10 @@
 }
 
 <div class="text-center">
-    <h2 id="birkenCountdown"></h2>
-    <img src="~/img/birken.png" alt="birken_logo" width="96" height="96" />
-    <p></p>
+    <h2 id="Countdown"></h2>
+    <img src="~/img/lustraløpet.jpg" alt="lustraløpet_logo" width="96" height="96" />
+    <h3>Lustraløpet</h3>
     <p>
-        @*Just a button to ping our LogHub*@
         <input type="button" class="btn btn-outline-dark" value="Ping LogHub!" onclick="location.href='@Url.Action("LogHubSite", "Home")'" />
     </p>
     <p>
@@ -15,11 +14,9 @@
     </p>
 </div>
 
-
-
 <script>
     // Set the date i'm' counting down to
-    var countDownDate = new Date("Mar 17, 2023 08:00:00").getTime();
+    var countDownDate = new Date("Jun 4, 2023 08:00:00").getTime();
 
     // Update the count down every 1 second
     var x = setInterval(function() {
@@ -36,14 +33,14 @@
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Output the result in an element with id="birkenCountdown"
-      document.getElementById("birkenCountdown").innerHTML = days + "d " + hours + "h "
+        // Output the result in an element with id="lustraløpetCountdown"
+        document.getElementById("Countdown").innerHTML = days + "d " + hours + "h "
       + minutes + "m " + seconds + "s ";
 
       // If the count down is over, write some text
       if (distance < 0) {
         clearInterval(x);
-        document.getElementById("birkenCountdown").innerHTML = "EXPIRED";
+            document.getElementById("Countdown").innerHTML = "UTGÅTT";
       }
     }, 1000);
 </script>

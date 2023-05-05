@@ -1,6 +1,93 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h4>Correctly guess what year the photograph was taken</h4>
+﻿<head>
+	<title>TimeCapsule</title
+</head>
+<body>
+	<div class="container">
+		<div class="centered-text">
+			<form>
+				<div class="form-group">
+					<label for="guess">Guess the Year:</label>
+					<input type="number" id="guess" name="guess" class="form-control" style="height:50px; width:300px" required>
+				</div>
+				<button type="submit" id="submit" class="btn btn-outline-dark">Submit</button>
+			</form>
+			<div id="message" class="mt-3" style="width:300px"></div>
+			<div id="score" class="mt-3">Score: <span id="score-value">0</span></div>
+			<button id="hint" class="btn btn-secondary mt-3">Hint</button>
+		</div>
+		<img id="image" src="" width="600" height="500">
+	</div>
+	<script src="script.js"></script>
+</body>
+
+
+<script>
+	// Define an array of objects that contain the image URL and the year the photo was taken
+	const images = [
+		{ url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Sogndal_JarleN.JPG/800px-Sogndal_JarleN.JPG?20100502192343', year: 2010 },
+		{ url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Leikanger_hermansverk.jpg/800px-Leikanger_hermansverk.jpg?20061215023057', year: 2005 },
+		{ url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Erling_Haaland_2023_%28cropped%29.jpg/800px-Erling_Haaland_2023_%28cropped%29.jpg', year: 2023 },
+		{ url: 'https://2.bp.blogspot.com/-r5X17_WNwVU/WPBQIP9S5vI/AAAAAAAAz9s/xz6XjFuTad00UPv98PlKKBb14uLRwtzMACLcB/s1600/Moscow%2Bin%2B1935%2B%25281%2529.jpg', year: 1935 },
+		{ url: 'https://rarehistoricalphotos.com/wp-content/uploads/2023/04/Laika-dog-in-space-small.jpg', year: 1957 }
+	];
+
+	// Get the necessary elements from the DOM
+	const imageEl = document.getElementById('image');
+	const formEl = document.querySelector('form');
+	const guessEl = document.getElementById('guess');
+	const messageEl = document.getElementById('message');
+	const scoreEl = document.getElementById('score-value');
+	const hintEl = document.getElementById('hint');
+
+	// Initialize the game
+	let score = 0;
+	let currentImage = null;
+
+	// Function to display a random image from the array
+	function displayImage() {
+		// Remove the current image from the array
+		const index = images.indexOf(currentImage);
+		if (index > -1) {
+			images.splice(index, 1);
+		}
+		// Randomly select an object from the updated array
+		currentImage = images[Math.floor(Math.random() * images.length)];
+		// Display the image in the container div
+		imageEl.src = currentImage.url;
+	}
+
+	// Function to handle form submission
+	function handleSubmit(event) {
+		event.preventDefault();
+		// Compare the guess with the year value of the selected object
+		if (guessEl.value == currentImage.year) {
+			// If the guess is correct, update the score counter and display a message that the guess is correct
+			score += 1;
+			scoreEl.textContent = score;
+			messageEl.textContent = 'Correct!';
+		} else {
+			// If the guess is incorrect, display a message that the guess is incorrect and deduct points from the score counter
+			score -= 1;
+			scoreEl.textContent = score;
+			messageEl.textContent = 'Incorrect!';
+		}
+		// Reset the form
+		formEl.reset();
+		// Display the next image
+		displayImage();
+	}
+
+	// Function to handle hint button click
+	function handleHint() {
+		// Display a message with a clue about the year the photo was taken
+		messageEl.textContent = `The year is between \${currentImage.year - 10} and \${currentImage.year + 10}`;
+	}
+
+	// Add event listeners
+	formEl.addEventListener('submit', handleSubmit);
+	hintEl.addEventListener('click', handleHint);
+
+	// Display the first image
+	displayImage();
+
+</script>
