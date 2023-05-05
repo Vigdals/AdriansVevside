@@ -1,5 +1,5 @@
 ﻿<head>
-	<title>TimeCapsule</title
+	<title>TimeCapsule</title>
 </head>
 <body>
 	<div class="container">
@@ -15,7 +15,9 @@
 			<div id="score" class="mt-3">Score: <span id="score-value">0</span></div>
 			<button id="hint" class="btn btn-secondary mt-3">Hint</button>
 		</div>
-		<img id="image" src="" width="600" height="500">
+		<div id="scaled-frame">
+			<img id="image" src="" class="img-fluid">
+		</div>
 	</div>
 	<script src="script.js"></script>
 </body>
@@ -80,7 +82,7 @@
 	// Function to handle hint button click
 	function handleHint() {
 		// Display a message with a clue about the year the photo was taken
-		messageEl.textContent = `The year is between \${currentImage.year - 10} and \${currentImage.year + 10}`;
+		messageEl.textContent = `(NOT WORKING YET!) The year is between \${currentImage.year - 10} and \${currentImage.year + 10}`;
 	}
 
 	// Add event listeners
