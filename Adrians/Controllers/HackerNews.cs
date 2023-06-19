@@ -7,20 +7,20 @@ namespace Adrians.Controllers
 {
     public class HackerNews : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             //Just an init of the other code
-            var hackerNewsModelList = GetApiInfo();
+            var hackerNewsModelList = await GetApiInfo();
 
             return View(hackerNewsModelList);
         }
 
-        public List<HackerNewsModel> GetApiInfo()
+        public async Task<List<HackerNewsModel>> GetApiInfo()
         {
             var hackerNewsModelList = new List<HackerNewsModel?>();
 
             string apiUrl = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
-            var jsonResult = ApiCall.DoApiCall(apiUrl);
+            var jsonResult = await ApiCall.DoApiCallAsync(apiUrl);
             JsonElement json = JsonSerializer.Deserialize<JsonElement>(jsonResult);
             int antall = Math.Min(json.GetArrayLength(), 10);
 
@@ -30,7 +30,7 @@ namespace Adrians.Controllers
             {
                 var storyUrl = "https://hacker-news.firebaseio.com/v0/item/" + json[i].GetInt32() +
                     ".json?print=pretty";
-                var jsonStoryResult = ApiCall.DoApiCall(storyUrl);
+                var jsonStoryResult = await ApiCall.DoApiCallAsync(storyUrl);
 
                 JsonElement jsonHackerNewsStory = JsonSerializer.Deserialize<JsonElement>(jsonStoryResult);
                 //Debug.WriteLine("The json story we are getting: " + jsonHackerNewsStory);

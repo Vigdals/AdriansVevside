@@ -5,13 +5,13 @@ namespace Adrians.Resources
 {
     public class ApiCall
     {
-        public static string DoApiCall(string apiURL)
+        public static async Task<string> DoApiCallAsync(string apiURL)
         {
             using var client = new HttpClient();
             // Get data response
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = client.GetAsync(apiURL).Result;
-            var stringResponse = response.Content.ReadAsStringAsync().Result;
+            var response = await client.GetAsync(apiURL);
+            var stringResponse = await response.Content.ReadAsStringAsync();
             return stringResponse;
         }
 

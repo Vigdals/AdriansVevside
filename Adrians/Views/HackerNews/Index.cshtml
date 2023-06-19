@@ -24,28 +24,3 @@
     </table>
     <p>*Click the score to get to comments</p>
 </div>
-
-@*<tbody id="table-body">
-    <tr>
-        <td colspan="4">Getting top stories... Please wait</td>
-    </tr>
-</tbody>
-
-<script>
-    $(document).ready(function () {
-        $.ajax({
-            url: "/api/topstories",
-            type: "GET",
-            success: function (data) {
-                var tableBody = $("#table-body");
-                tableBody.empty();
-                for (var i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    var row = "<tr><td>" + item.score + "</td><td>" + item.title + "</td><td>" + item.url + "</td><td>" + item.by + "</td></tr>";
-                    tableBody.append(row);
-                }
-            }
-        });
-    });
-</script>
-*@
