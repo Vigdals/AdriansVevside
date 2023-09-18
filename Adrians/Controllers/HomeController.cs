@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 namespace Adrians.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,6 +17,7 @@ namespace Adrians.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
+            Debug.WriteLine("HEYA");   
             return View();
         }
         
