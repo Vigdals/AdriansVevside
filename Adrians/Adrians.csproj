@@ -26,4 +26,8 @@
     <Folder Include="Service\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\.well-known\Security.txt" />
+  </ItemGroup>
+
 </Project>

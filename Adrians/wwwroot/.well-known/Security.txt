@@ -1,0 +1,4 @@
+﻿Contact: mailto:vigdal@vigdal.dev
+Expires: 2030-01-01T09:39:00.000Z
+Preferred-Languages: en, no
+Canonical: https://adriansvevside.azurewebsites.net/.well-known/security.txt
