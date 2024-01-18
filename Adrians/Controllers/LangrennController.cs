@@ -16,6 +16,10 @@ namespace Adrians.Controllers
         {
             return View();
         }
+                public IActionResult Brunestegen()
+        {
+            return View();
+        }
         public IActionResult Hodlekve()
         {
             return View();
