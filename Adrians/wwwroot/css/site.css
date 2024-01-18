@@ -46,3 +46,14 @@ body {
     align-items: center;
     height: 100%;
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-item {
+    margin: 10px;
+}
