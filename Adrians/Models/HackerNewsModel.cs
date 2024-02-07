@@ -1,4 +1,6 @@
-﻿namespace Adrians.Models
+﻿using static Adrians.Models.FplMatchesModel;
+
+namespace Adrians.Models
 {
     
     public class HackerNewsModel
@@ -14,5 +16,10 @@
         public string? url { get; set; }
 
 
+    }
+    public class ApiResponse
+    {
+        public List<Event> Events { get; set; }
+        // ... other properties if needed
     }
 }
