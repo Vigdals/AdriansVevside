@@ -76,8 +76,12 @@ namespace Adrians.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Epost")]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "Brukernamn")]
+            public string Brukernamn { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -86,7 +90,7 @@ namespace Adrians.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Passord")]
             public string Password { get; set; }
 
             /// <summary>
@@ -94,8 +98,8 @@ namespace Adrians.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirm passord")]
+            [Compare("Password", ErrorMessage = "Passorda er ikkje like, dumskalle.")]
             public string ConfirmPassword { get; set; }
         }
 

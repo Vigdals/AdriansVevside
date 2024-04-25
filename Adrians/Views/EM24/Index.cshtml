@@ -1,9 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<Adrians.ViewModels.TournamentViewModel>?
+@if (Model != null)
+{
+    <div>
+        <table class="table table-striped table-hover table-responsive" style="width: 600px">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.gruppenamn</td>
+                        <td>@item.id</td>
+                        <td>@item.yearStart</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-EM24
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
