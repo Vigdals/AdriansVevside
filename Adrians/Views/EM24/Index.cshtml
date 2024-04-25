@@ -1,28 +1,44 @@
-﻿@model List<Adrians.ViewModels.TournamentViewModel>?
-@if (Model != null)
-{
-    <div>
-        <table class="table table-striped table-hover table-responsive" style="width: 600px">
-            <thead class="thead-dark">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.gruppenamn</td>
-                        <td>@item.id</td>
-                        <td>@item.yearStart</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+﻿@model List<Adrians.ViewModels.NifsKampViewModel>?
+
+<div class="container">
+    <div class="row">
+        <!-- Left Logo Column -->
+        <div class="col-md-4 text-center">
+            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 150px; height: auto;" />
+        </div>
+        <!-- Table Column -->
+        <div class="col-md-4">
+            @if (Model != null)
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Heimelag</th>
+                                <th></th>
+                                <th>Bortelag</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.homeTeam</td>
+                                    <td>@item.result</td>
+                                    <td>@item.awayTeam</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+        <!-- Right Logo Column -->
+        <div class="col-md-4 text-center">
+            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 150px; height: auto;" />
+        </div>
     </div>
-}
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
