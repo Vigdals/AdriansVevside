@@ -8,6 +8,7 @@ namespace Adrians.ViewModels
         public string awayTeam { get; set; }
         public string result { get; set; }
         public string stadium { get; set; }
+        //public string group { get; set; }
         public NifsKampViewModel(NifsKampModel match)
         {
             this.homeTeam = match.homeTeam.name;

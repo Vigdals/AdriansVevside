@@ -11,7 +11,7 @@ namespace Adrians.Controllers
 {
     public class EM24Controller : Controller
     {
-        //[Authorize]
+        [Authorize]
         public IActionResult Index(string tournamentID)
         {
             tournamentID = "59";
@@ -28,7 +28,8 @@ namespace Adrians.Controllers
                 foreach (var match in matchModels.Result)
                 {
                     matchViewModelList.Add(new NifsKampViewModel(match));
-                    Debug.WriteLine(match.homeTeam.name + " + " + match.awayTeam.name);
+                    
+                    Debug.WriteLine(tournamentViewModel.gruppenamn + match.homeTeam.name + " + " + match.awayTeam.name);
                 }
                 //return View(matchViewModelList);
             }
@@ -49,9 +50,6 @@ namespace Adrians.Controllers
                     TournamentViewModelList.Add(new TournamentViewModel(gruppe));
                 }
             }
-
-
-
             return TournamentViewModelList;
         }
 

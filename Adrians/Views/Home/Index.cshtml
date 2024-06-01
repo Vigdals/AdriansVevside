@@ -3,15 +3,19 @@
 }
 
 <div class="text-center">
+    <input type="button" class="btn btn-outline-dark" value="Logg inn for tipping!" onclick="location.href='@Url.Action("Index", "EM24")'" />
+</div>
+
+@* <div class="text-center">
     <img src="~/img/lustrafjorden_inn.png" alt="lustraløpet_logo" width="298" height="39" />
     <h2 id="Countdown"></h2>
     <p>
-        <input type="button" class="btn btn-outline-dark" value="Ping LogHub!" onclick="location.href='@Url.Action("LogHubSite", "Home")'"/>
+        <input type="button" class="btn btn-outline-dark" value="Ping LogHub!" onclick="location.href='@Url.Action("LogHubSite", "Home")'" />
     </p>
     <p>
         Email me at <span style="unicode-bidi:bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
     </p>
-</div>
+</div> *@
 
 
 <script>
@@ -19,28 +23,28 @@
     var countDownDate = new Date("Jun 29, 2024 00:00:00").getTime();
 
     // Update the count down every 1 second
-    var x = setInterval(function() {
+    var x = setInterval(function () {
 
-      // Get today's date and time
-      var now = new Date().getTime();
+        // Get today's date and time
+        var now = new Date().getTime();
 
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
 
-      // Time calculations for days, hours, minutes and seconds
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Output the result in an element with id="lustraløpetCountdown"
         document.getElementById("Countdown").innerHTML = days + "d " + hours + "h "
-      + minutes + "m " + seconds + "s ";
+            + minutes + "m " + seconds + "s ";
 
-      // If the count down is over, write some text
-      if (distance < 0) {
-        clearInterval(x);
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
             document.getElementById("Countdown").innerHTML = "";
-      }
+        }
     }, 1000);
 </script>

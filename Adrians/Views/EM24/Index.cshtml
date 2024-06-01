@@ -4,7 +4,7 @@
     <div class="row">
         <!-- Left Logo Column -->
         <div class="col-md-4 text-center">
-            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 150px; height: auto;" />
+            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 100px; height: auto;" />
         </div>
         <!-- Table Column -->
         <div class="col-md-4">
@@ -15,7 +15,9 @@
                         <thead>
                             <tr>
                                 <th>Heimelag</th>
-                                <th></th>
+                                <th>H</th>
+                                <th>U</th>
+                                <th>B</th>
                                 <th>Bortelag</th>
                             </tr>
                         </thead>
@@ -24,7 +26,9 @@
                             {
                                 <tr>
                                     <td>@item.homeTeam</td>
-                                    <td>@item.result</td>
+                                    <td>@Html.RadioButtonFor(model => Model.NifsKampViewModel[index].Answer, "Home")</td>
+                                    <td>@Html.RadioButtonFor(model => Model.TippeModels[index].Answer, "Tie", new { @required = "True" })</td>
+                                    <td>@Html.RadioButtonFor(model => Model.NifsKampViewModel[index].Answer, "Away")</td>
                                     <td>@item.awayTeam</td>
                                 </tr>
                             }
@@ -35,10 +39,24 @@
         </div>
         <!-- Right Logo Column -->
         <div class="col-md-4 text-center">
-            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 150px; height: auto;" />
+            <img src="~/img/uefa_euro_2024_logo.svg.png" alt="UEFA EURO 2024 Logo" class="img-fluid" style="max-width: 100px; height: auto;" />
         </div>
     </div>
 </div>
+
+@{
+    var now = DateTime.Now;
+    var tippingStartTid = new DateTime(2024, 06, 14, 20, 00, 00);
+    if (now < tippingStartTid)
+    {
+        <input type="submit" value="Send tipping for @Model.">
+    }
+    else
+    {
+        <p>Tipping er stengt!</p>
+    }
+}
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

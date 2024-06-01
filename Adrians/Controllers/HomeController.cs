@@ -17,8 +17,9 @@ namespace Adrians.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
-            Debug.WriteLine("HEYA");   
-            return View();
+            Debug.WriteLine("HEYA");
+            //return View(); return to EM24 instead
+            return RedirectToAction("Index", "EM24");
         }
         
         public IActionResult LogHubSite()
