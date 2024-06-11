@@ -63,6 +63,16 @@ namespace Adrians.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Brukarnamn")]
+            public string Brukarnamn { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Poengsum")]
+            public int Poengsum { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -74,7 +84,7 @@ namespace Adrians.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
             };
         }
 
