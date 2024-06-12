@@ -4,15 +4,16 @@
       "type": "mssql.local",
       "connectionId": "ConnectionStrings:DefaultConnection"
     },
+    "mssql3": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:AdriansContextConnection"
+    },
     "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/westeurope/connectors/ConnectionStrings_8C055E21E2",
       "secretStore": "LocalSecretsFile",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/adriansdbserver/databases/Adrians_db",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings"
-    },
-    "mssql3": {
-      "type": "mssql.local",
-      "connectionId": "ConnectionStrings:AdriansContextConnection"
     }
   }
 }

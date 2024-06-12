@@ -4,13 +4,13 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"
     },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings"
-    },
     "mssql3": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:AdriansContextConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings"
     }
   }
 }

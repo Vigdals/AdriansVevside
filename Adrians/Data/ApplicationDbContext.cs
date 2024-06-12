@@ -4,12 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Adrians.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
-        [PersonalData]
-        public string? Brukarnamn { get; set; }
+        //[PersonalData]
+        //public string? Brukarnamn { get; set; }
 
-        [PersonalData]
-        public int? Poengsum { get; set; }
+        //[PersonalData]
+        //public int? Poengsum { get; set; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : base(options)
+        {
+        }
     }
 }
