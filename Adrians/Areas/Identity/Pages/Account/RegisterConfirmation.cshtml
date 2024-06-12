@@ -1,10 +1,12 @@
 ﻿@page
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Du er no registrert!";
 }
 
-<h1>@ViewData["Title"]</h1>
+<a class="nav-link text-dark" asp-area="" asp-controller="EM24" asp-action="Index">Gå til tipping</a>
+
+@* <h1>@ViewData["Title"]</h1>
 @{
     if (@Model.DisplayConfirmAccountLink)
     {
@@ -19,5 +21,5 @@
         Please check your email to confirm your account.
 </p>
     }
-}
+} *@
 
