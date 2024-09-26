@@ -18,8 +18,8 @@ namespace Adrians.Controllers
         public IActionResult Index()
         {
             Debug.WriteLine("HEYA");
-            //return View(); return to EM24 instead
-            return RedirectToAction("Index", "EM24");
+            return View();
+            //return RedirectToAction("Index", "EM24");
         }
         
         public IActionResult LogHubSite()
