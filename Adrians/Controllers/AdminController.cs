@@ -48,6 +48,7 @@ namespace Adrians.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -59,6 +60,7 @@ namespace Adrians.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(RoleModel role)
         {
             if (ModelState.IsValid)
