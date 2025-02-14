@@ -16,7 +16,7 @@ namespace Adrians.Controllers
         {
             return View();
         }
-                public IActionResult Brunestegen()
+        public IActionResult Brunestegen()
         {
             return View();
         }
