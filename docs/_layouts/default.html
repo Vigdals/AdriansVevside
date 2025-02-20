@@ -17,7 +17,7 @@
         background-color: #0d1117; /* GitHub dark background */
         color: #e6edf3; /* GitHub light text */
       }
-
+    
       /* Sidebar Navigation */
       .sidebar {
         width: 250px;
@@ -29,7 +29,7 @@
         padding: 20px;
         overflow-y: auto;
       }
-
+    
       .sidebar a {
         color: #e6edf3;
         text-decoration: none;
@@ -37,30 +37,41 @@
         padding: 10px;
         border-radius: 4px;
       }
-
+    
       .sidebar a:hover {
         background-color: #1f6feb;
       }
-
+    
       /* Main content area */
       .main-content {
         margin-left: 270px;
         flex: 1;
         padding: 30px;
       }
-
-      /* GitHub-Style Code Blocks */
+    
+      /* 🔥 GitHub-Style Code Blocks */
       .markdown-body pre {
-        background-color: #0d1117;
-        color: #e6edf3;
+        background-color: #0d1117; /* GitHub dark mode code block */
+        color: #e6edf3; /* GitHub light text */
         padding: 16px;
         border-radius: 6px;
         font-size: 14px;
         line-height: 1.5;
         overflow-x: auto;
         border: 1px solid #30363d;
+        font-family: Consolas, "Courier New", monospace; /* GitHub font */
       }
-
+    
+      /* Syntax Highlighting: GitHub Colors */
+      .markdown-body .hljs-keyword { color: #ff7b72; } /* Keywords */
+      .markdown-body .hljs-string { color: #a5d6ff; } /* Strings */
+      .markdown-body .hljs-comment { color: #8b949e; font-style: italic; } /* Comments */
+      .markdown-body .hljs-type { color: #ffa657; } /* Type definitions */
+      .markdown-body .hljs-function { color: #d2a8ff; } /* Function names */
+      .markdown-body .hljs-number { color: #79c0ff; } /* Numbers */
+      .markdown-body .hljs-operator { color: #ff7b72; } /* Operators */
+      .markdown-body .hljs-punctuation { color: #c9d1d9; } /* Brackets, dots, etc. */
+    
       /* Inline Code */
       .markdown-body code {
         background-color: rgba(110, 118, 129, 0.4);
@@ -69,12 +80,13 @@
         border-radius: 4px;
         font-size: 14px;
       }
-
+    
       /* Make Inline Code Less Blocky */
       .markdown-body p code {
         font-size: 85%;
       }
     </style>
+    
   </head>
 
   <body>
