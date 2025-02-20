@@ -1,17 +1,13 @@
 ---
 layout: default
-title: "My First Tech Post"
+title: "How I made FPL deadliner"
 date: 2025-02-20
 ---
 Welcome to my new tech blog! Let’s talk about .NET, security, and everything in between.
 
-### How I Used ASP.NET MVC in AdriansVevside
+### How I made FPL deadliner
 
 My _AdriansVevside_ website is built using **ASP.NET Core MVC**, which helps structure the application into three main components:
-
-- **Models**: Define the data structures and business logic.  
-- **Views**: Handle the presentation layer (HTML, CSS, etc.).  
-- **Controllers**: Orchestrate data retrieval, apply logic, and direct results to the Views.
 
 ### FPLController Overview
 
