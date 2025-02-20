@@ -11,139 +11,97 @@
     />
 
     <style>
+      /* General layout */
       body {
-        margin-bottom: 60px; /* Extra space so content doesn't hide behind footer */
+        display: flex;
+        background-color: #0d1117; /* GitHub dark background */
+        color: #e6edf3; /* GitHub light text */
       }
-    
-      .navbar-brand {
-        font-weight: bold;
-        font-size: 1.5rem;
+
+      /* Sidebar Navigation */
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #161b22; /* Dark sidebar */
+        padding: 20px;
+        overflow-y: auto;
       }
-    
-      /* Dark theme with narrower container for readability */
-      .content-wrapper {
-        max-width: 800px;
-        margin: 0 auto; /* center horizontally */
-      }
-    
-      /* Center headings, but left-align general text for readability */
-      .markdown-body h1,
-      .markdown-body h2,
-      .markdown-body h3 {
-        text-align: center;
-      }
-    
-      /* Left-align paragraphs, lists, blockquotes, tables, etc. */
-      .markdown-body p,
-      .markdown-body ul,
-      .markdown-body ol,
-      .markdown-body table,
-      .markdown-body blockquote {
-        text-align: left;
-      }
-    
-      /* 🔥 Dark Theme for Code Blocks */
-      .markdown-body pre {
-        background-color: #1e1e1e; /* Dark mode (VS Code theme) */
-        color: #ffffff; /* White text */
-        padding: 1rem;
-        border-radius: 6px;
-        overflow-x: auto; /* Prevents breaking on long lines */
-        font-size: 0.95em; /* Slightly smaller font */
-      }
-    
-      .markdown-body code {
-        color: #ffdd88; /* Yellow highlight */
-        background-color: #333; /* Dark inline code */
-        padding: 0.2rem 0.4rem;
+
+      .sidebar a {
+        color: #e6edf3;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
         border-radius: 4px;
       }
-    
-      /* Inline code should be distinct from block code */
+
+      .sidebar a:hover {
+        background-color: #1f6feb;
+      }
+
+      /* Main content area */
+      .main-content {
+        margin-left: 270px;
+        flex: 1;
+        padding: 30px;
+      }
+
+      /* GitHub-Style Code Blocks */
+      .markdown-body pre {
+        background-color: #0d1117;
+        color: #e6edf3;
+        padding: 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-x: auto;
+        border: 1px solid #30363d;
+      }
+
+      /* Inline Code */
+      .markdown-body code {
+        background-color: rgba(110, 118, 129, 0.4);
+        color: #e6edf3;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      /* Make Inline Code Less Blocky */
       .markdown-body p code {
-        background-color: #2d2d2d;
+        font-size: 85%;
       }
     </style>
   </head>
 
-  <!-- Use Bootstrap 5.3 dark theme -->
-  <body data-bs-theme="dark">
+  <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-      <div class="container">
-        <a class="navbar-brand" href="{{ "/" | relative_url }}">Adrians GitHub</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarsExample01"
-          aria-controls="navbarsExample01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <h3>Adrians GitHub</h3>
+      <a href="{{ "/" | relative_url }}">🏠 Home</a>
+      <a href="{{ "/blog/" | relative_url }}">📝 Blog</a>
 
-        <div class="collapse navbar-collapse" id="navbarsExample01">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- Home Link -->
-            <li class="nav-item">
-              <a class="nav-link" href="{{ "/" | relative_url }}">Home</a>
-            </li>
+      <h4>Blog Posts</h4>
+      <ul class="list-unstyled">
+        {% for post in site.posts %}
+          <li>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
 
-            <!-- Blog Dropdown: loops over site.posts -->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="blogDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Blog
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="blogDropdown">
-                {% for post in site.posts %}
-                  <li>
-                    <a class="dropdown-item" href="{{ post.url | relative_url }}">
-                      {{ post.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Main Content Container -->
-    <div class="container my-4">
-      <!-- Hero Section -->
-      <!-- <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
-        <div class="container-fluid py-5 text-center"> -->
-          <!-- Example hero heading; uncomment if desired -->
-          <!-- <h1 class="display-5 fw-bold">{{ page.title }}</h1> -->
-          <!-- <p class="fs-4">GitHub Pages!</p>
-        </div>
-      </div> -->
-
-      <!-- Markdown Content Card -->
-      <div class="card p-4 shadow-sm bg-secondary text-white">
-        <div class="content-wrapper markdown-body">
-          {{ content }}
-        </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>{{ page.title }}</h1>
+      <div class="markdown-body">
+        {{ content }}
       </div>
     </div>
 
-    <!-- Footer (fixed-bottom) -->
-    <footer class="bg-dark text-white text-center py-3 fixed-bottom">
-      <small>&copy; 2025 - Adrian’s Awesome Site</small>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
