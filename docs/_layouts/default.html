@@ -62,13 +62,13 @@
     </style>
   </head>
 
-  <!-- Bootstrap 5.3 dark theme -->
+  <!-- Use Bootstrap 5.3 dark theme -->
   <body data-bs-theme="dark">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="#">Adrians GitHub</a>
+        <a class="navbar-brand" href="{{ "/" | relative_url }}">Adrians GitHub</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -80,10 +80,35 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarsExample01">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Home Link -->
             <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link" href="{{ "/" | relative_url }}">Home</a>
+            </li>
+
+            <!-- Blog Dropdown: loops over site.posts -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="blogDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Blog
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="blogDropdown">
+                {% for post in site.posts %}
+                  <li>
+                    <a class="dropdown-item" href="{{ post.url | relative_url }}">
+                      {{ post.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
             </li>
           </ul>
         </div>
@@ -95,6 +120,7 @@
       <!-- Hero Section -->
       <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
         <div class="container-fluid py-5 text-center">
+          <!-- Example hero heading; uncomment if desired -->
           <!-- <h1 class="display-5 fw-bold">{{ page.title }}</h1> -->
           <p class="fs-4">GitHub Pages!</p>
         </div>
