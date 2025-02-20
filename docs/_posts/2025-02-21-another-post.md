@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Some Topic"
+title: "My 2nd Tech Post"
 date: 2025-03-01
 ---
-# Some Topic
+
 A brand new post about [this or that].
