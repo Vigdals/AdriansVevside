@@ -46,25 +46,25 @@ Feel free to explore the code, suggest improvements, or fork the repository for 
 
 
 <script>
-  // 🌦 Fetch Weather from Yr.no (Oslo)
-  fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=59.91&lon=10.75", {
+  // 🌦 Fetch Weather from Yr.no for Sogndal
+  fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=61.2296&lon=7.1015", {
     headers: { "User-Agent": "AdriansVevside/1.0" }
   })
   .then(response => response.json())
   .then(data => {
-    let temp = data.properties.timeseries[0].data.instant.details.air_temperature;
-    let weather = data.properties.timeseries[0].data.next_1_hours.summary.symbol_code.replace("_", " ");
-    document.getElementById("weather").innerHTML = `🌡️ ${temp}°C - ${weather}`;
+    const weatherElement = document.getElementById("weather");
+    if (data && data.properties && data.properties.timeseries && data.properties.timeseries.length > 0) {
+      const details = data.properties.timeseries[0].data.instant.details;
+      const temperature = details.air_temperature;
+      const windSpeed = details.wind_speed;
+      const precipitation = data.properties.timeseries[0].data.next_1_hours?.details?.precipitation_amount || 0;
+      weatherElement.innerHTML = `🌡️ Temperature: ${temperature}°C<br>💨 Wind Speed: ${windSpeed} m/s<br>🌧️ Precipitation (next hour): ${precipitation} mm`;
+    } else {
+      weatherElement.innerHTML = "Weather data is currently unavailable.";
+    }
   })
-  .catch(error => document.getElementById("weather").innerHTML = "Error loading weather.");
-
-  // ⚽ Fetch Barcelona Matches from FotMob API
-  fetch("https://www.fotmob.com/api/matches?teamId=8633")
-  .then(response => response.json())
-  .then(data => {
-    let matches = data.matches.slice(0, 5).map(m => 
-      `<li>${m.home} vs ${m.away} - ${m.time}</li>`).join("");
-    document.getElementById("barca-matches").innerHTML = `<ul>${matches}</ul>`;
-  })
-  .catch(error => document.getElementById("barca-matches").innerHTML = "Error loading matches.");
+  .catch(error => {
+    console.error("Error fetching weather data:", error);
+    document.getElementById("weather").innerHTML = "Error loading weather.";
+  });
 </script>
