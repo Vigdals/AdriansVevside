@@ -24,13 +24,13 @@ Stay updated with the latest posts:
   {% endfor %}
 </ul>
 
-## 🌦 Live Weather in Oslo
+## 🌦 Live Weather in Sogndal
 
 <div id="weather">Loading weather...</div>
 
-## ⚽ Upcoming FC Barcelona Matches
+<!-- ## ⚽ Upcoming FC Barcelona Matches
 
-<div id="barca-matches">Loading matches...</div>
+<div id="barca-matches">Loading matches...</div> -->
 
 ## Maintainer
 
