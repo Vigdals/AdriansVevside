@@ -10,6 +10,11 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
 
+    <!-- highlight.js (GitHub Theme) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
     <style>
       /* General layout */
       body {
@@ -49,7 +54,7 @@
         padding: 30px;
       }
     
-      /* 🔥 GitHub-Style Code Blocks */
+      /* GitHub-Style Code Blocks */
       .markdown-body pre {
         background-color: #0d1117; /* GitHub dark mode code block */
         color: #e6edf3; /* GitHub light text */
@@ -61,32 +66,7 @@
         border: 1px solid #30363d;
         font-family: Consolas, "Courier New", monospace; /* GitHub font */
       }
-    
-      /* Syntax Highlighting: GitHub Colors */
-      .markdown-body .hljs-keyword { color: #ff7b72; } /* Keywords */
-      .markdown-body .hljs-string { color: #a5d6ff; } /* Strings */
-      .markdown-body .hljs-comment { color: #8b949e; font-style: italic; } /* Comments */
-      .markdown-body .hljs-type { color: #ffa657; } /* Type definitions */
-      .markdown-body .hljs-function { color: #d2a8ff; } /* Function names */
-      .markdown-body .hljs-number { color: #79c0ff; } /* Numbers */
-      .markdown-body .hljs-operator { color: #ff7b72; } /* Operators */
-      .markdown-body .hljs-punctuation { color: #c9d1d9; } /* Brackets, dots, etc. */
-    
-      /* Inline Code */
-      .markdown-body code {
-        background-color: rgba(110, 118, 129, 0.4);
-        color: #e6edf3;
-        padding: 3px 6px;
-        border-radius: 4px;
-        font-size: 14px;
-      }
-    
-      /* Make Inline Code Less Blocky */
-      .markdown-body p code {
-        font-size: 85%;
-      }
     </style>
-    
   </head>
 
   <body>
@@ -100,7 +80,7 @@
       <ul class="list-unstyled">
         {% for post in site.posts %}
           <li>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            <a href="{{ post.url | relative_url }}">📝 {{ post.title }}</a>
           </li>
         {% endfor %}
       </ul>
@@ -108,11 +88,9 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <!-- <h1>{{ page.title }}</h1> -->
       <div class="markdown-body">
         {{ content }}
       </div>
     </div>
-
   </body>
 </html>
