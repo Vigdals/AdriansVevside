@@ -1,0 +1,4 @@
+# docs/_config.yml
+title: "My Cool GitHub Pages Site"
+description: "A short description of my site"
+theme: jekyll-theme-cayman
