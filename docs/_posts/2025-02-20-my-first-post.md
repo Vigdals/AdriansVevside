@@ -5,7 +5,7 @@ date: 2025-02-20
 ---
 Welcome to my new tech blog! Let’s talk about .NET, security, and everything in between.
 
-# How I Used ASP.NET MVC in AdriansVevside
+### How I Used ASP.NET MVC in AdriansVevside
 
 My _AdriansVevside_ website is built using **ASP.NET Core MVC**, which helps structure the application into three main components:
 
@@ -13,7 +13,7 @@ My _AdriansVevside_ website is built using **ASP.NET Core MVC**, which helps str
 - **Views**: Handle the presentation layer (HTML, CSS, etc.).  
 - **Controllers**: Orchestrate data retrieval, apply logic, and direct results to the Views.
 
-## FPLController Overview
+### FPLController Overview
 
 One of the key parts of this site is the **FPLController**, which fetches upcoming Fantasy Premier League deadlines. Below is a quick look at how it works:
 
@@ -29,6 +29,7 @@ It uses `ApiCall.DoApiCallAsync` (a helper method) to fetch the raw JSON. The re
 ### Code Example
 
 ```csharp
+
 using Adrians.Resources;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
