@@ -4,26 +4,65 @@
     <meta charset="UTF-8" />
     <title>{{ page.title }}</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS (no integrity attrs for simplicity) -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
 
+    <!-- Some custom CSS overrides -->
     <style>
-      /* Minimal custom overrides */
       body {
-        margin-bottom: 50px; /* footer spacing */
+        margin-bottom: 50px; /* space above the fixed footer */
       }
+
       .navbar-brand {
         font-weight: bold;
         font-size: 1.5rem;
+      }
+
+      /* A narrower container for readability */
+      .content-wrapper {
+        max-width: 800px;   /* change to taste */
+        margin: 0 auto;     /* center horizontally */
+      }
+
+      /* We'll apply .markdown-body so we can style Markdown selectively */
+      .markdown-body h1,
+      .markdown-body h2,
+      .markdown-body h3,
+      .markdown-body p,
+      .markdown-body ul,
+      .markdown-body ol,
+      .markdown-body table,
+      .markdown-body blockquote {
+        text-align: center;
+      }
+
+      /* Code blocks and inline code stay left-aligned */
+      .markdown-body pre,
+      .markdown-body code {
+        text-align: left;
+        margin: 0 auto; /* center the code block itself */
+        display: block;
+      }
+
+      .markdown-body pre {
+        background-color: #222; /* dark background for code block */
+        padding: 1rem;
+        border-radius: 4px;
+      }
+
+      /* Optional: lighten text inside code for better contrast */
+      .markdown-body code {
+        color: #ffdd88;
       }
     </style>
   </head>
 
   <!-- Use Bootstrap's dark theme system -->
   <body data-bs-theme="dark">
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
       <div class="container">
@@ -51,10 +90,11 @@
         </div>
       </div>
 
-      <!-- Actual Page Content -->
-      <!-- The "text-center" class centers all text inside (including headings, code, etc.) -->
-      <div class="card p-4 shadow-sm bg-secondary text-white text-center">
-        {{ content }}
+      <!-- Wrap the Markdown content in a narrower card -->
+      <div class="card p-4 shadow-sm bg-secondary text-white">
+        <div class="content-wrapper markdown-body">
+          {{ content }}
+        </div>
       </div>
     </div>
 
@@ -64,8 +104,6 @@
     </footer>
 
     <!-- Bootstrap JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
