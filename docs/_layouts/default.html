@@ -14,25 +14,25 @@
       body {
         margin-bottom: 60px; /* Extra space so content doesn't hide behind footer */
       }
-
+    
       .navbar-brand {
         font-weight: bold;
         font-size: 1.5rem;
       }
-
+    
       /* Dark theme with narrower container for readability */
       .content-wrapper {
         max-width: 800px;
         margin: 0 auto; /* center horizontally */
       }
-
+    
       /* Center headings, but left-align general text for readability */
       .markdown-body h1,
       .markdown-body h2,
       .markdown-body h3 {
         text-align: center;
       }
-
+    
       /* Left-align paragraphs, lists, blockquotes, tables, etc. */
       .markdown-body p,
       .markdown-body ul,
@@ -41,23 +41,27 @@
       .markdown-body blockquote {
         text-align: left;
       }
-
-      /* Code blocks: left-aligned, dark background, slightly lighter text */
-      .markdown-body pre,
-      .markdown-body code {
-        text-align: left;
-        margin: 0 auto;
-        display: block;
-      }
-
+    
+      /* 🔥 Dark Theme for Code Blocks */
       .markdown-body pre {
-        background-color: #222;
+        background-color: #1e1e1e; /* Dark mode (VS Code theme) */
+        color: #ffffff; /* White text */
         padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto; /* Prevents breaking on long lines */
+        font-size: 0.95em; /* Slightly smaller font */
+      }
+    
+      .markdown-body code {
+        color: #ffdd88; /* Yellow highlight */
+        background-color: #333; /* Dark inline code */
+        padding: 0.2rem 0.4rem;
         border-radius: 4px;
       }
-
-      .markdown-body code {
-        color: #ffdd88; /* highlight code text */
+    
+      /* Inline code should be distinct from block code */
+      .markdown-body p code {
+        background-color: #2d2d2d;
       }
     </style>
   </head>

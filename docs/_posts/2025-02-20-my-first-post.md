@@ -29,7 +29,6 @@ It uses `ApiCall.DoApiCallAsync` (a helper method) to fetch the raw JSON. The re
 ### Code Example
 
 ```csharp
-
 using Adrians.Resources;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -86,3 +85,4 @@ namespace Adrians.Controllers
       }
   }
 }
+```
