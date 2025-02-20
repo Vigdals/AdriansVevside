@@ -3,22 +3,25 @@ layout: default
 title: "How I made FPL deadliner"
 date: 2025-02-20
 ---
-Welcome to my new tech blog! Let’s talk about .NET, security, and everything in between.
 
-### How I made FPL deadliner
+### How I made [FPL deadliner](https://vigdal.dev/Fpl)
 
-My _AdriansVevside_ website is built using **ASP.NET Core MVC**, which helps structure the application into three main components:
+You can find the FPL deadline at [https://vigdal.dev/Fpl](https://vigdal.dev/Fpl). The **FPLController** in **AdriansVevside** is responsible for fetching and displaying **upcoming Fantasy Premier League (FPL) deadlines**. It integrates with the **official FPL API** and processes the event data before rendering it in the **ASP.NET MVC view**.
 
-### FPLController Overview
+## How It Works
 
-One of the key parts of this site is the **FPLController**, which fetches upcoming Fantasy Premier League deadlines. Below is a quick look at how it works:
+The `FPLController` follows a structured approach to handle data retrieval and presentation:
 
-- **`IndexAsync` Action**  
-  This action serves as the entry point for displaying future FPL deadlines. It calls `GetDeadlines()` to fetch all deadlines, then filters out events that have already passed, ensuring that only **future** deadlines appear to users.
+1. **`IndexAsync` Action**
+   - Acts as the **entry point** for displaying FPL deadlines.
+   - Calls `GetDeadlines()` to fetch **all FPL events**.
+   - **Filters out past events** and keeps only upcoming ones.
+   - Passes the final list of **future deadlines** to the View.
 
-- **`GetDeadlines` Method**  
-  This method reaches out to the official Fantasy Premier League API:
-
+2. **`GetDeadlines` Method**
+   - Makes an **HTTP request** to the official **Fantasy Premier League API**.
+   - Parses the **JSON response** to extract **event details**.
+   - Returns a **list of structured event objects**.
 
 It uses `ApiCall.DoApiCallAsync` (a helper method) to fetch the raw JSON. The returned data is then parsed with `System.Text.Json`, creating a list of strongly typed `FplMatchesModel.Event` objects. 
 

@@ -3,13 +3,13 @@ layout: default
 title: "Home"
 ---
 
-#### Welcome to AdriansVevside
+#### Welcome to my GitHub Pages!
 
 [![Board Status](https://dev.azure.com/adhvi/3093fd49-6d98-446c-b7ea-d0dcd7eda40d/114477e7-bf49-4fd4-bfdf-494c5ba0b07c/_apis/work/boardbadge/2ef32e82-faee-4544-8345-31d6f01e5fa2)](https://dev.azure.com/adhvi/3093fd49-6d98-446c-b7ea-d0dcd7eda40d/_boards/board/t/114477e7-bf49-4fd4-bfdf-494c5ba0b07c/Microsoft.RequirementCategory)
 
 ## Live Site
 
-Explore the live version of the site here: [https://adriansvevside.azurewebsites.net/](https://adriansvevside.azurewebsites.net/)
+Explore the live version of the site here: [https://adriansvevside.azurewebsites.net/](https://adriansvevside.azurewebsites.net/) or here: [https://vigdal.dev/](https://vigdal.dev/).
 
 ## Blog Posts on GitHub Pages
 
