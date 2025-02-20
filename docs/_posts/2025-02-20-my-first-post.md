@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: "My First Tech Post"
 date: 2025-02-20
 ---
