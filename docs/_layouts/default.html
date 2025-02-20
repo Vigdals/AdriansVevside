@@ -10,10 +10,9 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
 
-    <!-- Optional: A tiny bit of custom styling -->
     <style>
+      /* Minimal custom overrides */
       body {
-        background-color: #f7f7f7;
         margin-bottom: 50px; /* footer spacing */
       }
       .navbar-brand {
@@ -23,11 +22,12 @@
     </style>
   </head>
 
-  <body>
+  <!-- Use Bootstrap's dark theme system -->
+  <body data-bs-theme="dark">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="#">Adrians Vevside</a>
+        <a class="navbar-brand" href="#">Adrians GitHub</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -45,27 +45,27 @@
     <!-- Main Content Container -->
     <div class="container my-4">
       <!-- Hero/Intro Section -->
-      <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+      <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
         <div class="container-fluid py-5">
-          <h1 class="display-5 fw-bold">{{ page.title }}</h1>
-          <p class="col-md-8 fs-4">Velkommen til min moderne GitHub Page!</p>
+          <p class="col-md-8 fs-4">Velkommen til GitHub Pages!</p>
         </div>
       </div>
 
-      <!-- Actual Page Content Goes Here -->
-      <div class="card p-4 shadow-sm">{{ content }}</div>
+      <!-- Actual Page Content -->
+      <!-- The "text-center" class centers all text inside (including headings, code, etc.) -->
+      <div class="card p-4 shadow-sm bg-secondary text-white text-center">
+        {{ content }}
+      </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-light text-center py-3 fixed-bottom">
+    <footer class="bg-dark text-white text-center py-3 fixed-bottom">
       <small>&copy; 2025 - Adrian’s Awesome Site</small>
     </footer>
 
-    <!-- Bootstrap JS (Optional but handy for interactive components) -->
+    <!-- Bootstrap JS -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ENjdO4Dr2bkBIFxQpeVkxzUoj3XcU+K+f43fugPnYzJgZ4zGM4Cq4eekWf5XhZ+N"
-      crossorigin="anonymous"
     ></script>
   </body>
 </html>
