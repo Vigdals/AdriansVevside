@@ -1,4 +1,3 @@
-# docs/_config.yml
-title: "My Cool GitHub Pages Site"
-description: "A short description of my site"
-theme: jekyll-theme-cayman
+title: "Adrians Vevside"
+description: "My personal site"
+theme: null # or remove if not using a GitHub theme
