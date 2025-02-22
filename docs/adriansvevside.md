@@ -2,9 +2,6 @@
 layout: default
 title: "AdriansVevside - .NET MVC"
 ---
-
-### AdriansVevside (.NET MVC)
-
 **AdriansVevside** is a personal project aimed at delving into the capabilities of the .NET ecosystem, particularly focusing on web development using ASP.NET Core MVC.
 
 ### Repository Structure

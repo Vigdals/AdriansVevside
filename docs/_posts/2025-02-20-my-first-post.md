@@ -3,25 +3,22 @@ layout: default
 title: "How I made FPL deadliner"
 date: 2025-02-20
 ---
-
-### How I made [FPL deadliner](https://vigdal.dev/Fpl)
-
-You can find the FPL deadline at [https://vigdal.dev/Fpl](https://vigdal.dev/Fpl). The **FPLController** in **AdriansVevside** is responsible for fetching and displaying **upcoming Fantasy Premier League (FPL) deadlines**. It integrates with the **official FPL API** and processes the event data before rendering it in the **ASP.NET MVC view**.
+You can find the FPL deadline at [https://vigdal.dev/Fpl](https://vigdal.dev/Fpl). The FPLController in AdriansVevside is responsible for fetching and displaying upcoming Fantasy Premier League (FPL) deadlines. It integrates with the official FPL API and processes the event data before rendering it in the ASP.NET MVC view.
 
 ## How It Works
 
 The `FPLController` follows a structured approach to handle data retrieval and presentation:
 
-1. **`IndexAsync` Action**
-   - Acts as the **entry point** for displaying FPL deadlines.
-   - Calls `GetDeadlines()` to fetch **all FPL events**.
-   - **Filters out past events** and keeps only upcoming ones.
-   - Passes the final list of **future deadlines** to the View.
+1. `IndexAsync` Action
+   - Acts as the entry point for displaying FPL deadlines.
+   - Calls `GetDeadlines()` to fetch all FPL events.
+   - Filters out past events and keeps only upcoming ones.
+   - Passes the final list of future deadlines to the View.
 
-2. **`GetDeadlines` Method**
-   - Makes an **HTTP request** to the official **Fantasy Premier League API**.
-   - Parses the **JSON response** to extract **event details**.
-   - Returns a **list of structured event objects**.
+2. `GetDeadlines` Method
+   - Makes an HTTP request to the official Fantasy Premier League API.
+   - Parses the JSON response to extract event details.
+   - Returns a list of structured event objects.
 
 It uses `ApiCall.DoApiCallAsync` (a helper method) to fetch the raw JSON. The returned data is then parsed with `System.Text.Json`, creating a list of strongly typed `FplMatchesModel.Event` objects. 
 
