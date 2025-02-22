@@ -7,11 +7,11 @@ title: "Home"
 
 [![Board Status](https://dev.azure.com/adhvi/3093fd49-6d98-446c-b7ea-d0dcd7eda40d/114477e7-bf49-4fd4-bfdf-494c5ba0b07c/_apis/work/boardbadge/2ef32e82-faee-4544-8345-31d6f01e5fa2)](https://dev.azure.com/adhvi/3093fd49-6d98-446c-b7ea-d0dcd7eda40d/_boards/board/t/114477e7-bf49-4fd4-bfdf-494c5ba0b07c/Microsoft.RequirementCategory)
 
-## Live Site
+### Live Site
 
 Explore the live version of the site here: [https://adriansvevside.azurewebsites.net/](https://adriansvevside.azurewebsites.net/) or here: [https://vigdal.dev/](https://vigdal.dev/).
 
-## Blog Posts on GitHub Pages
+### Blog Posts
 
 Stay updated with the latest posts:
 
@@ -24,7 +24,7 @@ Stay updated with the latest posts:
   {% endfor %}
 </ul>
 
-## 🌦 Live Weather in Sogndal
+### 🌦 Live Weather in Sogndal
 
 <div id="weather">Loading weather...</div>
 
@@ -32,15 +32,15 @@ Stay updated with the latest posts:
 
 <div id="barca-matches">Loading matches...</div> -->
 
-## Maintainer
+### Maintainer
 
 This project is maintained by [Adrian](https://github.com/vigdals).
 
-## License
+### License
 
 This project is licensed under the MIT License. For more details, refer to the [LICENSE.md](LICENSE.md) file.
 
-## Usage
+##### Usage
 
 Feel free to explore the code, suggest improvements, or fork the repository for your own experiments. Contributions are welcome!
 
