@@ -32,19 +32,6 @@ Stay updated with the latest posts:
 
 <div id="barca-matches">Loading matches...</div> -->
 
-### Maintainer
-
-This project is maintained by [Adrian](https://github.com/vigdals).
-
-### License
-
-This project is licensed under the MIT License. For more details, refer to the [LICENSE.md](LICENSE.md) file.
-
-##### Usage
-
-Feel free to explore the code, suggest improvements, or fork the repository for your own experiments. Contributions are welcome!
-
-
 <script>
   // 🌦 Fetch Weather from Yr.no for Sogndal
   fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=61.2296&lon=7.1015", {

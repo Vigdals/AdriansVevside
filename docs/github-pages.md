@@ -2,9 +2,6 @@
 layout: default
 title: "GitHub Pages & Blog"
 ---
-
-# GitHub Pages & Blog
-
 The **docs/** folder serves as the core for the documentation and blog management:
 
 - **_posts/**: A collection of Markdown files for blog posts, following the naming convention `YYYY-MM-DD-title.md`. Each post is written in Markdown and processed by Jekyll to render properly within the site.
