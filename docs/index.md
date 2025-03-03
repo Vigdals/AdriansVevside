@@ -28,9 +28,9 @@ Stay updated with the latest posts:
 
 <div id="weather">Loading weather...</div>
 
-<!-- ## ⚽ Upcoming FC Barcelona Matches
+### ⚽ Upcoming FC Barcelona Matches
 
-<div id="barca-matches">Loading matches...</div> -->
+<div id="barca-matches">Loading matches...</div>
 
 <script>
   // 🌦 Fetch Weather from Yr.no for Sogndal
@@ -53,5 +53,27 @@ Stay updated with the latest posts:
   .catch(error => {
     console.error("Error fetching weather data:", error);
     document.getElementById("weather").innerHTML = "Error loading weather.";
+  });
+
+  // ⚽ Fetch Upcoming FC Barcelona Matches
+  fetch("https://api.football-data.org/v2/teams/81/matches?status=SCHEDULED", {
+    headers: { "X-Auth-Token": "4f5a263e32034f429ec2bf5b3cfce2b2" }
+  })
+  .then(response => response.json())
+  .then(data => {
+    const matchesElement = document.getElementById("barca-matches");
+    if (data && data.matches && data.matches.length > 0) {
+      const upcomingMatches = data.matches.slice(0, 5);
+      matchesElement.innerHTML = upcomingMatches.map(match => {
+        const date = new Date(match.utcDate).toLocaleDateString();
+        return `<div>🗓️ ${date} - ${match.homeTeam.name} vs ${match.awayTeam.name}</div>`;
+      }).join("");
+    } else {
+      matchesElement.innerHTML = "No upcoming matches found.";
+    }
+  })
+  .catch(error => {
+    console.error("Error fetching matches data:", error);
+    document.getElementById("barca-matches").innerHTML = "Error loading matches.";
   });
 </script>

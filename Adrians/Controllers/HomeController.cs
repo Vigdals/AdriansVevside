@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Adrians.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,7 +21,7 @@ namespace Adrians.Controllers
             return View();
             //return RedirectToAction("Index", "EM24");
         }
-        
+
         public IActionResult LogHubSite()
         {
             LogHub();

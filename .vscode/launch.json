@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Adrians/bin/Debug/net6.0/Adrians.dll",
+            "program": "${workspaceFolder}/Adrians/bin/Debug/net8.0/Adrians.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Adrians",
             "stopAtEntry": false,
