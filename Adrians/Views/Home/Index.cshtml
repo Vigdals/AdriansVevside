@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
 
 @* <div class="text-center">
@@ -7,58 +7,57 @@
 </div> *@
 
 <div class="text-center">
-    
-    <div id="weather">Loading weather...</div>
 
-    <img src="~/img/birken.png" alt="birken_logo" width="299" height="250"/>
-    <h2 id="Countdown"></h2>
-    <p>
-        <input type="button" class="btn btn-outline-dark" value="Ping LogHub!" onclick="location.href='@Url.Action("LogHubSite", "Home")'"/>
-    </p>
-    <p>
-        Email me at <span style="unicode-bidi:bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
-    </p>
+  <div id="weather">Loading weather...</div>
+
+  <img src="~/img/birken.png" alt="birken_logo" width="299" height="250" />
+  <h2 id="Countdown"></h2>
+  <p>
+    <input type="button" class="btn btn-outline-dark" value="Ping LogHub!"
+      onclick="location.href='@Url.Action("LogHubSite", "Home")'" />
+  </p>
+  <p>
+    Email me at <span style="unicode-bidi:bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
+  </p>
 </div>
 
 
-
-
 <script>
-    // Set the date i'm' counting down to
-    var countDownDate = new Date("Mar 22, 2025 08:40:00").getTime();
+  // Set the date i'm' counting down to
+  var countDownDate = new Date("Mar 22, 2025 08:40:00").getTime();
 
-    // Update the count down every 1 second
-    var x = setInterval(function () {
+  // Update the count down every 1 second
+  var x = setInterval(function () {
 
-        // Get today's date and time
-        var now = new Date().getTime();
+    // Get today's date and time
+    var now = new Date().getTime();
 
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
 
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Output the result in an element with id="lustraløpetCountdown"
-        document.getElementById("Countdown").innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
+    // Output the result in an element with id="lustraløpetCountdown"
+    document.getElementById("Countdown").innerHTML = days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s ";
 
-        // If the count down is over, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("Countdown").innerHTML = "";
-        }
-    }, 1000);
+    // If the count down is over, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("Countdown").innerHTML = "";
+    }
+  }, 1000);
 </script>
 
 <script>
-    // 🌦 Fetch Weather from Yr.no for Sogndal
-    fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=61.2296&lon=7.1015", {
-      headers: { "User-Agent": "AdriansVevside/1.0" }
-    })
+  // 🌦 Fetch Weather from Yr.no for Sogndal
+  fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=61.2296&lon=7.1015", {
+    headers: { "User-Agent": "AdriansVevside/1.0" }
+  })
     .then(response => response.json())
     .then(data => {
       const weatherElement = document.getElementById("weather");

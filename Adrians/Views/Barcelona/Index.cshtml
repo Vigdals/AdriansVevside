@@ -1,0 +1,34 @@
+@model List<Match>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Upcoming Matches for FC Barcelona</h2>
+    <div class="row">
+        @foreach (var match in Model)
+        {
+            var matchDate = DateTime.Parse(match.Date);
+            <!-- Ensure it's in the correct timezone -->
+
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@match.HomeTeam vs @match.AwayTeam</h5>
+                        <p class="card-text">Match Date:</p>
+                        <p class="card-subtitle text-muted">
+                            <strong>@matchDate.ToString("dd/MM/yyyy HH:mm")</strong>
+                        </p>
+                        <p class="card-text">Status:
+                            @if (match.Status == "SCHEDULED")
+                            {
+                                <span class="badge badge-warning">Scheduled</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-info">@match.Status</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
