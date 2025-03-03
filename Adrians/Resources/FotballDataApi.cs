@@ -15,8 +15,8 @@ public class FotballDataApi
         {
             client.DefaultRequestHeaders.Add("X-Auth-Token", _apiKey);
 
-            // Fetch matches for FC Barcelona
-            var response = await client.GetStringAsync($"{ApiUrl}?team=81&status=SCHEDULED&limit=5");
+            // Fetch matches for FC Barcelona with the correct API call
+            var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=5");
 
             // Deserialize the response into the list of Match objects
             var matchesResponse = JsonConvert.DeserializeObject<ApiMatchesResponse>(response);
@@ -30,7 +30,9 @@ public class FotballDataApi
                     HomeTeam = match.HomeTeam.Name,
                     AwayTeam = match.AwayTeam.Name,
                     Date = match.utcDate,
-                    Status = match.Status
+                    Status = match.Status,
+                    HomeTeamLogo = match.HomeTeam.CrestUrl,  // Adding logo URL
+                    AwayTeamLogo = match.AwayTeam.CrestUrl   // Adding logo URL
                 });
             }
 
@@ -55,4 +57,5 @@ public class MatchDetail
 public class Team
 {
     public string Name { get; set; }
+    public string CrestUrl { get; set; }  // Property for the team logo URL
 }

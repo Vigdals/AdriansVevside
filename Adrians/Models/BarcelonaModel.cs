@@ -9,5 +9,8 @@ namespace Adrians.Models
         public string AwayTeam { get; set; }
         public string Date { get; set; }
         public string Status { get; set; }
+        public string HomeTeamLogo { get; set; }  // Logo URL for the home team
+        public string AwayTeamLogo { get; set; }  // Logo URL for the away team
     }
+
 }
