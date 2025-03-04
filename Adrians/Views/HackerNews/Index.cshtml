@@ -1,26 +1,20 @@
 ﻿@model List<Adrians.Models.HackerNewsModel>?
 
-<div>
-    <h6>Top stories on Hacker News</h6>
-  
-    <table class="table table-striped table-hover table-responsive" style="width: 600px">
-        <thead class="thead-dark">
-        <tr>
-            <th>Score</th>
-            <th>Title</th>
-            <th>By</th>
-        </tr>
-        </thead>
-        <tbody>
+<div class="container mt-5">
+    <h2 class="mb-4">Top stories on Hacker News</h2>
+    <div class="row">
         @foreach (var item in Model)
         {
-            <tr>
-                <td><a href="https://news.ycombinator.com/item?id= @item.score">@item.score</a></td>
-                <td><a href="@item.url">@item.title</a></td>
-                <td>@item.by</td>
-            </tr>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm bg-dark text-light">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="@item.url" class="text-light">@item.title</a></h5>
+                        <p class="card-text">Score: <a href="https://news.ycombinator.com/item?id=@item.score" class="text-warning">@item.score</a></p>
+                        <p class="card-text">By: <span class="text-info">@item.by</span></p>
+                    </div>
+                </div>
+            </div>
         }
-        </tbody>
-    </table>
-    <p>*Click the score to get to comments</p>
+    </div>
+    <p class="text-light">*Click the score to get to comments. I think</p>
 </div>
