@@ -1,6 +1,5 @@
 ﻿@model List<Adrians.Models.FplMatchesModel.Event>
 
-
 <div class="container mt-5">
     <h2 class="mb-4">Upcoming FPL Events</h2>
     <div class="row">
@@ -8,7 +7,7 @@
         {
             var localDeadlineTime = TimeZoneInfo.ConvertTimeFromUtc(eventItem.DeadlineTime, TimeZoneInfo.FindSystemTimeZoneById("Romance Standard Time"));
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm bg-dark text-light">
                     <div class="card-body">
                         <h5 class="card-title">@eventItem.Name</h5>
                         <p class="card-text">Neste deadline:</p>

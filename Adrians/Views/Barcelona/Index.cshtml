@@ -9,29 +9,36 @@
             <!-- Assuming 'match.Date' is a string -->
 
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm bg-dark text-light">
                     <div class="card-body">
                         <!-- Display Home Team Logo and Name -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <img src="@match.HomeTeamLogo" alt="@match.HomeTeam"
-                                style="width: 40px; height: 40px; object-fit: cover;" />
+                            @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
+                            {
+                                <img src="@match.HomeTeamLogo" alt="@match.HomeTeam"
+                                     style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
                             <h5 class="card-title">@match.HomeTeam vs @match.AwayTeam</h5>
-                            <img src="@match.AwayTeamLogo" alt="@match.AwayTeam"
-                                style="width: 40px; height: 40px; object-fit: cover;" />
+                            @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
+                            {
+                                <img src="@match.AwayTeamLogo" alt="@match.AwayTeam"
+                                     style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
                         </div>
 
                         <p class="card-text">Match Date:</p>
                         <p class="card-subtitle text-muted">
                             <strong>@matchDate.ToString("dd/MM/yyyy HH:mm")</strong>
                         </p>
-                        <p class="card-text">Status:
+                        <p class="card-text">
+                            Status:
                             @if (match.Status == "SCHEDULED")
                             {
-                                <span class="badge badge-warning">Scheduled</span>
+                                <span class="badge bg-warning text-dark">Scheduled</span>
                             }
                             else
                             {
-                                <span class="badge badge-info">@match.Status</span>
+                                <span class="badge bg-info text-dark">@match.Status</span>
                             }
                         </p>
                     </div>
