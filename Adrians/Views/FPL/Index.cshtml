@@ -9,12 +9,51 @@
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm bg-dark text-light">
                     <div class="card-body">
-                        <h5 class="card-title">@eventItem.Name</h5>
-                        <p class="card-text">Neste deadline:</p>
-                        <p class="card-subtitle text-muted"><strong>@localDeadlineTime.ToString("dd/MM/yyyy HH:mm")</strong></p>
+                        <h5 class="card-title text-white">@eventItem.Name</h5>
+                        <p class="card-text">Next deadline:</p>
+                        <p class="card-subtitle text-white"><strong>@localDeadlineTime.ToString("dd/MM/yyyy HH:mm")</strong></p>
+                        <p class="card-subtitle"><strong id="countdown-@eventItem.Id"></strong></p>
                     </div>
                 </div>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    function updateCountdown(deadline, elementId) {
+                        const countdownElement = document.getElementById(elementId);
+                        const deadlineDate = new Date(deadline);
+
+                        function calculateTimeLeft() {
+                            const now = new Date();
+                            const timeLeft = deadlineDate - now;
+
+                            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                            // Calculate color based on time left relative to 7 days
+                            const totalHours = (deadlineDate - now) / (1000 * 60 * 60);
+                            const maxHours = 7 * 24; // 7 days
+                            const green = Math.min(255, Math.max(0, (totalHours / maxHours) * 150)); // Scale down the green value
+                            const red = 255 - green;
+                            countdownElement.style.color = `rgb(${red}, ${green}, 0)`;
+
+                            if (timeLeft < 0) {
+                                clearInterval(interval);
+                                countdownElement.innerHTML = "Event has started";
+                            }
+                        }
+
+                        calculateTimeLeft();
+                        const interval = setInterval(calculateTimeLeft, 1000);
+                    }
+
+                    updateCountdown('@localDeadlineTime.ToString("yyyy-MM-ddTHH:mm:ssZ")', 'countdown-@eventItem.Id');
+                });
+            </script>
         }
     </div>
 </div>
+

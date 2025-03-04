@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Adrians.Areas.Identity.Data;
 
@@ -13,5 +9,5 @@ public class AdriansUser : IdentityUser
     public string? Brukarnamn { get; set; }
 
     [PersonalData]
-    public int? Poengsum{ get; set;}
+    public int? Poengsum { get; set; }
 }

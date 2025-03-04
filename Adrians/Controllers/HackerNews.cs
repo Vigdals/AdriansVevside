@@ -1,5 +1,4 @@
-﻿using Adrians.Models;
-using Adrians.Resources;
+﻿using Adrians.Resources;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -66,7 +65,7 @@ namespace Adrians.Controllers
             }
 
             //return hackerNewsModelList;
-            return hackerNewsModelList.OrderByDescending(i=>i.score).ToList();
+            return hackerNewsModelList.OrderByDescending(i => i.score).ToList();
         }
     }
 }

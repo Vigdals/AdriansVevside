@@ -1,5 +1,4 @@
-﻿using Adrians.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Diagnostics;
 

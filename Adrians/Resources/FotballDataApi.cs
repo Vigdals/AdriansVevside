@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
-using Adrians.Models;
 using System.Diagnostics;
+using Adrians.Models;
 
 public class FotballDataApi
 {
@@ -15,9 +15,6 @@ public class FotballDataApi
 
             // Fetch matches for FC Barcelona with the correct API call
             var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=5");
-
-            // Log the response for debugging
-            Debug.WriteLine(response);
 
             // Deserialize the response into the BarcelonaModel object
             var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
@@ -35,10 +32,12 @@ public class FotballDataApi
                     {
                         HomeTeam = match.HomeTeam.Name,
                         AwayTeam = match.AwayTeam.Name,
-                        Date = match.utcDate,
+                        Date = match.UtcDate,
                         Status = match.Status,
                         HomeTeamLogo = match.HomeTeam.CrestUrl, // Adding logo URL
-                        AwayTeamLogo = match.AwayTeam.CrestUrl // Adding logo URL
+                        AwayTeamLogo = match.AwayTeam.CrestUrl, // Adding logo URL
+                        HomeTeamShortName = match.HomeTeam.TeamShortName, // Adding short name
+                        AwayTeamShortName = match.AwayTeam.TeamShortName  // Adding short name
                     });
                 }
             }

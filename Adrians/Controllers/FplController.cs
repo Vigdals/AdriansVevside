@@ -1,6 +1,5 @@
 ﻿using Adrians.Resources;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Text.Json;
 
 namespace Adrians.Controllers
@@ -10,7 +9,6 @@ namespace Adrians.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             var hackerNewsModelList = await GetDeadlines();
-
 
             //Just getting future deadlines
             DateTime now = DateTime.UtcNow;

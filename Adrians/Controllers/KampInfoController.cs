@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Adrians.Models;
-using Adrians.Resources;
+﻿using Adrians.Resources;
+using Adrians.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
-using Adrians.ViewModels;
 
 namespace Adrians.Controllers
 {
@@ -39,7 +38,7 @@ namespace Adrians.Controllers
             //The most sexy oneliner in the world!
             //Takes the jsonResult, deserializes it and adds it to my model. Crazy easy
             var matchModel = JsonSerializer.Deserialize<List<NifsKampModel>>(jsonResult);
-            
+
             return matchModel;
         }
     }

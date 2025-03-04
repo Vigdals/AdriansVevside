@@ -1,6 +1,4 @@
-﻿using Adrians.Models;
-
-namespace Adrians.ViewModels
+﻿namespace Adrians.ViewModels
 {
     public class NifsKampViewModel
     {
@@ -17,5 +15,5 @@ namespace Adrians.ViewModels
             this.stadium = match.stadium.name;
         }
     }
-    
+
 }

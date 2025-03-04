@@ -2,7 +2,7 @@
 
 namespace Adrians.Models
 {
-    
+
     public class HackerNewsModel
     {
         public string? by { get; set; }

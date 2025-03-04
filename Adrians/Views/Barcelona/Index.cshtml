@@ -15,20 +15,27 @@
                         <div class="d-flex justify-content-between align-items-center">
                             @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
                             {
-                                <img src="@match.HomeTeamLogo" alt="@match.HomeTeam"
+                                <img src="@match.HomeTeamLogo" alt="@match.HomeTeamShortName"
                                      style="width: 40px; height: 40px; object-fit: cover;" />
                             }
-                            <h5 class="card-title">@match.HomeTeam vs @match.AwayTeam</h5>
+                            <h5 class="card-title">@match.HomeTeamShortName vs @match.AwayTeamShortName</h5>
                             @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
                             {
-                                <img src="@match.AwayTeamLogo" alt="@match.AwayTeam"
+                                <img src="@match.AwayTeamLogo" alt="@match.AwayTeamShortName"
                                      style="width: 40px; height: 40px; object-fit: cover;" />
                             }
                         </div>
-
-                        <p class="card-text">Match Date:</p>
-                        <p class="card-subtitle text-muted">
-                            <strong>@matchDate.ToString("dd/MM/yyyy HH:mm")</strong>
+                        <p class="card-subtitle text-light">
+                            <strong>
+                                @if (match.Status == "SCHEDULED")
+                                {
+                                    @:<!-- Match date is blank when status is SCHEDULED -->
+                                }
+                                else
+                                {
+                                    @matchDate.ToString("dd/MM/yyyy HH:mm")
+                                }
+                            </strong>
                         </p>
                         <p class="card-text">
                             Status:
@@ -47,3 +54,4 @@
         }
     </div>
 </div>
+
