@@ -19,9 +19,6 @@ public class FotballDataApi
             // Deserialize the response into the BarcelonaModel object
             var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
 
-            // Log the deserialized response for debugging
-            Debug.WriteLine(JsonConvert.SerializeObject(matchesResponse, Formatting.Indented));
-
             var upcomingMatches = new List<Match>();
 
             if (matchesResponse?.Matches != null)
