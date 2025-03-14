@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Adrians.Models;
 
 public class FotballDataApi

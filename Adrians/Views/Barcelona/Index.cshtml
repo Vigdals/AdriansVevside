@@ -1,7 +1,7 @@
 @model List<Match>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Upcoming Matches for FC Barcelona</h2>
+    <h2 class="mb-4 text-center">Upcoming Matches for FC Barcelona</h2>
     <div class="row">
         @foreach (var match in Model)
         {
@@ -10,7 +10,7 @@
 
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm bg-dark text-light">
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <!-- Display Home Team Logo and Name -->
                         <div class="d-flex justify-content-between align-items-center">
                             @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
@@ -54,4 +54,3 @@
         }
     </div>
 </div>
-

@@ -22,7 +22,7 @@ public class Team
 {
     [JsonProperty("name")] public string Name { get; set; }
 
-    [JsonProperty("crestUrl")] public string CrestUrl { get; set; }
+    [JsonProperty("crest")] public string CrestUrl { get; set; }
 
     [JsonProperty("shortName")] public string TeamShortName { get; set; }
 }
