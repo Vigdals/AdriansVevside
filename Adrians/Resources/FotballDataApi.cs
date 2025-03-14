@@ -1,8 +1,4 @@
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Adrians.Models;
 
 public class FotballDataApi
 {
@@ -24,9 +20,7 @@ public class FotballDataApi
             var upcomingMatches = new List<Match>();
 
             if (matchesResponse?.Matches != null)
-            {
                 foreach (var match in matchesResponse.Matches)
-                {
                     upcomingMatches.Add(new Match
                     {
                         HomeTeam = match.HomeTeam.Name,
@@ -36,10 +30,8 @@ public class FotballDataApi
                         HomeTeamLogo = match.HomeTeam.CrestUrl, // Adding logo URL
                         AwayTeamLogo = match.AwayTeam.CrestUrl, // Adding logo URL
                         HomeTeamShortName = match.HomeTeam.TeamShortName, // Adding short name
-                        AwayTeamShortName = match.AwayTeam.TeamShortName  // Adding short name
+                        AwayTeamShortName = match.AwayTeam.TeamShortName // Adding short name
                     });
-                }
-            }
 
             return upcomingMatches;
         }

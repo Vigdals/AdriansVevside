@@ -1,4 +1,4 @@
-﻿    @model List<Adrians.ViewModels.NifsKampViewModel>?
+﻿@model List<Adrians.ViewModels.NifsKampViewModel>?
 
 @using (Html.BeginForm("Index", "KampInfo", FormMethod.Post))
 {
@@ -7,10 +7,10 @@
             Velg liga
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new {stageId = "690256"})'>Champions League sluttspel</a>
-            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new {stageId = "690266"})'> Europa League sluttspel</a>
+            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new { stageId = "690256" })'>Champions League sluttspel</a>
+            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new { stageId = "690266" })'> Europa League sluttspel</a>
             @*<a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new {stageId = "687987"})'>Conference League sluttspel</a>*@
-            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new {stageId = "59"})'>EM 24</a>
+            <a class="dropdown-item" href='@Url.Action("Index", "KampInfo", new { stageId = "59" })'>EM 24</a>
         </div>
     </div>
 }
@@ -21,21 +21,21 @@
     <div>
         <table class="table table-striped table-hover table-responsive" style="width: 600px">
             <thead class="thead-dark">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.homeTeam</td>
-                        <td>@item.result</td>
-                        <td>@item.awayTeam</td>
-                    </tr>
-                }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.homeTeam</td>
+                    <td>@item.result</td>
+                    <td>@item.awayTeam</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

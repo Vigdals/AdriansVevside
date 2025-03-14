@@ -1,4 +1,4 @@
-﻿@model List<Adrians.Models.HackerNewsModel>?
+﻿@model List<HackerNewsModel>?
 
 <div class="container mt-5">
     <h2 class="mb-4">Top stories on Hacker News</h2>
@@ -8,7 +8,9 @@
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm bg-dark text-light">
                     <div class="card-body">
-                        <h5 class="card-title"><a href="@item.url" class="text-light">@item.title</a></h5>
+                        <h5 class="card-title">
+                            <a href="@item.url" class="text-light">@item.title</a>
+                        </h5>
                         <p class="card-text">Score: <a href="https://news.ycombinator.com/item?id=@item.score" class="text-warning">@item.score</a></p>
                         <p class="card-text">By: <span class="text-info">@item.by</span></p>
                     </div>

@@ -1,4 +1,4 @@
-﻿@model List<Adrians.Models.FplMatchesModel.Event>
+﻿@model List<FplMatchesModel.Event>
 
 <div class="container mt-5">
     <h2 class="mb-4">Upcoming FPL Events</h2>
@@ -11,8 +11,12 @@
                     <div class="card-body">
                         <h5 class="card-title text-white">@eventItem.Name</h5>
                         <p class="card-text">Next deadline:</p>
-                        <p class="card-subtitle text-white"><strong>@localDeadlineTime.ToString("dd/MM/yyyy HH:mm")</strong></p>
-                        <p class="card-subtitle"><strong id="countdown-@eventItem.Id"></strong></p>
+                        <p class="card-subtitle text-white">
+                            <strong>@localDeadlineTime.ToString("dd/MM/yyyy HH:mm")</strong>
+                        </p>
+                        <p class="card-subtitle">
+                            <strong id="countdown-@eventItem.Id"></strong>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -56,4 +60,3 @@
         }
     </div>
 </div>
-

@@ -1,7 +1,5 @@
-﻿namespace Adrians.Models
-{
-    public class TeamModel
-    {
+﻿namespace Adrians.Models;
 
-    }
+public class TeamModel
+{
 }

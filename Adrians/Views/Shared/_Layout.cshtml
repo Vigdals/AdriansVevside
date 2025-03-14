@@ -2,86 +2,100 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"/>
     <title>AdriansVevside</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
 </head>
 
 <body class="bg-dark text-light">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Adrians</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Fpl" asp-action="Index">FPL</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Barcelona"
-                               asp-action="Index">Barca</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="HackerNews"
-                               asp-action="Index">HackerNews</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                Langrenn
-                            </a>
-                            <ul class="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
-                                       asp-action="Hodlekve">Hodlekve</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
-                                       asp-action="Heggis">Heggis</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
-                                       asp-action="Brunestegen">Brunestegen</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Enhetsregisteret"
-                               asp-action="Index">Enhetsregisteret</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Admin"
-                                   asp-action="Index">Admin</a>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Adrians</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Fpl" asp-action="Index">FPL</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Barcelona"
+                           asp-action="Index">
+                            Barca
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="HackerNews"
+                           asp-action="Index">
+                            HackerNews
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Langrenn
+                        </a>
+                        <ul class="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
+                                   asp-action="Hodlekve">
+                                    Hodlekve
+                                </a>
                             </li>
-                        }
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+                            <li>
+                                <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
+                                   asp-action="Heggis">
+                                    Heggis
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light" asp-area="" asp-controller="Langrenn"
+                                   asp-action="Brunestegen">
+                                    Brunestegen
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Enhetsregisteret"
+                           asp-action="Index">
+                            Enhetsregisteret
+                        </a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Admin"
+                               asp-action="Index">
+                                Admin
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <partial name="_LoginPartial"/>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted bg-dark">
-        <div class="container">
-            &copy; @DateTime.Now.Year - <a class="text-light" asp-area="" asp-controller="Home" asp-action="Index">Adrians</a>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted bg-dark">
+    <div class="container">
+        &copy; @DateTime.Now.Year - <a class="text-light" asp-area="" asp-controller="Home" asp-action="Index">Adrians</a>
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
 </body>
 
 </html>

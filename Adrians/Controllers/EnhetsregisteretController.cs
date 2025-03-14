@@ -1,34 +1,28 @@
-﻿using Adrians.Resources;
+﻿using System.Text.Json;
+using Adrians.Resources;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
-namespace Adrians.Controllers
+namespace Adrians.Controllers;
+
+public class EnhetsregisteretController : Controller
 {
-    public class EnhetsregisteretController : Controller
+    public IActionResult Index(string orgNummer)
     {
-        public IActionResult Index(string orgNummer)
-        {
-            if (string.IsNullOrWhiteSpace(orgNummer))
-            {
-                return View();
-            }
-            else
-            {
-                var Organisasjon = GetApiInfo("https://data.brreg.no/enhetsregisteret/api/enheter/" + orgNummer);
+        if (string.IsNullOrWhiteSpace(orgNummer)) return View();
 
-                return View();
-            }
-        }
+        var Organisasjon = GetApiInfo("https://data.brreg.no/enhetsregisteret/api/enheter/" + orgNummer);
 
-        public async Task<List<OrgModel>> GetApiInfo(string apiEndpoint)
-        {
-            var OrgModelList = new List<OrgModel>();
-            var jsonResult = await ApiCall.DoApiCallAsync(apiEndpoint);
+        return View();
+    }
 
-            JsonElement json = JsonSerializer.Deserialize<JsonElement>(jsonResult);
+    public async Task<List<OrgModel>> GetApiInfo(string apiEndpoint)
+    {
+        var OrgModelList = new List<OrgModel>();
+        var jsonResult = await ApiCall.DoApiCallAsync(apiEndpoint);
+
+        var json = JsonSerializer.Deserialize<JsonElement>(jsonResult);
 
 
-            return OrgModelList;
-        }
+        return OrgModelList;
     }
 }
