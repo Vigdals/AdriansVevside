@@ -66,6 +66,12 @@
                             Enhetsregisteret
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="RPG"
+                           asp-action="Index">
+                            RPG
+                        </a>
+                    </li>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
                     {
                         <li class="nav-item">

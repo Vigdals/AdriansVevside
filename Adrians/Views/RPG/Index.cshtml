@@ -1,6 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Epic RPG Adventure - Fight!";
 }
-RPG game coming soon!
+
+<div style="text-align:center; margin-top:50px;">
+    <h1>The Epic Journey Awaits!</h1>
+    <h2>Prepare for Battle!</h2>
+    <p>Ready your sword and shield for a fight against a feeble enemy!</p>
+    
+    <!-- Fight Button -->
+    <p>
+        <button id="fightBtn" class="btn btn-danger" style="padding:10px; font-size:16px;">
+            Engage in Battle
+        </button>
+    </p>
+    
+    <!-- Container to display battle outcome -->
+    <div id="result" style="margin-top:30px; font-size:18px; white-space: pre-line;"></div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#fightBtn").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("Adventure", "Game")',
+                    type: 'GET',
+                    success: function(result) {
+                        $("#result").text(result);
+                    },
+                    error: function() {
+                        $("#result").text("An error occurred while engaging in battle.");
+                    }
+                });
+            });
+        });
+    </script>
+}
