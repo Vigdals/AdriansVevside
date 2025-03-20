@@ -1,14 +1,29 @@
 global using Adrians.Models;
 using Adrians.Data;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplicationInsightsTelemetry();
+// Load Azure Key Vault
+var keyVaultUrl = builder.Configuration["AzureKeyVault:VaultUri"];
+if (!string.IsNullOrEmpty(keyVaultUrl))
+{
+    var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+    builder.Configuration.AddAzureKeyVault(secretClient, new AzureKeyVaultConfigurationOptions());
+}
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Retrieve the database password from Key Vault
+var keyVaultClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+var secret = keyVaultClient.GetSecret("sql-sa-adriansDbAdmin");
+var dbPassword = secret.Value.Value;
+
+// Inject the password into the connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!
+    .Replace("PLACEHOLDER", dbPassword);
 
 // Register ApplicationDbContext for Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -18,21 +33,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDbContext<GameContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Removed confirmed account here for simplicity
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
-
-// Register HttpClient
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -40,15 +52,12 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
