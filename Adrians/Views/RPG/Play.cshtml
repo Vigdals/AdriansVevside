@@ -1,0 +1,23 @@
+﻿@model Adrians.Models.RPGModels.Character
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Adventure Choices";
+}
+
+<h2>Welcome, @Model.Name!</h2>
+<p>Your current health: @Model.Health</p>
+
+<h3>Choose Your Action</h3>
+<form method="get" asp-action="Adventure">
+    <div class="form-group">
+        <label for="choice">Select an action:</label>
+        <select id="choice" name="choice" class="form-control" style="width:50%; display:inline-block;">
+            <option value="">-- Choose an action --</option>
+            <option value="fight">Fight</option>
+            <option value="explore">Explore</option>
+        </select>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
