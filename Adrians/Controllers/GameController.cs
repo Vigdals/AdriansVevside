@@ -99,7 +99,7 @@ namespace Adrians.Controllers
                 // The Balrog always wins: your health is set to 1.
                 character.Health = 1;
                 _context.SaveChanges();
-                resultMessage = $"{encounterMessage}\n\nYou are overwhelmed by the Balrog and fall, thelling the others to -- FLY YOU FOOLS --, leaving you with only 1 HP.";
+                resultMessage = $"{encounterMessage}\n\nYou are overwhelmed by the Balrog and fall, telling the others to -- FLY YOU FOOLS --, leaving you with only 1 HP.";
             }
             // 10% chance: Encounter a mighty Uruk-hai.
             else if (roll < 0.11) // from 0.01 to 0.11 = 10%
@@ -114,7 +114,7 @@ namespace Adrians.Controllers
                 if (battleRoll < winChance)
                 {
                     int healthGain = 40;
-                    character.Health += healthGain;
+                    character.Health = Math.Min(character.Health + healthGain, 100);
                     _context.SaveChanges();
                     resultMessage = $"{encounterMessage}\n\nAgainst all odds, you defeat the mighty enemy! You gain {healthGain} health. New health: {character.Health}.";
                 }
@@ -139,7 +139,7 @@ namespace Adrians.Controllers
                 if (battleRoll < winChance)
                 {
                     int healthGain = 10;
-                    character.Health += healthGain;
+                    character.Health = Math.Min(character.Health + healthGain, 100);
                     _context.SaveChanges();
                     resultMessage = $"{encounterMessage}\n\nYou engage in battle and defeat the enemy! You gain {healthGain} health. New health: {character.Health}.";
                 }
