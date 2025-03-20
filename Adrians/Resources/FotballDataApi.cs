@@ -20,33 +20,31 @@ public class FotballDataApi
 
     public async Task<List<Match>> GetUpcomingMatchesAsync()
     {
-        using (var client = new HttpClient())
-        {
-            client.DefaultRequestHeaders.Add("X-Auth-Token", _apiKey);
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("X-Auth-Token", _apiKey);
 
-            // Fetch matches for FC Barcelona with the correct API call
-            var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=5");
+        // Fetch matches for FC Barcelona with the correct API call
+        var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=5");
 
-            // Deserialize the response into the BarcelonaModel object
-            var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
+        // Deserialize the response into the BarcelonaModel object
+        var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
 
-            var upcomingMatches = new List<Match>();
+        var upcomingMatches = new List<Match>();
 
-            if (matchesResponse?.Matches != null)
-                foreach (var match in matchesResponse.Matches)
-                    upcomingMatches.Add(new Match
-                    {
-                        HomeTeam = match.HomeTeam.Name,
-                        AwayTeam = match.AwayTeam.Name,
-                        Date = match.UtcDate,
-                        Status = match.Status,
-                        HomeTeamLogo = match.HomeTeam.CrestUrl,
-                        AwayTeamLogo = match.AwayTeam.CrestUrl,
-                        HomeTeamShortName = match.HomeTeam.TeamShortName,
-                        AwayTeamShortName = match.AwayTeam.TeamShortName
-                    });
+        if (matchesResponse?.Matches != null)
+            foreach (var match in matchesResponse.Matches)
+                upcomingMatches.Add(new Match
+                {
+                    HomeTeam = match.HomeTeam.Name,
+                    AwayTeam = match.AwayTeam.Name,
+                    Date = match.UtcDate,
+                    Status = match.Status,
+                    HomeTeamLogo = match.HomeTeam.CrestUrl,
+                    AwayTeamLogo = match.AwayTeam.CrestUrl,
+                    HomeTeamShortName = match.HomeTeam.TeamShortName,
+                    AwayTeamShortName = match.AwayTeam.TeamShortName
+                });
 
-            return upcomingMatches;
-        }
+        return upcomingMatches;
     }
 }
