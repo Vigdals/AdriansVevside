@@ -75,13 +75,19 @@ namespace Adrians.Controllers
         }
         private static readonly Random _random = new Random();
 
+        /// <summary>
+        /// GET: Game/Adventure
+        /// Simulates a battle and returns a JSON result containing a battle message and updated health.
+        /// </summary>
         public IActionResult Adventure()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var character = _context.Characters.FirstOrDefault(c => c.ApplicationUserId == userId);
 
             if (character == null)
-                return Content("No character found. Please create one first.", "text/plain");
+            {
+                return Json(new { error = "No character found. Please create one first." });
+            }
 
             // Introduce the enemy
             string enemyName = "a feeble Orc";
@@ -92,20 +98,23 @@ namespace Adrians.Controllers
             double playerChanceToWin = 0.75;
             double roll = _random.NextDouble();
 
+            string resultMessage;
             if (roll < playerChanceToWin)
             {
                 int healthGain = 10;
                 character.Health += healthGain;
                 _context.SaveChanges();
-                return Content($"{encounterMessage}\n\nYou engage in battle and defeat the enemy! You gain {healthGain} health. New health: {character.Health}.", "text/plain");
+                resultMessage = $"{encounterMessage}\n\nYou engage in battle and defeat the enemy! You gain {healthGain} health.";
             }
             else
             {
                 int healthLoss = 15;
                 character.Health -= healthLoss;
                 _context.SaveChanges();
-                return Content($"{encounterMessage}\n\nYou fight valiantly but take a hit, losing {healthLoss} health. New health: {character.Health}.", "text/plain");
+                resultMessage = $"{encounterMessage}\n\nYou fight valiantly but take a hit, losing {healthLoss} health.";
             }
+
+            return Json(new { message = resultMessage, health = character.Health });
         }
     }
 }

@@ -1,10 +1,16 @@
-﻿@{
+﻿@model Adrians.Models.RPGModels.Character
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Epic RPG Adventure - Fight!";
 }
 
 <div style="text-align:center; margin-top:50px;">
     <h1>The Epic Journey Awaits!</h1>
+    <!-- Display character details loaded from the database -->
+    <h2>Hello, @Model.Name!</h2>
+    <p>Your current health: <span id="healthDisplay">@Model.Health</span></p>
+    
     <h2>Prepare for Battle!</h2>
     <p>Ready your sword and shield for a fight against a feeble enemy!</p>
     
@@ -22,20 +28,28 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#fightBtn").click(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '@Url.Action("Adventure", "Game")',
-                    type: 'GET',
-                    success: function(result) {
-                        $("#result").text(result);
-                    },
-                    error: function() {
-                        $("#result").text("An error occurred while engaging in battle.");
-                    }
-                });
-            });
-        });
+    $(document).ready(function() {
+         $("#fightBtn").click(function(e) {
+             e.preventDefault();
+             $.ajax({
+                 url: '@Url.Action("Adventure", "Game")',
+                 type: 'GET',
+                 dataType: 'json',
+                 success: function(data) {
+                     // Check if there is an error returned
+                     if (data.error) {
+                         $("#result").text(data.error);
+                     } else {
+                         $("#result").text(data.message);
+                         // Update the health display on the page
+                         $("#healthDisplay").text(data.health);
+                     }
+                 },
+                 error: function() {
+                     $("#result").text("An error occurred while engaging in battle.");
+                 }
+             });
+         });
+    });
     </script>
 }
