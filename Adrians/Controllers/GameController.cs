@@ -33,7 +33,7 @@ namespace Adrians.Controllers
             if (string.IsNullOrEmpty(model.CharacterName))
             {
                 ModelState.AddModelError("CharacterName", "Character name is required.");
-                return View(model);
+                return View("~/Views/RPG/CreateCharacter.cshtml", model);
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -41,7 +41,7 @@ namespace Adrians.Controllers
             // Check if the user already has a character
             if (_context.Characters.Any(c => c.ApplicationUserId == userId))
             {
-                return RedirectToAction("Play");
+                return RedirectToAction("Index", "RPG");
             }
 
             // Create and save the new character
@@ -55,24 +55,11 @@ namespace Adrians.Controllers
             _context.Characters.Add(character);
             _context.SaveChanges();
 
-            return RedirectToAction("Play");
+            return RedirectToAction("Index", "RPG");
         }
 
         // GET: Game/Play
-        public IActionResult Play()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var character = _context.Characters.FirstOrDefault(c => c.ApplicationUserId == userId);
 
-            if (character == null)
-            {
-                // If no character exists, redirect to create one.
-                return RedirectToAction("CreateCharacter");
-            }
-
-            // Pass the character to the view so you can display its details
-            return View("~/Views/RPG/Play.cshtml", character);
-        }
         private static readonly Random _random = new Random();
 
         /// <summary>
