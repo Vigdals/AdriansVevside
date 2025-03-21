@@ -1,0 +1,10 @@
+name: Custom CodeQL Config
+queries:
+  - security-and-quality
+query-filters:
+  "*":
+    exclude:
+      when:
+        severity:
+          - low
+          - warning
