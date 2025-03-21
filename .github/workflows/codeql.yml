@@ -23,18 +23,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript']
+        language: [ 'csharp', 'javascript', 'actions']
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby']
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          queries: security-and-quality
+          queries: |
+            security-and-quality
+            model-pack-${{ matrix.language }}
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
