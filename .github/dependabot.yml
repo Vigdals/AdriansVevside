@@ -1,6 +1,25 @@
 version: 2
 updates:
+  # Enable version updates for NuGet (.NET, MVC, C#, cshtml, etc.)
   - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps):"
+
+  # Enable version updates for npm (JavaScript, HTML)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps):"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
