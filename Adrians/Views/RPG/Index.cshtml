@@ -5,51 +5,115 @@
     ViewBag.Title = "Epic RPG Adventure - Fight!";
 }
 
-<div style="text-align:center; margin-top:50px;">
-    <h1>The Epic Journey Awaits!</h1>
-    <!-- Display character details loaded from the database -->
-    <h2>Hello, @Model.Name!</h2>
-    <p>Your current health: <span id="healthDisplay">@Model.Health</span></p>
-    
-    <h2>Prepare for Battle!</h2>
-    <p>Ready your sword and shield for a fight against a feeble enemy!</p>
-    
-    <!-- Fight Button -->
-    <p>
-        <button id="fightBtn" class="btn btn-danger" style="padding:10px; font-size:16px;">
-            Engage in Battle
-        </button>
-    </p>
-    
-    <!-- Container to display battle outcome -->
-    <div id="result" style="margin-top:30px; font-size:18px; white-space: pre-line;"></div>
+<div class="container my-5">
+    <div class="card bg-dark text-white shadow">
+        <div class="card-body">
+            <h1 class="card-title text-center">The Epic Journey Awaits!</h1>
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <h2>Hello, @Model.Name!</h2>
+                    <!-- Health bar placed below the greeting -->
+                    <div class="my-3">
+                        <div class="progress mx-auto" style="max-width: 300px;">
+                            <div id="healthBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar"
+                                 style="width: @Model.Health%;"
+                                 aria-valuenow="@Model.Health" aria-valuemin="0" aria-valuemax="100">
+                                @Model.Health
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Engage in Battle button -->
+                    <button id="fightBtn" class="btn btn-danger btn-lg my-3">Engage in Battle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Popup for Battle Result -->
+<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resultModalLabel">Battle Result</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalResultBody">
+                <!-- Battle result message will be injected here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+    <!-- jQuery (if not already included in your layout) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-         $("#fightBtn").click(function(e) {
-             e.preventDefault();
-             $.ajax({
-                 url: '@Url.Action("Adventure", "Game")',
-                 type: 'GET',
-                 dataType: 'json',
-                 success: function(data) {
-                     // Check if there is an error returned
-                     if (data.error) {
-                         $("#result").text(data.error);
-                     } else {
-                         $("#result").text(data.message);
-                         // Update the health display on the page
-                         $("#healthDisplay").text(data.health);
+        $(document).ready(function() {
+             $("#fightBtn").click(function(e) {
+                 e.preventDefault();
+                 $.ajax({
+                     url: '@Url.Action("Adventure", "Game")',
+                     type: 'GET',
+                     dataType: 'json',
+                     success: function(data) {
+                         if (data.error) {
+                             $("#modalResultBody").text(data.error);
+                         } else {
+                             $("#modalResultBody").text(data.message);
+                             // Update health display and progress bar (assuming maximum health is 100)
+                             var health = data.health;
+                             var percentage = Math.min(health, 100);
+                             // For dynamic color, we'll compute green from health and red from the difference.
+                             var green = Math.floor((health / 100) * 255);
+                             var red = 255 - green;
+                             var color = "rgb(" + red + ", " + green + ", 0)";
+
+                             $("#healthBar")
+                                 .css("width", percentage + "%")
+                                 .css("background-color", color)
+                                 .attr("aria-valuenow", health)
+                                 .text(health);
+
+                             // Special effects for Balrog encounter
+                             if (data.message.indexOf("Balrog") !== -1) {
+                                 // Flash the modal body background between dark and danger
+                                 var flashes = 0;
+                                 var interval = setInterval(function(){
+                                     $("#modalResultBody").toggleClass("bg-danger");
+                                     flashes++;
+                                     if(flashes >= 6) {
+                                         clearInterval(interval);
+                                         $("#modalResultBody").removeClass("bg-danger");
+                                     }
+                                 }, 300);
+
+                                 // Shake the modal header
+                                 $("#resultModalLabel").animate({ marginLeft: "-10px" }, 100)
+                                     .animate({ marginLeft: "10px" }, 100)
+                                     .animate({ marginLeft: "0px" }, 100);
+                             }
+                         }
+                         // Show the modal popup
+                         var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                         resultModal.show();
+                     },
+                     error: function() {
+                         $("#modalResultBody").text("An error occurred while engaging in battle.").hide().fadeIn(1000);
+                         var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                         resultModal.show();
                      }
-                 },
-                 error: function() {
-                     $("#result").text("An error occurred while engaging in battle.");
-                 }
+                 });
              });
-         });
-    });
+
+             // When the modal is closed, animate the health bar (slide effect)
+             $('#resultModal').on('hidden.bs.modal', function () {
+                 $("#healthBar").slideUp(200).slideDown(200);
+             });
+        });
     </script>
 }
