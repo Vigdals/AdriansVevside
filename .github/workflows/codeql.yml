@@ -33,19 +33,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          config: |
-            queries:
-              - uses: security-and-quality
-            query-filters:
-              - exclude:
-                  when:
-                    severity: 'error'
-              - exclude:
-                  when:
-                    severity: 'low'
-              - exclude:
-                  when:
-                    severity: 'warning'
+          config-file: .github/codeql/codeql-config.yml
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
@@ -59,4 +47,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:${{ matrix.language }}"
