@@ -2,14 +2,14 @@ name: "CodeQL"
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
     paths-ignore:
-      - "**/*.md"
-      - "**/*.txt"
+      - '**/*.md'
+      - '**/*.txt'
   schedule:
-    - cron: "00 12 * * 4"
+    - cron: '00 12 * * 4'
 
 jobs:
   analyze:
@@ -23,7 +23,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["csharp", "javascript"]
+        language: [ 'csharp', 'javascript']
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby']
 
     steps:
       - name: Checkout repository
@@ -33,12 +34,12 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          config-file: .github/codeql/codeql-config.yml
+          queries: security-and-quality
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
 
-      # Uncomment hvis autobuild feiler
+      # Uncomment the following lines if the Autobuild step fails.
       # - name: Build
       #   run: |
       #     dotnet restore
@@ -47,4 +48,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{ matrix.language }}"
+          category: "/language:${{matrix.language}}"
