@@ -1,6 +1,6 @@
 name: "Custom CodeQL Config"
 queries:
-  - uses: security-and-quality
+  - "security-and-quality"
 query-filters:
   - query: "*"
     exclude:
