@@ -1,19 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
+using Adrians.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Adrians.Controllers;
-
-public class BarcelonaController : Controller
+[Authorize]
+[AutoValidateAntiforgeryToken]
+public class BarcaController : Controller
 {
     private readonly FotballDataApi _footballService;
+    private readonly ChatGptService _chatGptService;
 
-    public BarcelonaController()
+    public BarcaController()
     {
         _footballService = new FotballDataApi();
+        _chatGptService = new ChatGptService();
     }
 
-    public async Task<ActionResult> IndexAsync()
+    public async Task<IActionResult> Index()
     {
         var upcomingMatches = await _footballService.GetUpcomingMatchesAsync();
-        return View(upcomingMatches);
+        var gptSummary = TempData["GptSummary"] as string;
+
+        var viewModel = new BarcaViewModel
+        {
+            Matches = upcomingMatches,
+            GptSummary = gptSummary
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> FetchGptSummary()
+    {
+        var gptSummary = await _chatGptService.GetBarcaSummaryAsync();
+        TempData["GptSummary"] = gptSummary;
+
+        return RedirectToAction("Index");
     }
 }
