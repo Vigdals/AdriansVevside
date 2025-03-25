@@ -25,6 +25,8 @@
                     </div>
                     <!-- Engage in Battle button -->
                     <button id="fightBtn" class="btn btn-danger btn-lg my-3">Engage in Battle</button>
+                    <!-- Reset Game Button -->
+                    <button id="resetBtn" class="btn btn-warning btn-sm my-2">Reset Game</button>
                 </div>
             </div>
         </div>
@@ -51,69 +53,104 @@
 
 @section Scripts {
     <!-- jQuery (if not already included in your layout) -->
+    <!-- Dette er vanskeleg... -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-             $("#fightBtn").click(function(e) {
-                 e.preventDefault();
-                 $.ajax({
-                     url: '@Url.Action("Adventure", "Game")',
-                     type: 'GET',
-                     dataType: 'json',
-                     success: function(data) {
-                         if (data.error) {
-                             $("#modalResultBody").text(data.error);
-                         } else {
-                             $("#modalResultBody").text(data.message);
-                             // Update health display and progress bar (assuming maximum health is 100)
-                             var health = data.health;
-                             var percentage = Math.min(health, 100);
-                             // For dynamic color, we'll compute green from health and red from the difference.
-                             var green = Math.floor((health / 100) * 255);
-                             var red = 255 - green;
-                             var color = "rgb(" + red + ", " + green + ", 0)";
+        $(document).ready(function () {
+            // Fight button click
+            $("#fightBtn").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("Adventure", "Game")',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error) {
+                            $("#modalResultBody").text(data.error);
+                        } else {
+                            $("#modalResultBody").text(data.message);
+                            var health = data.health;
+                            var percentage = Math.min(health, 100);
+                            var green = Math.floor((health / 100) * 255);
+                            var red = 255 - green;
+                            var color = "rgb(" + red + ", " + green + ", 0)";
 
-                             $("#healthBar")
-                                 .css("width", percentage + "%")
-                                 .css("background-color", color)
-                                 .attr("aria-valuenow", health)
-                                 .text(health);
+                            $("#healthBar")
+                                .css("width", percentage + "%")
+                                .css("background-color", color)
+                                .attr("aria-valuenow", health)
+                                .text(health);
 
-                             // Special effects for Balrog encounter
-                             if (data.message.indexOf("Balrog") !== -1) {
-                                 // Flash the modal body background between dark and danger
-                                 var flashes = 0;
-                                 var interval = setInterval(function(){
-                                     $("#modalResultBody").toggleClass("bg-danger");
-                                     flashes++;
-                                     if(flashes >= 6) {
-                                         clearInterval(interval);
-                                         $("#modalResultBody").removeClass("bg-danger");
-                                     }
-                                 }, 300);
+                            if (data.message.indexOf("Balrog") !== -1) {
+                                var flashes = 0;
+                                var interval = setInterval(function () {
+                                    $("#modalResultBody").toggleClass("bg-danger");
+                                    flashes++;
+                                    if (flashes >= 6) {
+                                        clearInterval(interval);
+                                        $("#modalResultBody").removeClass("bg-danger");
+                                    }
+                                }, 300);
 
-                                 // Shake the modal header
-                                 $("#resultModalLabel").animate({ marginLeft: "-10px" }, 100)
-                                     .animate({ marginLeft: "10px" }, 100)
-                                     .animate({ marginLeft: "0px" }, 100);
-                             }
-                         }
-                         // Show the modal popup
-                         var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
-                         resultModal.show();
-                     },
-                     error: function() {
-                         $("#modalResultBody").text("An error occurred while engaging in battle.").hide().fadeIn(1000);
-                         var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
-                         resultModal.show();
-                     }
-                 });
-             });
+                                $("#resultModalLabel").animate({ marginLeft: "-10px" }, 100)
+                                    .animate({ marginLeft: "10px" }, 100)
+                                    .animate({ marginLeft: "0px" }, 100);
+                            }
+                        }
+                        var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                        resultModal.show();
+                    },
+                    error: function () {
+                        $("#modalResultBody").text("An error occurred while engaging in battle.");
+                        var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                        resultModal.show();
+                    }
+                });
+            });
 
-             // When the modal is closed, animate the health bar (slide effect)
-             $('#resultModal').on('hidden.bs.modal', function () {
-                 $("#healthBar").slideUp(200).slideDown(200);
-             });
+            // Reset button click
+            $("#resetBtn").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("ResetGame", "Game")',
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error) {
+                            $("#modalResultBody").text(data.error);
+                        } else {
+                            var health = data.health;
+                            var percentage = Math.min(health, 100);
+                            var green = Math.floor((health / 100) * 255);
+                            var red = 255 - green;
+                            var color = "rgb(" + red + ", " + green + ", 0)";
+
+                            $("#healthBar")
+                                .css("width", percentage + "%")
+                                .css("background-color", color)
+                                .attr("aria-valuenow", health)
+                                .text(health);
+
+                            $("#modalResultBody").text("Game has been reset. Health restored to 100.");
+                        }
+                        var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                        resultModal.show();
+                    },
+                    error: function () {
+                        $("#modalResultBody").text("Something went wrong while resetting the game.");
+                        var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                        resultModal.show();
+                    }
+                });
+            });
+
+            // Animate health bar on modal close
+            $('#resultModal').on('hidden.bs.modal', function () {
+                $("#healthBar").slideUp(200).slideDown(200);
+            });
         });
     </script>
 }

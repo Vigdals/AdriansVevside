@@ -154,5 +154,19 @@ namespace Adrians.Controllers
 
             return Json(new { message = resultMessage, health = character.Health });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResetGame()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var character = _context.Characters.FirstOrDefault(c => c.ApplicationUserId == userId);
+
+            int fullHealth = 100;
+            character.Health = fullHealth;
+            _context.SaveChanges();
+
+            return Json(new {health = character.Health});
+        }
     }
 }
