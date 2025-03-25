@@ -32,6 +32,12 @@ public class BarcaController : Controller
     [HttpPost]
     public async Task<IActionResult> FetchGptSummary()
     {
+        // Making sure my tokens dont get used up xD
+        if (User.Identity?.Name != "a@a.no")
+        {
+            return Forbid(); // Returnerer 403 Forbidden hvis brukeren ikke har tilgang
+        }
+
         var gptSummary = await _chatGptService.GetBarcaSummaryAsync();
         TempData["GptSummary"] = gptSummary;
 

@@ -17,13 +17,13 @@
 }
 
 <div class="container mt-5">
-    @if (!string.IsNullOrWhiteSpace(Model.GptSummary))
+    @if (!string.IsNullOrWhiteSpace(Model.GptSummaryHtml))
     {
         <div class="alert bg-dark text-light border-light rounded shadow-sm p-4">
             <h4 class="text-center mb-3">Daglig Oppsummering fra ChatGPT</h4>
 
-            <div style="white-space: pre-wrap;">
-                @Html.Raw(Model.GptSummary.Replace("\n", "<br/>").Replace("###", "<h5 class='mt-3'>").Replace("####", "<strong>").Replace("**", ""))
+            <div class="markdown-body">
+                @Html.Raw(Model.GptSummaryHtml)
             </div>
         </div>
     }
@@ -36,9 +36,6 @@
             <span class="visually-hidden">Laster...</span>
         </div>
     </form>
-
-    
-    
 
 
     <h2 class="mb-4 text-center">Upcoming Matches for FC Barcelona</h2>
@@ -54,13 +51,13 @@
                             @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
                             {
                                 <img src="@match.HomeTeamLogo" alt="@match.HomeTeamShortName"
-                                     style="width: 40px; height: 40px; object-fit: cover;" />
+                                     style="width: 40px; height: 40px; object-fit: cover;"/>
                             }
                             <h5 class="card-title">@match.HomeTeamShortName vs @match.AwayTeamShortName</h5>
                             @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
                             {
                                 <img src="@match.AwayTeamLogo" alt="@match.AwayTeamShortName"
-                                     style="width: 40px; height: 40px; object-fit: cover;" />
+                                     style="width: 40px; height: 40px; object-fit: cover;"/>
                             }
                         </div>
                         <p class="card-subtitle text-light">

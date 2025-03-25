@@ -24,7 +24,7 @@ public class FotballDataApi
         client.DefaultRequestHeaders.Add("X-Auth-Token", _apiKey);
 
         // Fetch matches for FC Barcelona with the correct API call
-        var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=5");
+        var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=10");
 
         // Deserialize the response into the BarcelonaModel object
         var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
