@@ -9,6 +9,7 @@ using System;
 
 namespace Adrians.Controllers
 {
+    //[Route("https://vg.no/test")]
     [Authorize]
     public class GameController : Controller
     {
