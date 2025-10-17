@@ -2,28 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 
-@* 
-<div class="text-center">
-    <input type="button" class="btn btn-outline-dark" value="Logg inn for tipping!" 
-           onclick="location.href='@Url.Action("Index", "EM24")'" />
-</div> 
-*@
+<section class="hero-section text-center py-5 fade-in">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div id="weather" class="card mb-4" aria-live="polite" aria-label="Current weather information">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></div>
+                            Loading weather...
+                        </div>
+                    </div>
+                </div>
 
-<div class="text-center">
-    <div id="weather">Loading weather...</div>
+                <div class="mb-4">
+                    <img src="~/img/STR.png" alt="STR Logo - Sogndal Team" class="img-fluid mb-3" style="max-width: 300px;" />
+                </div>
 
-    <img src="~/img/STR.png" alt="STR_logo" width="299" height="250" />
-    <h2 id="Countdown"></h2>
+                <div class="mb-4">
+                    <h2 id="Countdown" class="h3" aria-live="polite" aria-label="Countdown timer"></h2>
+                </div>
 
-    <p>
-        <input type="button" class="btn btn-outline-dark" value="Ping LogHub!"
-               onclick="location.href='@Url.Action("LogHubSite", "Home")'" />
-    </p>
+                <div class="mb-4">
+                    <button type="button" class="btn btn-outline-dark btn-lg" onclick="location.href='@Url.Action("LogHubSite", "Home")'" aria-label="Navigate to LogHub site">
+                        Ping LogHub!
+                    </button>
+                </div>
 
-    <p>
-        Email me at <span style="unicode-bidi: bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
-    </p>
-</div>
+                <div class="contact-info">
+                    <p class="mb-0">
+                        Email me at <span style="unicode-bidi: bidi-override; direction: rtl;" aria-label="Email address">ved.ladgiv@ladgiv</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script>
     // Set the date I'm counting down to

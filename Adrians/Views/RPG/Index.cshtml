@@ -5,33 +5,47 @@
     ViewBag.Title = "Epic RPG Adventure - Fight!";
 }
 
-<div class="container my-5">
-    <div class="card bg-dark text-white shadow">
-        <div class="card-body">
-            <h1 class="card-title text-center">The Epic Journey Awaits!</h1>
-            <div class="row mt-4">
-                <div class="col-md-8 offset-md-2 text-center">
-                    <h2>Hello, @Model.Name!</h2>
-                    <!-- Health bar placed below the greeting -->
-                    <div class="my-3">
-                        <div class="progress mx-auto" style="max-width: 300px;">
-                            <div id="healthBar" class="progress-bar progress-bar-striped progress-bar-animated"
-                                 role="progressbar"
-                                 style="width: @Model.Health%;"
-                                 aria-valuenow="@Model.Health" aria-valuemin="0" aria-valuemax="100">
-                                @Model.Health
+<section class="rpg-section py-5 fade-in">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title text-center mb-0">The Epic Journey Awaits!</h1>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="mb-4">Hello, @Model.Name!</h2>
+
+                        <!-- Health bar with improved accessibility -->
+                        <div class="mb-4">
+                            <label for="healthBar" class="form-label fw-bold">Health Status</label>
+                            <div class="progress mx-auto" style="max-width: 300px; height: 25px;">
+                                <div id="healthBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                     role="progressbar"
+                                     style="width: @Model.Health%;"
+                                     aria-valuenow="@Model.Health" aria-valuemin="0" aria-valuemax="100"
+                                     aria-label="Character health: @Model.Health percent">
+                                    <span class="visually-hidden">@Model.Health% Health</span>
+                                </div>
                             </div>
+                            <small class="text-muted mt-1 d-block">@Model.Health / 100 HP</small>
+                        </div>
+
+                        <!-- Action buttons with consistent styling -->
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
+                            <button id="fightBtn" class="btn btn-primary btn-lg" aria-label="Engage in battle with a random enemy">
+                                <i class="fas fa-sword" aria-hidden="true"></i> Engage in Battle
+                            </button>
+                            <button id="resetBtn" class="btn btn-outline-warning" aria-label="Reset the game and restore full health">
+                                <i class="fas fa-refresh" aria-hidden="true"></i> Reset Game
+                            </button>
                         </div>
                     </div>
-                    <!-- Engage in Battle button -->
-                    <button id="fightBtn" class="btn btn-danger btn-lg my-3">Engage in Battle</button>
-                    <!-- Reset Game Button -->
-                    <button id="resetBtn" class="btn btn-warning btn-sm my-2">Reset Game</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Modal Popup for Battle Result -->
 <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
