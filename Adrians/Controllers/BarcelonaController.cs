@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 public class BarcaController : Controller
 {
     private readonly FotballDataApi _footballService;
-    private readonly ChatGptService _chatGptService;
 
-    public BarcaController()
+    // Hent klienten frå DI
+    public BarcaController(FotballDataApi footballService)
     {
-        _footballService = new FotballDataApi();
-        _chatGptService = new ChatGptService();
+        _footballService = footballService;
     }
 
     public async Task<IActionResult> Index()
     {
         var upcomingMatches = await _footballService.GetUpcomingMatchesAsync();
+        // GPTsummary disabled for now
         var gptSummary = TempData["GptSummary"] as string;
 
         var viewModel = new BarcaViewModel
@@ -32,15 +32,6 @@ public class BarcaController : Controller
     [HttpPost]
     public async Task<IActionResult> FetchGptSummary()
     {
-        // Making sure my tokens dont get used up xD
-        if (User.Identity?.Name != "a@a.no")
-        {
-            return Forbid(); // Returnerer 403 Forbidden hvis brukeren ikke har tilgang
-        }
-
-        var gptSummary = await _chatGptService.GetBarcaSummaryAsync();
-        TempData["GptSummary"] = gptSummary;
-
         return RedirectToAction("Index");
     }
 }

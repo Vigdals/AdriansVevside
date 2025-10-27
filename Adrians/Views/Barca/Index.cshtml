@@ -1,101 +1,57 @@
 @model Adrians.ViewModels.BarcaViewModel
 
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("fetchGptForm");
-            const spinner = document.getElementById("gptSpinner");
-            const button = document.getElementById("fetchGptButton");
+<h2 class="text-center mb-4">Upcoming Matches for FC Barcelona</h2>
+<div class="row g-4">
+    @foreach (var match in Model.Matches)
+    {
+        var matchDate = DateTime.Parse(match.Date);
 
-            form?.addEventListener("submit", function () {
-                spinner.classList.remove("d-none");
-                button.disabled = true;
-                button.innerText = "Henter oppsummering...";
-                button.setAttribute('aria-disabled', 'true');
-            });
-        });
-    </script>
-}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
+                        {
+                            <img src="@match.HomeTeamLogo" alt="@match.HomeTeamShortName logo"
+                                 class="rounded-circle" style="width: 50px; height: 50px;" />
+                        }
+                        <h5 class="card-title mx-2 mb-0">@match.HomeTeamShortName vs @match.AwayTeamShortName</h5>
+                        @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
+                        {
+                            <img src="@match.AwayTeamLogo" alt="@match.AwayTeamShortName logo"
+                                 class="rounded-circle" style="width: 50px; height: 50px;" />
+                        }
+                    </div>
 
-<section class="barca-section py-5 fade-in">
-    <div class="container">
-        @if (!string.IsNullOrWhiteSpace(Model.GptSummaryHtml))
-        {
-            <div class="card mb-5">
-                <div class="card-header">
-                    <h3 class="card-title text-center mb-0">Daglig Oppsummering fra ChatGPT</h3>
-                </div>
-                <div class="card-body">
-                    <div class="markdown-body">
-                        @Html.Raw(Model.GptSummaryHtml)
+                    <div class="mt-auto">
+                        <p class="card-subtitle mb-2">
+                            <strong>
+                                @if (match.Status == "SCHEDULED")
+                                {
+                                    <span class="text-muted">Date to be announced</span>
+                                }
+                                else
+                                {
+                                    @matchDate.ToString("dd/MM/yyyy HH:mm")
+                                }
+                            </strong>
+                        </p>
+                        <p class="card-text mb-0">
+                            Status:
+                            @if (match.Status == "SCHEDULED")
+                            {
+                                <span class="badge bg-warning text-dark">Scheduled</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info text-dark">@match.Status</span>
+                            }
+                        </p>
                     </div>
                 </div>
             </div>
-        }
-
-        <div class="text-center mb-5">
-            <form id="fetchGptForm" asp-action="FetchGptSummary" method="post" class="d-inline">
-                <button id="fetchGptButton" type="submit" class="btn btn-primary btn-lg" aria-describedby="gptSpinner">
-                    <i class="fas fa-robot me-2" aria-hidden="true"></i>Hent Daglig Oppsummering fra ChatGPT
-                </button>
-                <div id="gptSpinner" class="spinner-border spinner-border-sm ms-3 d-none" role="status" aria-hidden="true">
-                    <span class="visually-hidden">Laster oppsummering...</span>
-                </div>
-            </form>
         </div>
-
-        <h2 class="text-center mb-4">Upcoming Matches for FC Barcelona</h2>
-        <div class="row g-4">
-            @foreach (var match in Model.Matches)
-            {
-                var matchDate = DateTime.Parse(match.Date);
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body text-center d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
-                                {
-                                    <img src="@match.HomeTeamLogo" alt="@match.HomeTeamShortName logo"
-                                         class="rounded-circle" style="width: 50px; height: 50px;" />
-                                }
-                                <h5 class="card-title mx-2 mb-0">@match.HomeTeamShortName vs @match.AwayTeamShortName</h5>
-                                @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
-                                {
-                                    <img src="@match.AwayTeamLogo" alt="@match.AwayTeamShortName logo"
-                                         class="rounded-circle" style="width: 50px; height: 50px;" />
-                                }
-                            </div>
-
-                            <div class="mt-auto">
-                                <p class="card-subtitle mb-2">
-                                    <strong>
-                                        @if (match.Status == "SCHEDULED")
-                                        {
-                                            <span class="text-muted">Date to be announced</span>
-                                        }
-                                        else
-                                        {
-                                            @matchDate.ToString("dd/MM/yyyy HH:mm")
-                                        }
-                                    </strong>
-                                </p>
-                                <p class="card-text mb-0">
-                                    Status:
-                                    @if (match.Status == "SCHEDULED")
-                                    {
-                                        <span class="badge bg-warning text-dark">Scheduled</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-info text-dark">@match.Status</span>
-                                    }
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+    }
+</div>
+</div>
 </section>

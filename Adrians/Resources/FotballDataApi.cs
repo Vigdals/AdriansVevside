@@ -1,38 +1,38 @@
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+
+public sealed class FootballDataOptions
+{
+    public string ApiUrl { get; set; } =
+        "https://api.football-data.org/v4/teams/81/matches";
+    public string ApiKey { get; set; } = "";
+}
 
 public class FotballDataApi
 {
-    private const string ApiUrl = "https://api.football-data.org/v4/teams/81/matches";
-    private readonly string _apiKey;
+    private readonly HttpClient _client;
+    private readonly FootballDataOptions _options;
 
-    // Retrieve the API key from Azure Key Vault
-    public FotballDataApi()
+    public FotballDataApi(HttpClient client, IOptions<FootballDataOptions> options)
     {
-        var keyVaultUrl = "https://VigdalsKeyVault.vault.azure.net/";
-        var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
-
-        KeyVaultSecret apiKeySecret = secretClient.GetSecret("FootballDataApiKey");
-
-        _apiKey = apiKeySecret.Value;
+        _client = client;
+        _options = options.Value;
     }
 
     public async Task<List<Match>> GetUpcomingMatchesAsync()
     {
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("X-Auth-Token", _apiKey);
+        _client.DefaultRequestHeaders.Remove("X-Auth-Token");
+        _client.DefaultRequestHeaders.Add("X-Auth-Token", _options.ApiKey);
 
-        // Fetch matches for FC Barcelona with the correct API call
-        var response = await client.GetStringAsync($"{ApiUrl}?status=SCHEDULED&limit=10");
-
-        // Deserialize the response into the BarcelonaModel object
+        var response = await _client.GetStringAsync($"{_options.ApiUrl}?status=SCHEDULED&limit=10");
         var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
 
         var upcomingMatches = new List<Match>();
 
         if (matchesResponse?.Matches != null)
+        {
             foreach (var match in matchesResponse.Matches)
+            {
                 upcomingMatches.Add(new Match
                 {
                     HomeTeam = match.HomeTeam.Name,
@@ -44,6 +44,8 @@ public class FotballDataApi
                     HomeTeamShortName = match.HomeTeam.TeamShortName,
                     AwayTeamShortName = match.AwayTeam.TeamShortName
                 });
+            }
+        }
 
         return upcomingMatches;
     }

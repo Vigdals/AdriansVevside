@@ -3,7 +3,25 @@ using Adrians.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+// NEW
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// =======================
+// Konfigurasjon (les frå appsettings, appsettings.{Environment}.json, user-secrets og miljøvariablar)
+// =======================
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables(); // NEW: mappar FootballData__ApiKey -> FootballData:ApiKey
+
+// NEW: bind FootballData-seksjonen til ein options-klasse du brukar i FotballDataApi
+builder.Services.Configure<FootballDataOptions>(
+    builder.Configuration.GetSection("FootballData"));
+
+// Registrer HttpClient + din klient
+builder.Services.AddHttpClient<FotballDataApi>(); // NEW
 
 // =======================
 // Connection String Setup (LocalDB)
@@ -29,9 +47,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
-// =======================
-// Build and Configure the App
-// =======================
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
