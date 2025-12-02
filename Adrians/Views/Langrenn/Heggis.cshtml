@@ -1,12 +1,26 @@
-﻿<div class="flex-container">
-    @*     <div class="flex-item">
+﻿@{
+    ViewData["Title"] = "Heggis";
+}
+
+<div style="display: flex; justify-content: center; padding-top: 20px;">
+    <iframe src="https://www.loyper.net/location/sognskisenter?lat=61.335538222693714&lng=7.21928243332502&zoom=14.757321853632988"
+            width="1000"
+            height="700"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy">
+    </iframe>
+</div>
+
+@* <div class="flex-container"> *@
+@*     <div class="flex-item">
         <iframe id="skisporet-heggis"
                 src="https://loyper.net/#/14,7.22799,61.33874" frameborder="0" height="500px" width="750px"
                 allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
     </div> *@
 
-    <div class="flex-item">
+@*     <div class="flex-item">
         <iframe sandbox="allow-scripts" id="yr-hodlekve"
                 src="https://pent.no/61.36111,7.26167" frameborder="0" height="500px" width="750px"
                 allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
@@ -16,4 +30,4 @@
     <div class="flex-item">
         <img id="scaled-frame" src="http://sognskisenter.org/webkam/parkering/image.jpg" alt="webcam of heggmyrane skisenter" width="400" height="500">
     </div>
-</div>
+</div>a *@

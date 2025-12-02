@@ -233,3 +233,19 @@ img:hover {
   font-weight: bold;
   transition: color 0.3s ease;
 }
+
+.event-logo {
+    height: 120px; /* viktig: kontroller høgda, ikkje breidda */
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 0;
+}
+
+/* logo-spesifikke finjusteringar */
+.logo-str {
+    margin-top: 10px; /* STR-bildet har mykje whitespace oppe */
+}
+
+.logo-lfi {
+    margin-top: 0px; /* få meir luft slik at dei blir optisk like */
+}

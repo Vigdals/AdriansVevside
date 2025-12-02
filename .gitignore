@@ -6,6 +6,14 @@
 .AppleDouble
 .LSOverride
 
+# VS / publish-profilar med miljøspesifikk info
+*.pubxml.user
+*.csproj.user
+*.user
+
+# Heile publish-profilar om du ikkje treng dei i git
+Properties/PublishProfiles/
+
 # Windows
 Thumbs.db
 ehthumbs.db

@@ -7,6 +7,7 @@
     <meta name="description" content="AdriansVevside - A modern web application"/>
     <meta name="author" content="Adrians"/>
     <title>AdriansVevside</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
@@ -24,6 +25,17 @@
                 <ul class="navbar-nav flex-grow-1" role="menubar">
                     <li class="nav-item" role="none">
                         <a class="nav-link text-light" asp-area="" asp-controller="Fpl" asp-action="Index" role="menuitem">FPL</a>
+                    </li>
+                    <li class="nav-item dropdown" role="none">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="langrennDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Langrenn
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="langrennDropdown">
+                            <li><a class="dropdown-item" asp-controller="Langrenn" asp-action="Brunestegen">Brunestegen</a></li>
+                            <li><a class="dropdown-item" asp-controller="Langrenn" asp-action="Heggis">Heggis</a></li>
+                            <li><a class="dropdown-item" asp-controller="Langrenn" asp-action="Hodlekve">Hodlekve</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item" role="none">
                         <a class="nav-link text-light" asp-area="" asp-controller="Barca" asp-action="Index" role="menuitem">Barca</a>
