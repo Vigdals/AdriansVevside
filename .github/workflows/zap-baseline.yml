@@ -1,18 +1,14 @@
-name: ZAP baseline scan
+name: ZAP Full Scan
 
 on:
   workflow_dispatch:
-
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sjekk ut kode (ikkje strengt nødvendig, men heilt ok)
-        uses: actions/checkout@v4
-
-      - name: Kjør OWASP ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.12.0
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.13.0
         with:
           target: 'https://adriansvevside.azurewebsites.net/'
           cmd_options: '-a'
