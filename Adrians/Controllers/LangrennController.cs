@@ -7,10 +7,12 @@ namespace Adrians.Controllers;
 public class LangrennController : Controller
 {
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
+    private readonly FrostService _frost;
 
-    public LangrennController(MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
+    public LangrennController(MeteorologiskInstituttKorttidsvarselService korttidsvarsel, FrostService frost)
     {
         _korttidsvarsel = korttidsvarsel;
+        _frost = frost;
     }
 
     public IActionResult Index()
@@ -25,6 +27,9 @@ public class LangrennController : Controller
                 "Heggmyrane",
                 61.335538222693714,
                 7.21928243332502);
+
+        ViewData["Snow48"] =
+            await _frost.GetSnowSummaryAsync("Hafslo", "SN55550:0", DateTimeOffset.UtcNow);
 
         return View();
     }
@@ -42,7 +47,6 @@ public class LangrennController : Controller
 
     public async Task<IActionResult> Brunestegen()
     {
-        // TODO: Set inn riktige koordinatar for Brunestegen/Gaupne
         ViewData["Korttidsvarsel"] =
             await _korttidsvarsel.HentKorttidsvarselAsync(
                 "Brunestegen",

@@ -1,16 +1,33 @@
 ﻿@model Adrians.ViewModels.KorttidsvarselViewModel
+@using Adrians.Helpers
+
+@{
+    var iconCode = MetIconHelper.GetIconFile(Model.SymbolCode);
+    var iconUrl = Url.Content($"~/assets/met-icons/svg/{iconCode}.svg");
+    var fallbackUrl = Url.Content("~/assets/met-icons/svg/unknown.svg");
+}
 
 <div class="card border-0 shadow-sm bg-body-tertiary mb-4">
     <div class="card-body">
 
         <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <h5 class="mb-1">@Model.LocationName – notid</h5>
-                <small class="text-body-secondary">
-                    Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")
-                </small>
+            <div class="d-flex align-items-center gap-2">
+                <img src="@iconUrl"
+                     alt="@Model.SymbolCode"
+                     width="36"
+                     height="36"
+                     loading="lazy"
+                     onerror="this.onerror=null;this.src='@fallbackUrl';" />
+
+                <div>
+                    <h5 class="mb-1">@Model.LocationName – no</h5>
+                    <small class="text-body-secondary">
+                        Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")
+                    </small>
+                </div>
             </div>
-            <span class="badge text-bg-secondary">Meteorologisk institutt</span>
+
+            <span class="badge text-bg-secondary">met.no</span>
         </div>
 
         <hr />
@@ -27,7 +44,7 @@
             </div>
 
             <div class="col-6 col-md-3">
-                <div class="fw-semibold">💥 Kast</div>
+                <div class="fw-semibold">💨 Kast</div>
                 <div>@Model.WindGustMs?.ToString("0.#") m/s</div>
             </div>
 
@@ -39,7 +56,7 @@
                         <strong>@Model.PrecipNext1hMm?.ToString("0.#") mm</strong>
                         @if (Model.TemperatureC <= 0)
                         {
-                            <span class="text-info">(snø)</span>
+                            <span class="text-info ms-1">(snø)</span>
                         }
                     }
                     else

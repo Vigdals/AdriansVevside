@@ -1,24 +1,35 @@
-﻿using System.Diagnostics;
+﻿using Adrians.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Diagnostics;
 
 namespace Adrians.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(
+        ILogger<HomeController> logger,
+        MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
     {
         _logger = logger;
+        _korttidsvarsel = korttidsvarsel;
     }
 
     [AutoValidateAntiforgeryToken]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        Debug.WriteLine("HEYA");
+        const double lat = 61.22908;
+        const double lon = 7.09674;
+
+        ViewData["Korttidsvarsel"] = await _korttidsvarsel.HentKorttidsvarselAsync(
+            "Sogndal",
+            lat,
+            lon);
+
         return View();
-        //return RedirectToAction("Index", "EM24");
     }
 
     public IActionResult LogHubSite()
@@ -50,6 +61,9 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+        });
     }
 }

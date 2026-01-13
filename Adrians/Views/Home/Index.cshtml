@@ -1,5 +1,7 @@
-﻿@{
+﻿@using Adrians.ViewModels
+@{
     ViewData["Title"] = "Home Page";
+    var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
 }
 
 <section class="hero-section text-center py-5 fade-in">
@@ -20,24 +22,28 @@
 
                 </div>
 
-                <div id="weather" class="card mb-4" aria-live="polite" aria-label="Current weather information">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></div>
-                            Loading weather...
-                        </div>
+                @* Vær (server-side) *@
+                @if (varsel != null)
+                {
+                    <partial name="_KorttidsvarselCard" model="varsel" />
+                }
+                else
+                {
+                    <div class="alert alert-secondary mb-4" role="alert">
+                        Klarte ikkje hente vêr akkurat no.
                     </div>
-                </div>
+                }
 
                 <div class="mb-4">
-                    <button type="button" class="btn btn-outline-dark btn-lg" onclick="location.href='@Url.Action("LogHubSite", "Home")'" aria-label="Navigate to LogHub site">
+                    <button type="button" class="btn btn-outline-dark btn-lg"
+                            onclick="location.href='@Url.Action("LogHubSite", "Home")'">
                         Ping LogHub!
                     </button>
                 </div>
 
                 <div class="contact-info">
                     <p class="mb-0">
-                        Email me at <span style="unicode-bidi: bidi-override; direction: rtl;" aria-label="Email address">ved.ladgiv@ladgiv</span>
+                        Email me at <span style="unicode-bidi: bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
                     </p>
                 </div>
             </div>
@@ -68,57 +74,6 @@
         }, 1000);
     }
 
-    // Start both countdowns with correct dates
     startCountdown("CountdownSTR", targetDateSTR);
     startCountdown("CountdownLFI", targetDateLFI);
-
-</script>
-
-<script>
-    // 🌦 Fetch Weather from Yr.no for Sogndal
-    fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=61.2296&lon=7.1015", {
-        headers: { "User-Agent": "AdriansVevside/1.0" }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const weatherElement = document.getElementById("weather");
-
-        if (data && data.properties && data.properties.timeseries && data.properties.timeseries.length > 0) {
-            const details = data.properties.timeseries[0].data.instant.details;
-            const temperature = details.air_temperature;
-            const windSpeed = details.wind_speed;
-            const precipitation = data.properties.timeseries[0].data.next_1_hours?.details?.precipitation_amount || 0;
-            const weatherCondition = data.properties.timeseries[0].data.next_1_hours?.summary?.symbol_code || "unknown";
-
-            const weatherEmojis = {
-                "clearsky": "☀️",
-                "fair": "🌤️",
-                "partlycloudy": "⛅",
-                "cloudy": "☁️",
-                "rainshowers": "🌦️",
-                "rain": "🌧️",
-                "heavyrain": "⛈️",
-                "snow": "❄️",
-                "sleet": "🌨️",
-                "fog": "🌫️",
-                "thunderstorm": "⛈️",
-                "unknown": "❓"
-            };
-
-            const weatherEmoji = weatherEmojis[weatherCondition] || "❓";
-
-            weatherElement.innerHTML = `
-                ${weatherEmoji} <strong>Vær i Sogndal</strong><br>
-                🌡️ Temperatur: ${temperature}°C<br>
-                💨 Vind: ${windSpeed} m/s<br>
-                🌧️ Nedbør: ${precipitation} mm
-            `;
-        } else {
-            weatherElement.innerHTML = "Weather data is currently unavailable.";
-        }
-    })
-    .catch(error => {
-        console.error("Error fetching weather data:", error);
-        document.getElementById("weather").innerHTML = "Error loading weather.";
-    });
 </script>

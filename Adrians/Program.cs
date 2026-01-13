@@ -1,27 +1,25 @@
 global using Adrians.Models;
+using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
+using Azure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Headers;
 
 // NYTT: Key Vault
-using Azure.Identity;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true)
     .AddEnvironmentVariables();
 
 // =======================
 // Key Vault
 // =======================
 var keyVaultUrlString = builder.Configuration["KeyVault:Url"]
-    ?? throw new InvalidOperationException("KeyVault:Url is not configured.");
+                        ?? throw new InvalidOperationException("KeyVault:Url is not configured.");
 
 var keyVaultUrl = new Uri(keyVaultUrlString);
 
@@ -33,16 +31,12 @@ builder.Configuration.AddAzureKeyVault(
 string connectionString;
 
 if (builder.Environment.IsDevelopment())
-{
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("DefaultConnection not found in configuration.");
-}
+                       ?? throw new InvalidOperationException("DefaultConnection not found in configuration.");
 else
-{
     connectionString = builder.Configuration["db-connection-adriansvevside"]
-        ?? throw new InvalidOperationException(
-            "Key Vault secret 'db-connection-adriansvevside' not found.");
-}
+                       ?? throw new InvalidOperationException(
+                           "Key Vault secret 'db-connection-adriansvevside' not found.");
 
 // =======================
 // FootballData-options / HttpClient
@@ -59,7 +53,16 @@ builder.Services.AddHttpClient<FotballDataApi>();
 // Cache (krav for å ikkje spamme MET)
 builder.Services.AddMemoryCache();
 
-// Named HttpClient for met.no (VIKTIG)
+// Named HttpClient for Frost
+builder.Services.AddHttpClient("frost", client =>
+{
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdal.dev)");
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
+
+builder.Services.AddScoped<FrostService>();
+
+// Named HttpClient for met.no
 builder.Services.AddHttpClient("met.no", client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd(
@@ -69,7 +72,6 @@ builder.Services.AddHttpClient("met.no", client =>
         new MediaTypeWithQualityHeaderValue("application/json")
     );
 });
-
 
 builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 
@@ -121,8 +123,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 

@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Service\" />
+    <Folder Include="wwwroot\assets\met-icons\svg\" />
   </ItemGroup>
 
   <ItemGroup>
