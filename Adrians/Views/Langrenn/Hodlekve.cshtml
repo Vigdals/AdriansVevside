@@ -1,21 +1,53 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Hodlekve";
 }
-<div class="text-center">
-    <iframe id="skisporet"
-            src="https://skisporet.no/setView/61.2850818/6.9782066/14/norges_grunnkart" frameborder="0" height="500px" width="750px"
-            allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-    @*    <iframe sandbox="allow-scripts" id="yr-hodlekve"
-            src="https://pent.no/61.29456,7.00267" frameborder="0" height="500px" width="750px"
-            allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>*@
-</div>
-<div id="wrap">
-    <iframe id="scaled-frame"
-            src="https://langrenn.harjo.net/axis-cgi/mjpg/video.cgi??a=0.26573685025976546" frameborder="0"
-            allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
+@using Adrians.ViewModels
+@{
+    var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
+}
+
+<div class="container-fluid px-0">
+    <div class="row g-4 align-items-start">
+        
+        <!-- Korttidsvarsel lokasjon -->
+        <partial name="_KorttidsvarselCard" model="varsel" />
+
+        <!-- Webcam (MJPEG) -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm bg-body-tertiary">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="card-title mb-0">Webkamera – skisenter</h5>
+                    <small class="text-body-secondary">Live MJPEG</small>
+                </div>
+
+                <div class="card-body pt-3">
+                    <img class="img-fluid rounded d-block w-100 bg-black"
+                         src="https://langrenn.harjo.net/axis-cgi/mjpg/video.cgi?a=0.542043362772018"
+                         alt="Webkamera frå skisenteret"
+                         loading="lazy" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Skisporet -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm bg-body-tertiary">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="card-title mb-0">Skisporet</h5>
+                    <small class="text-body-secondary">Kartvisning</small>
+                </div>
+
+                <div class="card-body pt-3">
+                    <div class="ratio ratio-4x3 rounded overflow-hidden">
+                        <iframe class="border-0"
+                                src="https://skisporet.no/setView/61.2850818/6.9782066/14/norges_grunnkart"
+                                loading="lazy"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

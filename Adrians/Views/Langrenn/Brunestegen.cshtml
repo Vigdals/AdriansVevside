@@ -1,15 +1,52 @@
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-<div class="flex-container">
-    <div class="flex-item">
-        <iframe id="skisporet"
-                src="https://gaupne.bygdalag.no/wp-content/uploads/2024/11/kamera.png" frameborder="0" height="793px" width="700px"
-                allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-        </iframe>
-        <iframe id="skisporet-heggis"
-                src="https://www.skisporet.no/map/segment/66206" frameborder="0" height="500px" width="750px"
-                allow="accelerometer; aautoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-        </iframe>
+@{
+    ViewData["Title"] = "Brunestegen";
+}
+@using Adrians.ViewModels
+@{
+    var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
+}
+
+<div class="container-fluid px-0">
+    <div class="row g-4 align-items-start">
+        
+        <!-- Korttidsvarsel lokasjon -->
+        <partial name="_KorttidsvarselCard" model="varsel" />
+
+        <!-- Kamera -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm bg-body-tertiary">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="card-title mb-0">Gaupne – webkamera</h5>
+                    <small class="text-body-secondary">Oppdatert bilete</small>
+                </div>
+
+                <div class="card-body pt-3">
+                    <img class="img-fluid rounded"
+                         src="https://gaupne.bygdalag.no/wp-content/uploads/2024/11/kamera.png"
+                         alt="Webkamera – Gaupne"
+                         loading="lazy"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skisporet -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm bg-body-tertiary">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="card-title mb-0">Skisporet – segment</h5>
+                    <small class="text-body-secondary">Interaktivt kart</small>
+                </div>
+
+                <div class="card-body pt-3">
+                    <div class="ratio ratio-1x1 rounded overflow-hidden">
+                        <iframe src="https://www.skisporet.no/map/segment/66206"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

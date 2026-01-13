@@ -1,30 +1,54 @@
-﻿using System.Diagnostics;
+﻿using Adrians.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Adrians.Controllers;
 
 public class LangrennController : Controller
 {
+    private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
+
+    public LangrennController(MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
+    {
+        _korttidsvarsel = korttidsvarsel;
+    }
+
     public IActionResult Index()
     {
-        var tidTilBirken = DagerTilBirken();
-        ViewBag.tidTilBirken = tidTilBirken;
-        Debug.WriteLine(tidTilBirken);
         return View();
     }
 
-    public IActionResult Heggis()
+    public async Task<IActionResult> Heggis()
     {
+        ViewData["Korttidsvarsel"] =
+            await _korttidsvarsel.HentKorttidsvarselAsync(
+                "Heggmyrane",
+                61.335538222693714,
+                7.21928243332502);
+
         return View();
     }
 
-    public IActionResult Brunestegen()
+    public async Task<IActionResult> Hodlekve()
     {
+        ViewData["Korttidsvarsel"] =
+            await _korttidsvarsel.HentKorttidsvarselAsync(
+                "Hodlekve",
+                61.2850818,
+                6.9782066);
+
         return View();
     }
 
-    public IActionResult Hodlekve()
+    public async Task<IActionResult> Brunestegen()
     {
+        // TODO: Set inn riktige koordinatar for Brunestegen/Gaupne
+        ViewData["Korttidsvarsel"] =
+            await _korttidsvarsel.HentKorttidsvarselAsync(
+                "Brunestegen",
+                61.41811,
+                7.29553);
+
         return View();
     }
 
