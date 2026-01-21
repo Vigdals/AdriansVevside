@@ -1,11 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Heggis";
 }
-@using Adrians.Services
+
 @using Adrians.ViewModels
 @{
     var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
-    var snow = ViewData["Snow48"] as FrostSnowSummary;
+    var snow = ViewData["Snow"] as FrostSnowDepth;
+    var test =0;
 }
 
 
@@ -16,19 +17,18 @@
         @if (snow is not null)
         {
             <div class="card border-0 shadow-sm bg-body-tertiary mb-4">
-                <div class="card-body d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="fw-semibold">Snø / nedbør – @snow.LocationName</div>
-                        <div class="text-body-secondary small">@snow.SourceId</div>
-
-                        <div class="mt-2">
-                            <div>Snødybde no: <strong>@(snow.SnowDepthNowCm?.ToString("0.#") ?? "—") cm</strong></div>
-                            <div>Endring 48t: <strong>@(snow.SnowDepthDelta48hCm?.ToString("0.#") ?? "—") cm</strong></div>
-                            <div>Nedbør 24t: <strong>@snow.PrecipLast24hMm.ToString("0.#") mm</strong></div>
-                            <div>Nedbør 48t: <strong>@snow.PrecipLast48hMm.ToString("0.#") mm</strong></div>
-                        </div>
+                <div class="card-body">
+                    <div class="fw-semibold">
+                        Snødybde – @snow.LocationName
                     </div>
-                    <span class="badge text-bg-secondary">Frost</span>
+
+                    <div class="display-6">
+                        @snow.SnowDepthCm cm
+                    </div>
+
+                    <div class="text-body-secondary small">
+                        Observasjon: @snow.ObservedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    </div>
                 </div>
             </div>
         }

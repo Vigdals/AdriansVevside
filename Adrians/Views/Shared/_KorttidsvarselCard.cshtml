@@ -4,6 +4,7 @@
 @{
     var iconCode = MetIconHelper.GetIconFile(Model.SymbolCode);
     var iconUrl = Url.Content($"~/assets/met-icons/svg/{iconCode}.svg");
+    //var iconUrl = Url.Content($"~/assets/met-icons/svg/clearsky_day.svg");
     var fallbackUrl = Url.Content("~/assets/met-icons/svg/unknown.svg");
 }
 
@@ -14,11 +15,10 @@
             <div class="d-flex align-items-center gap-2">
                 <img src="@iconUrl"
                      alt="@Model.SymbolCode"
-                     width="36"
-                     height="36"
+                     width="50"
+                     height="50"
                      loading="lazy"
                      onerror="this.onerror=null;this.src='@fallbackUrl';" />
-
                 <div>
                     <h5 class="mb-1">@Model.LocationName – no</h5>
                     <small class="text-body-secondary">

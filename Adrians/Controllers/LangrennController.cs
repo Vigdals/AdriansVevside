@@ -28,8 +28,10 @@ public class LangrennController : Controller
                 61.335538222693714,
                 7.21928243332502);
 
-        ViewData["Snow48"] =
-            await _frost.GetSnowSummaryAsync("Hafslo", "SN55550:0", DateTimeOffset.UtcNow);
+        ViewData["Snow"] =
+            await _frost.GetCurrentSnowDepthAsync(
+                "Hafslo",
+                "SN55550:0");
 
         return View();
     }
@@ -41,6 +43,11 @@ public class LangrennController : Controller
                 "Hodlekve",
                 61.2850818,
                 6.9782066);
+
+        ViewData["Snow"] =
+            await _frost.GetCurrentSnowDepthAsync(
+                "Anestølen",
+                "SN55740:0");
 
         return View();
     }

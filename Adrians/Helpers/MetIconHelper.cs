@@ -4,7 +4,7 @@
     {
         public static string GetIconFile(string? symbolCode)
         {
-            if (string.IsNullOrWhiteSpace(symbolCode)) return "unknown.png";
+            if (string.IsNullOrWhiteSpace(symbolCode)) return "unknown";
 
             // sjekkar symbolCode er trygg
             var safe = symbolCode
