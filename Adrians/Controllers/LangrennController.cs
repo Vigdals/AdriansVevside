@@ -46,7 +46,7 @@ public class LangrennController : Controller
 
         ViewData["Snow"] =
             await _frost.GetCurrentSnowDepthAsync(
-                "Anestølen",
+                "Hodlekve",
                 "SN55740:0");
 
         return View();
