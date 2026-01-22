@@ -5,4 +5,4 @@ querySpecs:
     queryFilters:
       - exclude:
           when:
-            severity: [ low, warning ]
+            severity: [ low, Medium ]
