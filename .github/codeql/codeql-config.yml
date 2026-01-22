@@ -1,8 +1,8 @@
-version: 2
-name: "Custom CodeQL Config"
-querySpecs:
-  - query: security-and-quality
-    queryFilters:
-      - exclude:
-          when:
-            severity: [ low, Medium ]
+name: "STAF CodeQL config"
+
+query-filters:
+  exclude:
+    severity: medium
+    severity: low
+    severity: warning
+    severity: recommendation
