@@ -1,8 +1,11 @@
 name: "STAF CodeQL config"
 
 query-filters:
-  exclude:
-    severity: medium
-    severity: low
-    severity: warning
-    severity: recommendation
+  - exclude:
+      severity: medium
+  - exclude:
+      severity: low
+  - exclude:
+      severity: warning
+  - exclude:
+      severity: recommendation
