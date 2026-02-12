@@ -15,10 +15,9 @@
             <div class="d-flex align-items-center gap-2">
                 <img src="@iconUrl"
                      alt="@Model.SymbolCode"
-                     width="50"
-                     height="50"
+                     class="weather-icon"
                      loading="lazy"
-                     onerror="this.onerror=null;this.src='@fallbackUrl';" />
+                     onerror="this.onerror=null;this.src='@fallbackUrl';"/>
                 <div>
                     <h5 class="mb-1">@Model.LocationName – no</h5>
                     <small class="text-body-secondary">

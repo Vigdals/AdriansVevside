@@ -1,0 +1,44 @@
+﻿@using Adrians.ViewModels
+@model FrostSnowDepth
+
+@{
+    // Enkel trend
+    const double threshold = 1.0;
+
+    string trendIcon;
+    string trendText;
+    string trendClass;
+
+    // Midlertidig: anta stabil snø dersom me ikkje veit betre?
+    trendIcon = "→";
+    trendText = "Stabil snødybde";
+    trendClass = "text-secondary";
+}
+
+<div class="card border-0 shadow-sm bg-body-tertiary mb-4">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="fw-semibold">
+                Snømengd – @Model.LocationName
+            </div>
+            <span class="badge bg-light text-dark">
+                @trendIcon
+            </span>
+        </div>
+
+        <div class="display-6 fw-bold">
+            @Model.SnowDepthCm?.ToString("0") cm
+        </div>
+
+        <div class="small @trendClass">
+            @trendText
+        </div>
+
+        <div class="text-body-secondary small mt-2">
+            Observasjon:
+            @Model.ObservedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+        </div>
+
+    </div>
+</div>

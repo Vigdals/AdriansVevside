@@ -9,13 +9,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
+    private readonly FrostService _frost;
 
     public HomeController(
         ILogger<HomeController> logger,
-        MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
+        MeteorologiskInstituttKorttidsvarselService korttidsvarsel, FrostService frost)
     {
         _logger = logger;
         _korttidsvarsel = korttidsvarsel;
+        _frost = frost;
     }
 
     [AutoValidateAntiforgeryToken]
@@ -28,6 +30,18 @@ public class HomeController : Controller
             "Sogndal",
             lat,
             lon);
+
+        //ViewData["Snow"] =
+        //    await _frost.GetCurrentSnowDepthAsync(
+        //        "Mjølversgrendi",
+        //        "SN55430:0");
+
+        ViewData["SnowStations"] = new[]
+        {
+            await _frost.GetCurrentSnowDepthAsync("Mjølversgrendi", "SN55430:0"),
+            await _frost.GetCurrentSnowDepthAsync("Hafslo", "SN55550:0"),
+            await _frost.GetCurrentSnowDepthAsync("Hodlekve", "SN55740:0")
+        };
 
         return View();
     }

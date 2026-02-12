@@ -6,8 +6,6 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-// NYTT: Key Vault
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -101,9 +99,6 @@ builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-// =======================
-// Middleware
-// =======================
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();

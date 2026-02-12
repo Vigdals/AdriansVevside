@@ -2,78 +2,103 @@
 @{
     ViewData["Title"] = "Home Page";
     var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
+    var snowStations = ViewData["SnowStations"] as IEnumerable<FrostSnowDepth?>;
 }
 
-<section class="hero-section text-center py-5 fade-in">
+<section class="hero-section text-center py-2 fade-in">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
-                <div class="row justify-content-center mt-4 align-items-end logos-row">
 
-                    <div class="col-md-6 text-center">
-                        <img src="~/img/STR.png" class="event-logo logo-str" alt="Sognefjord Trail Run" />
-                        <h2 id="CountdownSTR" class="h4 mt-3"></h2>
+                <!-- Logo + nedtelling -->
+                <div class="row justify-content-center mt-2 align-items-end logos-row">
+                    <div class="col-md-6 text-center mb-3 mb-md-0">
+                        <img src="~/img/STR.png"
+                             class="event-logo logo-str"
+                             alt="Sognefjord Trail Run" />
+                        <h2 id="CountdownSTR" class="h4 mt-2"></h2>
                     </div>
 
                     <div class="col-md-6 text-center">
-                        <img src="~/img/lustrafjorden_inn.png" class="event-logo logo-lfi" alt="Lustrafjorden Inn" />
-                        <h2 id="CountdownLFI" class="h4 mt-3"></h2>
+                        <img src="~/img/lustrafjorden_inn.png"
+                             class="event-logo logo-lfi"
+                             alt="Lustrafjorden Inn" />
+                        <h2 id="CountdownLFI" class="h4 mt-2"></h2>
                     </div>
-
                 </div>
 
-                @* Vær (server-side) *@
-                @if (varsel != null)
+                <!-- Vêr -->
+                @if (varsel is not null)
                 {
                     <partial name="_KorttidsvarselCard" model="varsel" />
                 }
                 else
                 {
-                    <div class="alert alert-secondary mb-4" role="alert">
+                    <div class="alert alert-secondary my-3">
                         Klarte ikkje hente vêr akkurat no.
                     </div>
                 }
 
-                <div class="mb-4">
-                    <button type="button" class="btn btn-outline-dark btn-lg"
+                <!-- Snøforhold -->
+                @if (snowStations is not null)
+                {
+                    <partial name="_SnowOverview" model="snowStations" />
+                }
+                else
+                {
+                    <div class="alert alert-secondary my-3">
+                        Klarte ikkje hente snømengd akkurat no.
+                    </div>
+                }
+
+                <!-- CTA -->
+                <div class="my-3">
+                    <button type="button"
+                            class="btn btn-outline-dark btn-lg"
                             onclick="location.href='@Url.Action("LogHubSite", "Home")'">
                         Ping LogHub!
                     </button>
                 </div>
 
-                <div class="contact-info">
+                <!-- Kontakt -->
+                <div class="contact-info mt-2">
                     <p class="mb-0">
-                        Email me at <span style="unicode-bidi: bidi-override; direction: rtl;">ved.ladgiv@ladgiv</span>
+                        Email me at
+                        <span style="unicode-bidi:bidi-override; direction:rtl;">
+                            ved.ladgiv@ladgiv
+                        </span>
                     </p>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    const targetDateSTR = new Date("Jun 6, 2026 08:00:00").getTime();
-    const targetDateLFI = new Date("Aug 15, 2026 08:00:00").getTime();
+    const countdowns = [
+        { id: "CountdownSTR", target: new Date("Jun 6, 2026 08:00:00").getTime() },
+        { id: "CountdownLFI", target: new Date("Aug 15, 2026 08:00:00").getTime() }
+    ];
 
-    function startCountdown(elementId, targetDate) {
-        setInterval(function () {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById(elementId).innerHTML =
-                `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            if (distance < 0) {
-                document.getElementById(elementId).innerHTML = "";
+    function startCountdown({ id, target }) {
+        setInterval(() => {
+            const now = Date.now();
+            const d = target - now;
+            if (d <= 0) {
+                document.getElementById(id).innerHTML = "";
+                return;
             }
+
+            const days = Math.floor(d / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((d / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((d / (1000 * 60)) % 60);
+            const seconds = Math.floor((d / 1000) % 60);
+
+            document.getElementById(id).innerHTML =
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }, 1000);
     }
 
-    startCountdown("CountdownSTR", targetDateSTR);
-    startCountdown("CountdownLFI", targetDateLFI);
+    countdowns.forEach(startCountdown);
 </script>

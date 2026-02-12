@@ -7,29 +7,15 @@
     var snow = ViewData["Snow"] as FrostSnowDepth;
 }
 
-
-
 <div class="container-fluid px-0">
     <div class="row g-4 align-items-start">
-        
+
+        <!--- Snømengd --->
         @if (snow is not null)
         {
-            <div class="card border-0 shadow-sm bg-body-tertiary mb-4">
-                <div class="card-body">
-                    <div class="fw-semibold">
-                        Snø – @snow.LocationName
-                    </div>
-
-                    <div class="display-6">
-                        @snow.SnowDepthCm cm
-                    </div>
-
-                    <div class="text-body-secondary small">
-                        Observasjon: @snow.ObservedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                    </div>
-                </div>
-            </div>
+            <partial name="_SnowDepthCard" model="snow" />
         }
+
 
         <!-- Korttidsvarsel lokasjon -->
         <partial name="_KorttidsvarselCard" model="varsel" />
