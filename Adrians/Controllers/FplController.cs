@@ -1,51 +1,45 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-using Adrians.Resources;
+using Adrians.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Adrians.Controllers;
 
-public class FplController : Controller
+public class FplController(IHttpClientFactory httpClientFactory, IMemoryCache cache) : Controller
 {
-    public async Task<IActionResult> IndexAsync()
+    private const string CacheKey = "fpl_deadlines";
+    private const string ApiUrl = "https://fantasy.premierleague.com/api/bootstrap-static/";
+
+    public async Task<IActionResult> Index()
     {
-        var hackerNewsModelList = await GetDeadlines();
-
-        //Just getting future deadlines
-        var now = DateTime.UtcNow;
-        List<FplMatchesModel.Event> futureDeadlines = new List<FplMatchesModel.Event>();
-        foreach (var eventItem in hackerNewsModelList)
-            if (eventItem.DeadlineTime > now)
-                futureDeadlines.Add(eventItem);
-
-        return View(futureDeadlines);
-    }
-
-    public async Task<List<FplMatchesModel.Event>> GetDeadlines()
-    {
-        var fplMatchesModelList = new List<FplMatchesModel.Event>();
-
-        var apiUrL = "https://fantasy.premierleague.com/api/bootstrap-static/";
-        var jsonResult = await ApiCall.DoApiCallAsync(apiUrL);
-        var bigFplJson = JsonSerializer.Deserialize<JsonElement>(jsonResult);
-        var events = bigFplJson.GetProperty("events");
-
-        foreach (var eventElement in events.EnumerateArray())
+        if (!cache.TryGetValue(CacheKey, out List<FplMatchesModel.Event>? events))
         {
-            var eventId = eventElement.GetProperty("id").GetInt32();
-            var eventName = eventElement.GetProperty("name").GetString();
-            var deadlineTime = DateTime.Parse(eventElement.GetProperty("deadline_time").GetString(), null,
-                DateTimeStyles.AdjustToUniversal);
-
-            var fplEvent = new FplMatchesModel.Event
-            {
-                Id = eventId,
-                Name = eventName,
-                DeadlineTime = deadlineTime
-            };
-            fplMatchesModelList.Add(fplEvent);
+            events = await FetchDeadlines();
+            cache.Set(CacheKey, events, TimeSpan.FromHours(1));
         }
 
-        return fplMatchesModelList;
+        var future = events!.Where(e => e.DeadlineTime > DateTime.UtcNow).ToList();
+        return View(future);
+    }
+
+    private async Task<List<FplMatchesModel.Event>> FetchDeadlines()
+    {
+        var client = httpClientFactory.CreateClient();
+        var json = await client.GetStringAsync(ApiUrl);
+        var root = JsonSerializer.Deserialize<JsonElement>(json);
+
+        return root.GetProperty("events")
+            .EnumerateArray()
+            .Select(e => new FplMatchesModel.Event
+            {
+                Id = e.GetProperty("id").GetInt32(),
+                Name = e.GetProperty("name").GetString() ?? "",
+                DeadlineTime = DateTime.Parse(
+                    e.GetProperty("deadline_time").GetString()!,
+                    null,
+                    DateTimeStyles.AdjustToUniversal)
+            })
+            .ToList();
     }
 }

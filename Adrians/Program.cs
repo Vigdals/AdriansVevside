@@ -75,6 +75,12 @@ builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 
 builder.Services.AddScoped<RssFeedService>();
 
+builder.Services.AddHttpClient("hackernews", client =>
+{
+    client.BaseAddress = new Uri("https://hacker-news.firebaseio.com/");
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
+
 // =======================
 // EF / Identity
 // =======================
