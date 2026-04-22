@@ -21,9 +21,6 @@ public class FotballDataApi
 
     public async Task<List<Match>> GetUpcomingMatchesAsync()
     {
-        _client.DefaultRequestHeaders.Remove("X-Auth-Token");
-        _client.DefaultRequestHeaders.Add("X-Auth-Token", _options.ApiKey);
-
         var response = await _client.GetStringAsync($"{_options.ApiUrl}?status=SCHEDULED&limit=10");
         var matchesResponse = JsonConvert.DeserializeObject<BarcelonaModel>(response);
 

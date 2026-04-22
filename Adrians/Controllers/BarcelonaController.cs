@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Adrians.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
-[Authorize]
+
 [AutoValidateAntiforgeryToken]
 public class BarcaController : Controller
 {
@@ -28,7 +28,7 @@ public class BarcaController : Controller
 
         return View(viewModel);
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> FetchGptSummary()
     {

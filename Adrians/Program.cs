@@ -1,4 +1,4 @@
-global using Adrians.Models;
+﻿global using Adrians.Models;
 using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
@@ -6,8 +6,12 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+// builder er inngangspunktet. Set opp alt før appen startar
 var builder = WebApplication.CreateBuilder(args);
 
+// =======================
+// Konfigurasjon
+// =======================
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true)
@@ -17,63 +21,47 @@ builder.Configuration
 // Key Vault
 // =======================
 var keyVaultUrlString = builder.Configuration["KeyVault:Url"]
-                        ?? throw new InvalidOperationException("KeyVault:Url is not configured.");
+    ?? throw new InvalidOperationException("KeyVault:Url is not configured.");
+builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUrlString), new DefaultAzureCredential());
 
-var keyVaultUrl = new Uri(keyVaultUrlString);
-
-builder.Configuration.AddAzureKeyVault(
-    keyVaultUrl,
-    new DefaultAzureCredential()
-);
-
+// Vel connection string basert på miljø
+// I dev: LocalDB frå appsettings
+// I prod: hemmeleg streng frå Key Vault
 string connectionString;
-
 if (builder.Environment.IsDevelopment())
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                       ?? throw new InvalidOperationException("DefaultConnection not found in configuration.");
+        ?? throw new InvalidOperationException("DefaultConnection not found.");
 else
     connectionString = builder.Configuration["db-connection-adriansvevside"]
-                       ?? throw new InvalidOperationException(
-                           "Key Vault secret 'db-connection-adriansvevside' not found.");
+        ?? throw new InvalidOperationException("Key Vault secret 'db-connection-adriansvevside' not found.");
 
 // =======================
-// FootballData-options / HttpClient
+// HTTP-klientar
 // =======================
-builder.Services.Configure<FootballDataOptions>(
-    builder.Configuration.GetSection("FootballData"));
+// AddHttpClient<T> bind ein typesatt klient til FotballDataApi
+// DI-containeren gir denne klienten til FotballDataApi automatisk
+builder.Services.Configure<FootballDataOptions>(builder.Configuration.GetSection("FootballData"));
+builder.Services.AddHttpClient<FotballDataApi>(client =>
+{
+    client.DefaultRequestHeaders.Add("X-Auth-Token", builder.Configuration["FootballData:ApiKey"]);
+});
 
-builder.Services.AddHttpClient<FotballDataApi>();
-
-// =======================
-// MET.no Nowcast
-// =======================
-
-// Cache (krav for � ikkje spamme MET)
-builder.Services.AddMemoryCache();
-
-// Named HttpClient for Frost
+// Named clients – hentast ut med httpClientFactory.CreateClient("frost") osb.
+// Nyttig når same service brukar fleire ulike API-ar
+builder.Services.AddMemoryCache(); // Delt cache for alle services
 builder.Services.AddHttpClient("frost", client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdal.dev)");
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
-
 builder.Services.AddScoped<FrostService>();
 
-// Named HttpClient for met.no
 builder.Services.AddHttpClient("met.no", client =>
 {
-    client.DefaultRequestHeaders.UserAgent.ParseAdd(
-        "AdriansVevside/1.0 (contact: adrvig92@gmail.com)"
-    );
-    client.DefaultRequestHeaders.Accept.Add(
-        new MediaTypeWithQualityHeaderValue("application/json")
-    );
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (contact: adrvig92@gmail.com)");
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
-
 builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
-
-builder.Services.AddScoped<RssFeedService>();
 
 builder.Services.AddHttpClient("hackernews", client =>
 {
@@ -82,18 +70,20 @@ builder.Services.AddHttpClient("hackernews", client =>
 });
 
 // =======================
-// EF / Identity
+// RSS
 // =======================
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddScoped<RssFeedService>();
 
-builder.Services.AddDbContext<GameContext>(options =>
-    options.UseSqlServer(connectionString));
-
+// =======================
+// Database / Identity
+// =======================
+// EF Core – set opp databasekontekstane med SQL Server
+builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContext<GameContext>(o => o.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-        options.SignIn.RequireConfirmedAccount = false)
+// Identity – innebygd brukar- og rollesystem
+builder.Services.AddDefaultIdentity<IdentityUser>(o => o.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -101,34 +91,31 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 // MVC
 // =======================
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient(); // Generisk fallback-klient (kan fjernast om du ikkje brukar den direkte)
 
-// (global HttpClient er OK � ha i tillegg)
-builder.Services.AddHttpClient();
-
+// =======================
+// Bygg appen
+// =======================
 var app = builder.Build();
 
+// Middleware-pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseMigrationsEndPoint(); // Viser EF-migrasjonsfeil i dev
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseExceptionHandler("/Home/Error"); // Feilside i prod
+    app.UseHsts(); // Tving HTTPS i nettlesaren
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection(); // Redirect HTTP → HTTPS
+app.UseStaticFiles();      // Tener filer frå wwwroot (CSS, JS, bilete)
+app.UseRouting();          // Finn riktig controller/action for URL-en
+app.UseAuthentication();   // Er du innlogga?
+app.UseAuthorization();    // Har du tilgang? (må kome ETTER authentication)
 
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    "default",
-    "{controller=Home}/{action=Index}/{id?}");
-
-app.MapRazorPages();
+app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages(); // For Identity-sidene (login, register osb.)
 
 app.Run();
