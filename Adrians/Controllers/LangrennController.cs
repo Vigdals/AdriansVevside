@@ -15,8 +15,25 @@ public class LangrennController : Controller
         _frost = frost;
     }
 
-    public IActionResult Index()
+    public async  Task<IActionResult> Index()
     {
+        var snowTask = Task.WhenAll(
+            _frost.GetCurrentSnowDepthAsync("Mjølversgrendi", "SN55430:0"),
+            _frost.GetCurrentSnowDepthAsync("Hafslo", "SN55550:0"),
+            _frost.GetCurrentSnowDepthAsync("Hodlekve", "SN55740:0")
+        );
+
+        var weatherTask = Task.WhenAll(
+            _korttidsvarsel.HentKorttidsvarselAsync("Brunestegen", 61.41811, 7.29553),
+            _korttidsvarsel.HentKorttidsvarselAsync("Heggmyrane", 61.335538222693714, 7.21928243332502),
+            _korttidsvarsel.HentKorttidsvarselAsync("Hodlekve", 61.2850818, 6.9782066)
+        );
+
+        await Task.WhenAll(snowTask, weatherTask);
+
+        ViewData["SnowStations"] = snowTask.Result;
+        ViewData["Korttidsvarslar"] = weatherTask.Result;
+
         return View();
     }
 

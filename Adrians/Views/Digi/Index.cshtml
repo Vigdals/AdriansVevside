@@ -1,0 +1,27 @@
+﻿@model List<Adrians.Models.RssItem>
+@{
+    ViewData["Title"] = "Digi.no";
+}
+
+<h4 class="mb-3">Digi.no</h4>
+
+@foreach (var item in Model)
+{
+    <div class="card bg-secondary mb-2">
+        <div class="card-body">
+            @if (item.ImageUrl is not null)
+            {
+                <img src="@item.ImageUrl" class="float-end ms-2 mb-1" style="max-width:120px" />
+            }
+            <h6 class="card-title">
+                <a href="@item.Link" target="_blank" class="text-light">@item.Title</a>
+                @if (item.IsPremium)
+                {
+                    <span class="badge bg-warning text-dark ms-1">Ekstra</span>
+                }
+            </h6>
+            <p class="card-text small text-muted mb-1">@item.Description</p>
+            <small class="text-muted">@item.PubDate.ToString("dd.MM HH:mm")</small>
+        </div>
+    </div>
+}

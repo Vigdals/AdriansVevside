@@ -73,6 +73,8 @@ builder.Services.AddHttpClient("met.no", client =>
 
 builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 
+builder.Services.AddScoped<RssFeedService>();
+
 // =======================
 // EF / Identity
 // =======================

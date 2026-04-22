@@ -31,18 +31,6 @@ public class HomeController : Controller
             lat,
             lon);
 
-        //ViewData["Snow"] =
-        //    await _frost.GetCurrentSnowDepthAsync(
-        //        "Mjølversgrendi",
-        //        "SN55430:0");
-
-        ViewData["SnowStations"] = new[]
-        {
-            await _frost.GetCurrentSnowDepthAsync("Mjølversgrendi", "SN55430:0"),
-            await _frost.GetCurrentSnowDepthAsync("Hafslo", "SN55550:0"),
-            await _frost.GetCurrentSnowDepthAsync("Hodlekve", "SN55740:0")
-        };
-
         return View();
     }
 

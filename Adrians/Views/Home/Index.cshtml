@@ -39,18 +39,6 @@
                     </div>
                 }
 
-                <!-- Snøforhold -->
-                @if (snowStations is not null)
-                {
-                    <partial name="_SnowOverview" model="snowStations" />
-                }
-                else
-                {
-                    <div class="alert alert-secondary my-3">
-                        Klarte ikkje hente snømengd akkurat no.
-                    </div>
-                }
-
                 <!-- CTA -->
                 <div class="my-3">
                     <button type="button"
