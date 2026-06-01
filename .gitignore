@@ -192,3 +192,5 @@ appsettings.*.Development.json
 # Remove any project-specific ignores you had before
 ############################
 # (Was: Adrians/appsettings.json) — removed on purpose
+/Adrians/appsettings.Development.json
+/Adrians/appsettings.Development.json
