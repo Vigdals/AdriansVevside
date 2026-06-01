@@ -1,4 +1,5 @@
 ﻿using Adrians.Services;
+using Adrians.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Diagnostics;
@@ -7,52 +8,118 @@ namespace Adrians.Controllers;
 
 public class HomeController : Controller
 {
+    private const double SogndalLat = 61.22908;
+    private const double SogndalLon = 7.09674;
+
     private readonly ILogger<HomeController> _logger;
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
-    private readonly FrostService _frost;
 
     public HomeController(
         ILogger<HomeController> logger,
-        MeteorologiskInstituttKorttidsvarselService korttidsvarsel, FrostService frost)
+        MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
     {
         _logger = logger;
         _korttidsvarsel = korttidsvarsel;
-        _frost = frost;
     }
 
-    [AutoValidateAntiforgeryToken]
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-        const double lat = 61.22908;
-        const double lon = 7.09674;
-
-        ViewData["Korttidsvarsel"] = await _korttidsvarsel.HentKorttidsvarselAsync(
-            "Sogndal",
-            lat,
-            lon);
-
-        return View();
+        var model = await BuildPublicDashboardAsync();
+        return View(model);
     }
 
-    public IActionResult LogHubSite()
+    private async Task<PublicDashboardViewModel> BuildPublicDashboardAsync()
     {
-        LogHub();
-        return View("Index");
-    }
+        KorttidsvarselViewModel? varsel = null;
 
-    private static async Task LogHub()
-    {
-        var conn = new HubConnectionBuilder()
-            .WithUrl("https://loghub.statsforvalteren.no/messageHub")
-            .Build();
+        try
+        {
+            varsel = await _korttidsvarsel.HentKorttidsvarselAsync(
+                "Sogndal",
+                SogndalLat,
+                SogndalLon);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Klarte ikkje hente korttidsvarsel.");
+        }
 
-        await conn.StartAsync();
+        return new PublicDashboardViewModel
+        {
+            Stadnamn = "Sogndal",
+            Korttidsvarsel = varsel,
+            SistOppdatert = DateTimeOffset.Now,
 
-        await conn.InvokeAsync("SendMessage", "Vevside",
-            "Bacon ipsum dolor amet filet mignon ribeye bresaola landjaeger fatback short loin, picanha short ribs pig meatball pork loin kielbasa. Pork chop shoulder pork loin, salami fatback short ribs ground round pork belly boudin. Ground round meatball t-bone pork leberkas burgdoggen hamburger spare ribs turducken shankle strip steak pork chop tail ham hock jowl. Tail jerky jowl pancetta chuck flank. Pastrami short ribs beef ribs swine, tongue ham frankfurter.",
-            "warning");
+            Countdowns =
+            [
+                new DashboardCountdownViewModel
+                {
+                    Id = "CountdownSTR",
+                    Tittel = "Sognefjord Trail Run",
+                    Undertittel = "Neste store mål",
+                    Tidspunkt = new DateTimeOffset(2026, 6, 6, 8, 0, 0, TimeSpan.FromHours(2)),
+                    BildeUrl = "/img/STR.png",
+                    AltTekst = "Sognefjord Trail Run"
+                },
+                new DashboardCountdownViewModel
+                {
+                    Id = "CountdownLFI",
+                    Tittel = "Lustrafjorden Inn",
+                    Undertittel = "Sommarplan",
+                    Tidspunkt = new DateTimeOffset(2026, 8, 15, 8, 0, 0, TimeSpan.FromHours(2)),
+                    BildeUrl = "/img/lustrafjorden_inn.png",
+                    AltTekst = "Lustrafjorden Inn"
+                }
+            ],
 
-        await conn.DisposeAsync();
+            InfoCards =
+            [
+                new DashboardInfoCardViewModel
+                {
+                    Tittel = "Pi-status",
+                    Verdi = "Oppe",
+                    Tekst = "Offentleg status. Detaljar kjem på privat dashboard.",
+                    Ikon = "🟢"
+                },
+                new DashboardInfoCardViewModel
+                {
+                    Tittel = "Neste Barça-kamp",
+                    Verdi = "Kjem",
+                    Tekst = "Koplar på FootballData i neste steg.",
+                    Ikon = "🔵"
+                },
+                new DashboardInfoCardViewModel
+                {
+                    Tittel = "Neste Sogndal-kamp",
+                    Verdi = "Kjem",
+                    Tekst = "Må avklare beste datakjelde.",
+                    Ikon = "⚽"
+                }
+            ],
+
+            Links =
+            [
+                new DashboardLinkViewModel
+                {
+                    Tittel = "Hacker News",
+                    Url = "/HackerNews",
+                    Tekst = "Nerdepåfyll"
+                },
+                new DashboardLinkViewModel
+                {
+                    Tittel = "Barça",
+                    Url = "/Barca",
+                    Tekst = "Fotball"
+                },
+                new DashboardLinkViewModel
+                {
+                    Tittel = "FPL",
+                    Url = "/FPL",
+                    Tekst = "Fantasy"
+                }
+            ]
+        };
     }
 
     public IActionResult Privacy()

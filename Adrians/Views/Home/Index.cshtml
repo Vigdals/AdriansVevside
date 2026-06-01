@@ -1,92 +1,156 @@
-﻿@using Adrians.ViewModels
+﻿@model Adrians.ViewModels.PublicDashboardViewModel
+
 @{
-    ViewData["Title"] = "Home Page";
-    var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
-    var snowStations = ViewData["SnowStations"] as IEnumerable<FrostSnowDepth?>;
+    ViewData["Title"] = "Dashboard";
 }
 
-<section class="hero-section text-center py-2 fade-in">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
+<section class="public-dashboard fade-in">
+    <div class="dashboard-shell">
 
-                <!-- Logo + nedtelling -->
-                <div class="row justify-content-center mt-2 align-items-end logos-row">
-                    <div class="col-md-6 text-center mb-3 mb-md-0">
-                        <img src="~/img/STR.png"
-                             class="event-logo logo-str"
-                             alt="Sognefjord Trail Run" />
-                        <h2 id="CountdownSTR" class="h4 mt-2"></h2>
-                    </div>
+        <header class="dashboard-header dashboard-header-minimal">
+            <div class="dashboard-clock">
+                <div id="DashboardClockTime">--:--</div>
+                <div id="DashboardClockDate" class="dashboard-muted">--</div>
+            </div>
 
-                    <div class="col-md-6 text-center">
-                        <img src="~/img/lustrafjorden_inn.png"
-                             class="event-logo logo-lfi"
-                             alt="Lustrafjorden Inn" />
-                        <h2 id="CountdownLFI" class="h4 mt-2"></h2>
+            <p class="dashboard-muted dashboard-updated">
+                @Model.Stadnamn · oppdatert @Model.SistOppdatert.ToString("HH:mm")
+            </p>
+        </header>
+        @if (TempData["StatusMessage"] is string statusMessage)
+        {
+            <div class="dashboard-alert">
+                @statusMessage
+            </div>
+        }
+
+        <div class="dashboard-grid dashboard-grid-main">
+
+            <article class="dashboard-card dashboard-card-wide">
+                <div class="dashboard-card-header">
+                    <div>
+                        <p class="dashboard-card-kicker">Vêr</p>
+                        <h2>@Model.Stadnamn akkurat no</h2>
                     </div>
+                    <span class="dashboard-card-badge">met.no</span>
                 </div>
 
-                <!-- Vêr -->
-                @if (varsel is not null)
+                @if (Model.Korttidsvarsel is not null)
                 {
-                    <partial name="_KorttidsvarselCard" model="varsel" />
+                    <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel" />
                 }
                 else
                 {
-                    <div class="alert alert-secondary my-3">
+                    <p class="dashboard-muted mb-0">
                         Klarte ikkje hente vêr akkurat no.
-                    </div>
-                }
-
-                <!-- CTA -->
-                <div class="my-3">
-                    <button type="button"
-                            class="btn btn-outline-dark btn-lg"
-                            onclick="location.href='@Url.Action("LogHubSite", "Home")'">
-                        Ping LogHub!
-                    </button>
-                </div>
-
-                <!-- Kontakt -->
-                <div class="contact-info mt-2">
-                    <p class="mb-0">
-                        Email me at
-                        <span style="unicode-bidi:bidi-override; direction:rtl;">
-                            ved.ladgiv@ladgiv
-                        </span>
                     </p>
-                </div>
+                }
+            </article>
 
-            </div>
+            <article class="dashboard-card">
+                <p class="dashboard-card-kicker">Neste</p>
+                <h2>Offentlege ting</h2>
+
+                <div class="dashboard-mini-list">
+                    @foreach (var card in Model.InfoCards)
+                    {
+                        <div class="dashboard-mini-row">
+                            <span class="dashboard-mini-icon">@card.Ikon</span>
+                            <div>
+                                <strong>@card.Tittel</strong>
+                                <span>@card.Verdi</span>
+                                <small>@card.Tekst</small>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </article>
+
         </div>
+
+        <div class="dashboard-grid dashboard-grid-countdowns">
+            @foreach (var countdown in Model.Countdowns)
+            {
+                <article class="dashboard-card dashboard-countdown-card">
+                    @if (!string.IsNullOrWhiteSpace(countdown.BildeUrl))
+                    {
+                        <img src="@countdown.BildeUrl"
+                             alt="@countdown.AltTekst"
+                             class="dashboard-event-logo" />
+                    }
+
+                    <p class="dashboard-card-kicker">@countdown.Undertittel</p>
+                    <h2>@countdown.Tittel</h2>
+
+                    <div class="dashboard-countdown"
+                         id="@countdown.Id"
+                         data-target="@countdown.Tidspunkt.ToUnixTimeMilliseconds()">
+                        --
+                    </div>
+                </article>
+            }
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-links">
+            @foreach (var link in Model.Links)
+            {
+                <a class="dashboard-link-card" href="@link.Url">
+                    <strong>@link.Tittel</strong>
+                    <span>@link.Tekst</span>
+                </a>
+            }
+        </div>
+
+        <footer class="dashboard-footer">
+            <span>© @DateTime.Now.Year · Adrians</span>
+        </footer>
+
     </div>
 </section>
 
 <script>
-    const countdowns = [
-        { id: "CountdownSTR", target: new Date("Jun 6, 2026 08:00:00").getTime() },
-        { id: "CountdownLFI", target: new Date("Aug 15, 2026 08:00:00").getTime() }
-    ];
+    function updateClock() {
+        const now = new Date();
 
-    function startCountdown({ id, target }) {
-        setInterval(() => {
-            const now = Date.now();
-            const d = target - now;
-            if (d <= 0) {
-                document.getElementById(id).innerHTML = "";
-                return;
-            }
+        document.getElementById("DashboardClockTime").textContent =
+            now.toLocaleTimeString("nb-NO", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
 
-            const days = Math.floor(d / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((d / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((d / (1000 * 60)) % 60);
-            const seconds = Math.floor((d / 1000) % 60);
-
-            document.getElementById(id).innerHTML =
-                `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }, 1000);
+        document.getElementById("DashboardClockDate").textContent =
+            now.toLocaleDateString("nb-NO", {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            });
     }
 
-    countdowns.forEach(startCountdown);
+    function updateCountdown(element) {
+        const target = Number(element.dataset.target);
+        const diff = target - Date.now();
+
+        if (diff <= 0) {
+            element.textContent = "No!";
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
+    }
+
+    function tick() {
+        updateClock();
+
+        document
+            .querySelectorAll(".dashboard-countdown[data-target]")
+            .forEach(updateCountdown);
+    }
+
+    tick();
+    setInterval(tick, 1000);
 </script>
