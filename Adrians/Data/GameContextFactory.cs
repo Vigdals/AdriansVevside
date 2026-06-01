@@ -1,26 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
-namespace Adrians.Data
+namespace Adrians.Data;
+
+public sealed class GameContextFactory : IDesignTimeDbContextFactory<GameContext>
 {
-    public class GameContextFactory : IDesignTimeDbContextFactory<GameContext>
+    public GameContext CreateDbContext(string[] args)
     {
-        public GameContext CreateDbContext(string[] args)
-        {
-            // Build configuration from appsettings.json
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+        var connectionString =
+            Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+            ?? "Server=localhost;Port=3306;Database=adriansdb;User=adrian;Password=supersecret;TreatTinyAsBoolean=false";
 
-            // Create DbContextOptionsBuilder and use the connection string from configuration
-            var builder = new DbContextOptionsBuilder<GameContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlServer(connectionString);
+        var optionsBuilder = new DbContextOptionsBuilder<GameContext>();
+        var serverVersion = ServerVersion.AutoDetect(connectionString);
 
-            return new GameContext(builder.Options);
-        }
+        optionsBuilder.UseMySql(connectionString, serverVersion);
+
+        return new GameContext(optionsBuilder.Options);
     }
 }
