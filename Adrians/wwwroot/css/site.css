@@ -3,10 +3,12 @@
     --color-bg: #15191f;
     --color-bg-elevated: #20262e;
     --color-bg-card: rgba(33, 37, 41, 0.88);
-    --color-bg-card-hover: rgba(52, 58, 64, 0.92);
+    --color-bg-card-hover: rgba(52, 58, 64, 0.94);
     --color-text: #f8f9fa;
     --color-text-muted: rgba(255, 255, 255, 0.68);
+    --color-text-soft: rgba(255, 255, 255, 0.82);
     --color-border: rgba(255, 255, 255, 0.12);
+    --color-border-strong: rgba(255, 255, 255, 0.22);
     --color-primary: #8ab4f8;
     --color-primary-strong: #5f9cf7;
     --color-success: #4ade80;
@@ -114,6 +116,12 @@ p {
     margin-bottom: var(--space-md);
 }
 
+/* Layout */
+
+.site-main-dashboard {
+    padding: 0;
+}
+
 /* Bootstrap overrides */
 
 .btn {
@@ -199,7 +207,7 @@ p {
         padding: var(--space-sm) var(--space-md);
     }
 
-/* Existing utility classes */
+/* Utility */
 
 .centerTHIS {
     display: flex;
@@ -278,6 +286,30 @@ p {
     object-fit: contain;
 }
 
+/* Skjult toppmeny på framsida */
+
+.dashboard-page .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.dashboard-page .site-navbar {
+    margin-bottom: 0 !important;
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.dashboard-page .site-header.is-visible .site-navbar,
+.dashboard-page .site-header:focus-within .site-navbar,
+.dashboard-page .site-header:hover .site-navbar {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* Public dashboard */
 
 .public-dashboard {
@@ -302,6 +334,19 @@ p {
     .dashboard-header h1 {
         margin: 0;
     }
+
+.dashboard-header-minimal {
+    align-items: flex-end;
+}
+
+    .dashboard-header-minimal .dashboard-clock {
+        text-align: left;
+    }
+
+.dashboard-updated {
+    margin: 0;
+    text-align: right;
+}
 
 .dashboard-eyebrow,
 .dashboard-card-kicker {
@@ -382,25 +427,44 @@ p {
     color: var(--color-text-muted);
 }
 
-.dashboard-countdown-card {
-    text-align: center;
-}
-
-.dashboard-event-logo {
-    max-height: 76px;
-    max-width: 240px;
-    width: auto;
-    object-fit: contain;
+.dashboard-alert {
     margin-bottom: var(--space-md);
 }
 
-.dashboard-countdown {
-    margin-top: 0.75rem;
-    font-size: clamp(1.8rem, 4vw, 3.4rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.04em;
+/* Vêrkort */
+
+.dashboard-weather-card {
+    min-height: 300px;
 }
+
+.dashboard-weather-large .weather-icon {
+    width: 64px;
+    height: 64px;
+}
+
+.dashboard-weather-large .row .col,
+.dashboard-weather-large .row [class*="col-"] {
+    font-size: 1rem;
+}
+
+    .dashboard-weather-large .row .col div:last-child,
+    .dashboard-weather-large .row [class*="col-"] div:last-child {
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    }
+
+    .dashboard-weather-large .row .col:first-child div:last-child,
+    .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
+    .weather-temperature strong,
+    .weather-temperature .weather-value {
+        font-size: 2.15rem;
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -0.05em;
+    }
+
+/* Info-kort */
 
 .dashboard-mini-list {
     display: grid;
@@ -429,6 +493,42 @@ p {
     font-size: 1.3rem;
 }
 
+/* Løpskort */
+
+.dashboard-countdown-card {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+    .dashboard-countdown-card .dashboard-card-kicker {
+        font-size: 0.62rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .dashboard-countdown-card h2 {
+        font-size: 0.95rem;
+        margin-bottom: 0.2rem;
+    }
+
+.dashboard-event-logo {
+    max-height: 48px;
+    max-width: 190px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-countdown {
+    margin-top: 0.35rem;
+    font-size: 1.35rem;
+    font-weight: 850;
+    line-height: 1;
+    letter-spacing: -0.035em;
+}
+
+/* Lenkekort */
+
 .dashboard-link-card {
     color: var(--color-text);
     text-decoration: none;
@@ -452,6 +552,8 @@ p {
         color: var(--color-text-muted);
     }
 
+/* Debug-knappar */
+
 .dashboard-debug-button {
     border: 1px solid rgba(255, 255, 255, 0.25);
     background: transparent;
@@ -466,10 +568,6 @@ p {
         border-color: var(--color-primary);
         background-color: rgba(138, 180, 248, 0.08);
     }
-
-.dashboard-alert {
-    margin-bottom: var(--space-md);
-}
 
 /* Animations */
 
@@ -508,7 +606,12 @@ p {
         flex-direction: column;
     }
 
-    .dashboard-clock {
+    .dashboard-header-minimal {
+        align-items: flex-start;
+    }
+
+    .dashboard-clock,
+    .dashboard-updated {
         text-align: left;
     }
 
@@ -516,6 +619,17 @@ p {
     .dashboard-grid-countdowns,
     .dashboard-grid-links {
         grid-template-columns: 1fr;
+    }
+
+    .dashboard-countdown {
+        font-size: 1.25rem;
+    }
+
+    .dashboard-weather-large .row .col:first-child div:last-child,
+    .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
+    .weather-temperature strong,
+    .weather-temperature .weather-value {
+        font-size: 2rem;
     }
 }
 
@@ -533,6 +647,30 @@ p {
 
     .event-logo {
         height: 88px;
+    }
+
+    .dashboard-event-logo {
+        max-height: 44px;
+    }
+
+    .dashboard-countdown-card h2 {
+        font-size: 0.9rem;
+    }
+
+    .dashboard-countdown {
+        font-size: 1.1rem;
+    }
+
+    .dashboard-weather-large .row .col div:last-child,
+    .dashboard-weather-large .row [class*="col-"] div:last-child {
+        font-size: 1.15rem;
+    }
+
+    .dashboard-weather-large .row .col:first-child div:last-child,
+    .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
+    .weather-temperature strong,
+    .weather-temperature .weather-value {
+        font-size: 1.85rem;
     }
 }
 
@@ -552,17 +690,4 @@ p {
     .dashboard-debug-button:hover {
         transform: none;
     }
-}
-
-.dashboard-header-minimal {
-    align-items: flex-end;
-}
-
-.dashboard-header-minimal .dashboard-clock {
-    text-align: left;
-}
-
-.dashboard-updated {
-    margin: 0;
-    text-align: right;
 }

@@ -17,6 +17,7 @@
                 @Model.Stadnamn · oppdatert @Model.SistOppdatert.ToString("HH:mm")
             </p>
         </header>
+
         @if (TempData["StatusMessage"] is string statusMessage)
         {
             <div class="dashboard-alert">
@@ -26,7 +27,7 @@
 
         <div class="dashboard-grid dashboard-grid-main">
 
-            <article class="dashboard-card dashboard-card-wide">
+            <article class="dashboard-card dashboard-card-wide dashboard-weather-card">
                 <div class="dashboard-card-header">
                     <div>
                         <p class="dashboard-card-kicker">Vêr</p>
@@ -37,12 +38,14 @@
 
                 @if (Model.Korttidsvarsel is not null)
                 {
-                    <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel" />
+                    <div class="dashboard-weather-large">
+                        <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel" />
+                    </div>
                 }
                 else
                 {
                     <p class="dashboard-muted mb-0">
-                        Klarte ikkje hente vêr akkurat no..
+                        Klarte ikkje hente vêr akkurat no.
                     </p>
                 }
             </article>
