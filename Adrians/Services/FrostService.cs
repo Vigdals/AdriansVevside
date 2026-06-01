@@ -33,8 +33,8 @@ public sealed class FrostService
         if (_cache.TryGetValue(cacheKey, out FrostSnowDepth? cached))
             return cached;
 
-        var clientId = _config["frost-client-id"];
-        var clientSecret = _config["frost-client-secret"];
+        var clientId = _config["Frost:ClientId"];
+        var clientSecret = _config["Frost:ClientSecret"];
 
         if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
             throw new InvalidOperationException("Missing Frost credentials.");

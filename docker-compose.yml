@@ -3,6 +3,8 @@ services:
     image: mariadb:11.4
     container_name: mariadb
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:3306:3306"
     environment:
       MARIADB_DATABASE: ${MARIADB_DATABASE}
       MARIADB_USER: ${MARIADB_USER}

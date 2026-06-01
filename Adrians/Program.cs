@@ -2,34 +2,10 @@
 using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
-using Azure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// =======================
-// Konfigurasjon
-// =======================
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
-
-// =======================
-// Key Vault
-// =======================
-// Bruk Key Vault berre når KeyVault:Url faktisk er sett.
-// På Raspberry Pi/self-hosted skal denne normalt ikkje vere sett.
-var useKeyVault = builder.Configuration.GetValue<bool>("KeyVault:Enabled");
-var keyVaultUrlString = builder.Configuration["KeyVault:Url"];
-
-if (useKeyVault && !string.IsNullOrWhiteSpace(keyVaultUrlString))
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri(keyVaultUrlString),
-        new DefaultAzureCredential());
-}
 
 // =======================
 // Database connection string
