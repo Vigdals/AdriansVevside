@@ -6,6 +6,20 @@
 .AppleDouble
 .LSOverride
 
+# Local environment/secrets
+.env
+.env.*
+!.env.example
+
+# Local backups
+*.bak
+*.bak.*
+docker-compose.yml.bak.*
+
+# Logs
+*.log
+EOF
+
 # VS / publish-profilar med miljøspesifikk info
 *.pubxml.user
 *.csproj.user

@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.*
+*.bak
+*.bak.*
+docker-compose.yml.bak.*
+docs
+README.md
+Security.md
+**/bin
+**/obj

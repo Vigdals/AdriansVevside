@@ -6,52 +6,62 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-// builder er inngangspunktet. Set opp alt før appen startar
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
 // Konfigurasjon
 // =======================
 builder.Configuration
-    .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
 // =======================
 // Key Vault
 // =======================
-var keyVaultUrlString = builder.Configuration["KeyVault:Url"]
-    ?? throw new InvalidOperationException("KeyVault:Url is not configured.");
-builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUrlString), new DefaultAzureCredential());
+// Bruk Key Vault berre når KeyVault:Url faktisk er sett.
+// På Raspberry Pi/self-hosted skal denne normalt ikkje vere sett.
+var useKeyVault = builder.Configuration.GetValue<bool>("KeyVault:Enabled");
+var keyVaultUrlString = builder.Configuration["KeyVault:Url"];
 
-// Vel connection string basert på miljø
-// I dev: LocalDB frå appsettings
-// I prod: hemmeleg streng frå Key Vault
-string connectionString;
-if (builder.Environment.IsDevelopment())
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("DefaultConnection not found.");
-else
-    connectionString = builder.Configuration["db-connection-adriansvevside"]
-        ?? throw new InvalidOperationException("Key Vault secret 'db-connection-adriansvevside' not found.");
+if (useKeyVault && !string.IsNullOrWhiteSpace(keyVaultUrlString))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUrlString),
+        new DefaultAzureCredential());
+}
+
+// =======================
+// Database connection string
+// =======================
+// Prioritet:
+// 1. ConnectionStrings:DefaultConnection frå miljøvariabel / appsettings
+// 2. db-connection-adriansvevside frå Key Vault, dersom Key Vault er aktivt
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
+    ?? builder.Configuration["db-connection-adriansvevside"]
+    ?? throw new InvalidOperationException("Database connection string not found.");
 
 // =======================
 // HTTP-klientar
 // =======================
-// AddHttpClient<T> bind ein typesatt klient til FotballDataApi
-// DI-containeren gir denne klienten til FotballDataApi automatisk
 builder.Services.Configure<FootballDataOptions>(builder.Configuration.GetSection("FootballData"));
 builder.Services.AddHttpClient<FotballDataApi>(client =>
 {
-    client.DefaultRequestHeaders.Add("X-Auth-Token", builder.Configuration["FootballData:ApiKey"]);
+    var apiKey = builder.Configuration["FootballData:ApiKey"];
+
+    if (!string.IsNullOrWhiteSpace(apiKey))
+    {
+        client.DefaultRequestHeaders.Add("X-Auth-Token", apiKey);
+    }
 });
 
-// Named clients – hentast ut med httpClientFactory.CreateClient("frost") osb.
-// Nyttig når same service brukar fleire ulike API-ar
-builder.Services.AddMemoryCache(); // Delt cache for alle services
+builder.Services.AddMemoryCache();
+
 builder.Services.AddHttpClient("frost", client =>
 {
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdal.dev)");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 builder.Services.AddScoped<FrostService>();
@@ -69,53 +79,68 @@ builder.Services.AddHttpClient("hackernews", client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
-// =======================
-// RSS
-// =======================
 builder.Services.AddScoped<RssFeedService>();
 
 // =======================
 // Database / Identity
 // =======================
-// EF Core – set opp databasekontekstane med SQL Server
-builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
-builder.Services.AddDbContext<GameContext>(o => o.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// Raspberry Pi-oppsettet ditt brukar MariaDB.
+// Dette krev NuGet-pakken Pomelo.EntityFrameworkCore.MySql.
+var serverVersion = ServerVersion.AutoDetect(connectionString);
 
-// Identity – innebygd brukar- og rollesystem
-builder.Services.AddDefaultIdentity<IdentityUser>(o => o.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(connectionString, serverVersion));
+
+builder.Services.AddDbContext<GameContext>(options =>
+    options.UseMySql(connectionString, serverVersion));
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+}
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 // =======================
 // MVC
 // =======================
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient(); // Generisk fallback-klient (kan fjernast om du ikkje brukar den direkte)
+builder.Services.AddHttpClient();
 
-// =======================
-// Bygg appen
-// =======================
 var app = builder.Build();
 
-// Middleware-pipeline
+// =======================
+// Middleware
+// =======================
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint(); // Viser EF-migrasjonsfeil i dev
+    app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error"); // Feilside i prod
-    app.UseHsts(); // Tving HTTPS i nettlesaren
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
-app.UseHttpsRedirection(); // Redirect HTTP → HTTPS
-app.UseStaticFiles();      // Tener filer frå wwwroot (CSS, JS, bilete)
-app.UseRouting();          // Finn riktig controller/action for URL-en
-app.UseAuthentication();   // Er du innlogga?
-app.UseAuthorization();    // Har du tilgang? (må kome ETTER authentication)
+// Nginx handterer HTTPS eksternt, men appen får X-Forwarded-Proto.
+// Denne kan stå, men dersom du får redirect-loop seinare må vi setje ForwardedHeaders.
+app.UseHttpsRedirection();
 
-app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages(); // For Identity-sidene (login, register osb.)
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();
