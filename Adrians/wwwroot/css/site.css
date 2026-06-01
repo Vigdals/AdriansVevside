@@ -499,11 +499,15 @@ p {
     text-align: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 128px;
 }
 
     .dashboard-countdown-card .dashboard-card-kicker {
         font-size: 0.62rem;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.15rem;
     }
 
     .dashboard-countdown-card h2 {
@@ -512,16 +516,26 @@ p {
     }
 
 .dashboard-event-logo {
-    max-height: 48px;
-    max-width: 190px;
     width: auto;
     object-fit: contain;
-    margin-bottom: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.45rem;
+}
+
+.dashboard-event-logo-str {
+    max-height: 38px;
+    max-width: 150px;
+}
+
+.dashboard-event-logo-lfi {
+    max-height: 34px;
+    max-width: 210px;
 }
 
 .dashboard-countdown {
-    margin-top: 0.35rem;
-    font-size: 1.35rem;
+    margin-top: 0.3rem;
+    font-size: 1.3rem;
     font-weight: 850;
     line-height: 1;
     letter-spacing: -0.035em;
@@ -649,8 +663,14 @@ p {
         height: 88px;
     }
 
-    .dashboard-event-logo {
-        max-height: 44px;
+    .dashboard-event-logo-str {
+        max-height: 34px;
+        max-width: 135px;
+    }
+
+    .dashboard-event-logo-lfi {
+        max-height: 30px;
+        max-width: 185px;
     }
 
     .dashboard-countdown-card h2 {

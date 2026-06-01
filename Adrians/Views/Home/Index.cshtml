@@ -31,7 +31,6 @@
                 <div class="dashboard-card-header">
                     <div>
                         <p class="dashboard-card-kicker">Vêr</p>
-                        <h2>@Model.Stadnamn akkurat no</h2>
                     </div>
                     <span class="dashboard-card-badge">met.no</span>
                 </div>
@@ -52,7 +51,7 @@
 
             <article class="dashboard-card">
                 <p class="dashboard-card-kicker">Neste</p>
-                <h2>Offentlege ting</h2>
+                <h2>Anna vas</h2>
 
                 <div class="dashboard-mini-list">
                     @foreach (var card in Model.InfoCards)
@@ -74,12 +73,19 @@
         <div class="dashboard-grid dashboard-grid-countdowns">
             @foreach (var countdown in Model.Countdowns)
             {
+                var logoClass = countdown.Id switch
+                {
+                    "CountdownSTR" => "dashboard-event-logo dashboard-event-logo-str",
+                    "CountdownLFI" => "dashboard-event-logo dashboard-event-logo-lfi",
+                    _ => "dashboard-event-logo"
+                };
+
                 <article class="dashboard-card dashboard-countdown-card">
                     @if (!string.IsNullOrWhiteSpace(countdown.BildeUrl))
                     {
                         <img src="@countdown.BildeUrl"
                              alt="@countdown.AltTekst"
-                             class="dashboard-event-logo" />
+                             class="@logoClass" />
                     }
 
                     <p class="dashboard-card-kicker">@countdown.Undertittel</p>

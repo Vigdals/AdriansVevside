@@ -57,7 +57,7 @@ public class HomeController : Controller
                 {
                     Id = "CountdownSTR",
                     Tittel = "Sognefjord Trail Run",
-                    Undertittel = "Neste store mål",
+                    Undertittel = "",
                     Tidspunkt = new DateTimeOffset(2026, 6, 6, 8, 0, 0, TimeSpan.FromHours(2)),
                     BildeUrl = "/img/STR.png",
                     AltTekst = "Sognefjord Trail Run"
@@ -66,7 +66,7 @@ public class HomeController : Controller
                 {
                     Id = "CountdownLFI",
                     Tittel = "Lustrafjorden Inn",
-                    Undertittel = "Sommarplan",
+                    Undertittel = "",
                     Tidspunkt = new DateTimeOffset(2026, 8, 15, 8, 0, 0, TimeSpan.FromHours(2)),
                     BildeUrl = "/img/lustrafjorden_inn.png",
                     AltTekst = "Lustrafjorden Inn"
