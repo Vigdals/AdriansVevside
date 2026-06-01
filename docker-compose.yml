@@ -36,6 +36,8 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mariadb;Port=3306;Database=${MARIADB_DATABASE};User=${MARIADB_USER};Password=${MARIADB_PASSWORD};TreatTinyAsBoolean=false"
     expose:
       - "8080"
+    volumes:
+      - dataprotection_keys:/root/.aspnet/DataProtection-Keys
 
   nginx:
     image: nginx:1.29-alpine
@@ -58,3 +60,4 @@ volumes:
   certbot_www:
   letsencrypt:
   nginx_cache:
+  dataprotection_keys:
