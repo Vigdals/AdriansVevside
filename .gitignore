@@ -6,6 +6,8 @@
 .AppleDouble
 .LSOverride
 
+Adrians/wwwroot/status/deploy.json
+
 # Local environment/secrets
 .env
 .env.*
