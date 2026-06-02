@@ -13,15 +13,18 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
     private readonly NifsKampService _nifsKampService;
+    private readonly PublicPiStatusService _piStatusService;
 
     public HomeController(
         ILogger<HomeController> logger,
         MeteorologiskInstituttKorttidsvarselService korttidsvarsel,
-        NifsKampService nifsKampService)
+        NifsKampService nifsKampService,
+        PublicPiStatusService piStatusService)
     {
         _logger = logger;
         _korttidsvarsel = korttidsvarsel;
         _nifsKampService = nifsKampService;
+        _piStatusService = piStatusService;
     }
 
     [HttpGet]
@@ -36,6 +39,7 @@ public class HomeController : Controller
         KorttidsvarselViewModel? varsel = null;
         NesteKampViewModel? nesteSogndalKamp = null;
         NesteKampViewModel? nesteBarcelonaKamp = null;
+        PublicPiStatus? piStatus = null;
 
         try
         {
@@ -67,12 +71,22 @@ public class HomeController : Controller
             _logger.LogWarning(ex, "Klarte ikkje hente neste Barcelona-kamp.");
         }
 
+        try
+        {
+            piStatus = await _piStatusService.GetStatusAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Klarte ikkje hente public Pi-status.");
+        }
+
         return new PublicDashboardViewModel
         {
             Stadnamn = "Sogndal",
             Korttidsvarsel = varsel,
             NesteSogndalKamp = nesteSogndalKamp,
             NesteBarcelonaKamp = nesteBarcelonaKamp,
+            PiStatus = piStatus,
             SistOppdatert = DateTimeOffset.Now,
 
             Countdowns =

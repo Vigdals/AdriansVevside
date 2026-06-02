@@ -7,12 +7,7 @@ namespace Adrians.Services;
 public sealed class NifsKampService
 {
     private const int SogndalTeamId = 10;
-    private const int Sogndal1DivisjonTournamentId = 6;
-    private const int SogndalFallbackStageId = 700912;
-
     private const int BarcelonaTeamId = 844;
-    private const int BarcelonaPrimeraDivisionTournamentId = 45;
-    private const int BarcelonaFallbackStageId = 699897;
 
     private readonly HttpClient _httpClient;
     private readonly ILogger<NifsKampService> _logger;
@@ -25,52 +20,89 @@ public sealed class NifsKampService
 
     public Task<NesteKampViewModel?> HentNesteSogndalKampAsync()
     {
-        return HentNesteKampAsync(
+        return HentNesteKampForLagAsync(
             tittel: "Neste Sogndal-kamp",
-            teamId: SogndalTeamId,
-            tournamentId: Sogndal1DivisjonTournamentId,
-            fallbackStageId: SogndalFallbackStageId);
+            teamId: SogndalTeamId);
     }
 
     public Task<NesteKampViewModel?> HentNesteBarcelonaKampAsync()
     {
-        return HentNesteKampAsync(
+        return HentNesteKampForLagAsync(
             tittel: "Neste Barça-kamp",
-            teamId: BarcelonaTeamId,
-            tournamentId: BarcelonaPrimeraDivisionTournamentId,
-            fallbackStageId: BarcelonaFallbackStageId);
+            teamId: BarcelonaTeamId);
     }
 
-    private async Task<NesteKampViewModel?> HentNesteKampAsync(
+    private async Task<NesteKampViewModel?> HentNesteKampForLagAsync(
         string tittel,
-        int teamId,
-        int tournamentId,
-        int fallbackStageId)
+        int teamId)
     {
         try
         {
-            var stageId = await FinnStageIdAsync(
-                teamId,
-                tournamentId,
-                fallbackStageId);
+            var stages = await _httpClient.GetFromJsonAsync<List<NifsStageDto>>(
+                $"teams/{teamId}/stages/?active=1");
 
-            var kampar = await _httpClient.GetFromJsonAsync<List<NifsMatchDto>>(
-                $"stages/{stageId}/matches/?teamId={teamId}");
+            if (stages is null || stages.Count == 0)
+            {
+                _logger.LogWarning(
+                    "Fann ingen aktive stages for teamId {TeamId}.",
+                    teamId);
 
-            if (kampar is null || kampar.Count == 0)
+                return null;
+            }
+
+            var relevanteStages = stages
+                .Where(ErRelevantStage)
+                .OrderByDescending(stage => stage.Active == true)
+                .ThenByDescending(stage => stage.YearStart ?? 0)
+                .ThenByDescending(stage => stage.YearEnd ?? 0)
+                .ThenByDescending(stage => stage.Id)
+                .ToList();
+
+            if (relevanteStages.Count == 0)
+            {
+                _logger.LogWarning(
+                    "Fann ingen relevante stages for teamId {TeamId}.",
+                    teamId);
+
+                return null;
+            }
+
+            var alleKampar = new List<NifsMatchDto>();
+
+            foreach (var stage in relevanteStages)
+            {
+                try
+                {
+                    var kampar = await _httpClient.GetFromJsonAsync<List<NifsMatchDto>>(
+                        $"stages/{stage.Id}/matches/?teamId={teamId}");
+
+                    if (kampar is not null && kampar.Count > 0)
+                    {
+                        alleKampar.AddRange(kampar);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(
+                        ex,
+                        "Klarte ikkje hente kampar frå NIFS for teamId {TeamId}, stageId {StageId}.",
+                        teamId,
+                        stage.Id);
+                }
+            }
+
+            if (alleKampar.Count == 0)
             {
                 _logger.LogInformation(
-                    "NIFS returnerte ingen kampar for teamId {TeamId}, tournamentId {TournamentId}, stageId {StageId}.",
-                    teamId,
-                    tournamentId,
-                    stageId);
+                    "Fann ingen kampar i relevante stages for teamId {TeamId}.",
+                    teamId);
 
                 return null;
             }
 
             var no = DateTimeOffset.Now;
 
-            var nesteKamp = kampar
+            var nesteKamp = alleKampar
                 .Where(kamp => kamp.Timestamp > no)
                 .OrderBy(kamp => kamp.Timestamp)
                 .FirstOrDefault();
@@ -78,10 +110,8 @@ public sealed class NifsKampService
             if (nesteKamp is null)
             {
                 _logger.LogInformation(
-                    "Fann ingen framtidige kampar for teamId {TeamId}, tournamentId {TournamentId}, stageId {StageId}.",
-                    teamId,
-                    tournamentId,
-                    stageId);
+                    "Fann ingen framtidige kampar for teamId {TeamId}.",
+                    teamId);
 
                 return null;
             }
@@ -102,73 +132,29 @@ public sealed class NifsKampService
         {
             _logger.LogWarning(
                 ex,
-                "Klarte ikkje hente neste kamp frå NIFS for teamId {TeamId}, tournamentId {TournamentId}.",
-                teamId,
-                tournamentId);
+                "Klarte ikkje hente neste kamp frå NIFS for teamId {TeamId}.",
+                teamId);
 
             return null;
         }
     }
 
-    private async Task<int> FinnStageIdAsync(
-        int teamId,
-        int tournamentId,
-        int fallbackStageId)
+    private static bool ErRelevantStage(NifsStageDto stage)
     {
-        try
+        var tournament = stage.Tournament;
+
+        if (tournament is null)
         {
-            var stages = await _httpClient.GetFromJsonAsync<List<NifsStageDto>>(
-                $"teams/{teamId}/stages/?active=1");
-
-            if (stages is null || stages.Count == 0)
-            {
-                _logger.LogWarning(
-                    "Fann ingen stages for teamId {TeamId}. Brukar fallback stageId {FallbackStageId}.",
-                    teamId,
-                    fallbackStageId);
-
-                return fallbackStageId;
-            }
-
-            var stage = stages
-                .Where(stage => stage.Tournament?.Id == tournamentId)
-                .OrderByDescending(stage => stage.Active == true)
-                .ThenByDescending(stage => stage.YearStart ?? 0)
-                .ThenByDescending(stage => stage.YearEnd ?? 0)
-                .ThenByDescending(stage => stage.Id)
-                .FirstOrDefault();
-
-            if (stage is null)
-            {
-                _logger.LogWarning(
-                    "Fann ikkje stage for teamId {TeamId}, tournamentId {TournamentId}. Brukar fallback stageId {FallbackStageId}.",
-                    teamId,
-                    tournamentId,
-                    fallbackStageId);
-
-                return fallbackStageId;
-            }
-
-            _logger.LogInformation(
-                "Brukar NIFS stageId {StageId} ({StageName}) for teamId {TeamId}, tournamentId {TournamentId}.",
-                stage.Id,
-                stage.FullName ?? stage.Name,
-                teamId,
-                tournamentId);
-
-            return stage.Id;
+            return false;
         }
-        catch (Exception ex)
+
+        // Ikkje vis treningskampar på hovuddashboardet.
+        if (string.Equals(tournament.Name, "Treningskamper", StringComparison.OrdinalIgnoreCase))
         {
-            _logger.LogWarning(
-                ex,
-                "Klarte ikkje slå opp stage for teamId {TeamId}, tournamentId {TournamentId}. Brukar fallback stageId {FallbackStageId}.",
-                teamId,
-                tournamentId,
-                fallbackStageId);
-
-            return fallbackStageId;
+            return false;
         }
+
+        return true;
     }
 
     private static string VelVisningsnamn(NifsTeamDto? team)

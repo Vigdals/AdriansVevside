@@ -64,6 +64,7 @@ builder.Services.AddHttpClient<NifsKampService>(client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
+builder.Services.AddScoped<PublicPiStatusService>();
 builder.Services.AddScoped<RssFeedService>();
 
 // =======================

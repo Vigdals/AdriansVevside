@@ -1,7 +1,9 @@
 ﻿namespace Adrians.ViewModels;
+using Adrians.Models;
 
 public sealed class PublicDashboardViewModel
 {
+    public PublicPiStatus? PiStatus { get; set; }
     public required string Stadnamn { get; init; }
 
     public KorttidsvarselViewModel? Korttidsvarsel { get; init; }

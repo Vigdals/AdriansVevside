@@ -65,7 +65,7 @@
                         </div>
 
                         <p class="dashboard-muted mb-0">
-                            Ingen komande seriekamp funnen akkurat no.
+                            Ingen komande kamp funnen akkurat no.
                         </p>
                     </article>
                 }
@@ -85,13 +85,97 @@
                         </div>
 
                         <p class="dashboard-muted mb-0">
-                            Ingen komande ligakamp funnen akkurat no.
+                            Ingen komande kamp funnen akkurat no.
                         </p>
                     </article>
                 }
             </div>
 
         </div>
+
+        @if (Model.PiStatus is not null)
+        {
+            var piStatusClass = Model.PiStatus.IsOk
+                ? "dashboard-pi-status-ok"
+                : "dashboard-pi-status-warning";
+
+            <article class="dashboard-card dashboard-pi-status-card @piStatusClass">
+                <div class="dashboard-card-header">
+                    <div>
+                        <p class="dashboard-card-kicker">Pi-status</p>
+                        <h2>VigdalPi</h2>
+                    </div>
+
+                    <span class="dashboard-card-badge">
+                        @(Model.PiStatus.IsOk ? "OK" : "Sjekk")
+                    </span>
+                </div>
+
+                <div class="dashboard-pi-status-main">
+                    <div>
+                        <span class="dashboard-pi-status-dot"></span>
+                        <strong>
+                            @(Model.PiStatus.IsOk ? "Siste deploy var OK" : "Deploy-status er uklar")
+                        </strong>
+                    </div>
+
+                    @if (Model.PiStatus.DeployedAt is not null)
+                    {
+                        <p class="dashboard-muted">
+                            Sist deploya @Model.PiStatus.DeployedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="dashboard-muted">
+                            Ingen deploy-tid registrert.
+                        </p>
+                    }
+                </div>
+
+                <dl class="dashboard-pi-status-details">
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.CommitShort))
+                    {
+                        <div>
+                            <dt>Commit</dt>
+                            <dd>@Model.PiStatus.CommitShort</dd>
+                        </div>
+                    }
+
+                    @if (Model.PiStatus.ResponseMs is not null)
+                    {
+                        <div>
+                            <dt>Respons</dt>
+                            <dd>@Model.PiStatus.ResponseMs ms</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.DotnetRuntime))
+                    {
+                        <div>
+                            <dt>.NET</dt>
+                            <dd>@Model.PiStatus.DotnetRuntime</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.AppEnvironment))
+                    {
+                        <div>
+                            <dt>Miljø</dt>
+                            <dd>@Model.PiStatus.AppEnvironment</dd>
+                        </div>
+                    }
+                </dl>
+
+                @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Message))
+                {
+                    <p class="dashboard-muted mb-0">
+                        @Model.PiStatus.Message
+                    </p>
+                }
+            </article>
+        }
+
 
         <div class="dashboard-grid dashboard-grid-countdowns">
             @foreach (var countdown in Model.Countdowns)
