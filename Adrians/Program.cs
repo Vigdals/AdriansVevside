@@ -1,4 +1,5 @@
 ﻿global using Adrians.Models;
+
 using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
@@ -23,6 +24,7 @@ var connectionString =
 // HTTP-klientar
 // =======================
 builder.Services.Configure<FootballDataOptions>(builder.Configuration.GetSection("FootballData"));
+
 builder.Services.AddHttpClient<FotballDataApi>(client =>
 {
     var apiKey = builder.Configuration["FootballData:ApiKey"];
@@ -55,12 +57,19 @@ builder.Services.AddHttpClient("hackernews", client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
+builder.Services.AddHttpClient<NifsKampService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.nifs.no/");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
 builder.Services.AddScoped<RssFeedService>();
 
 // =======================
 // Database / Identity
 // =======================
-// Raspberry Pi-oppsettet ditt brukar MariaDB.
+// Raspberry Pi-oppsettet brukar MariaDB.
 // Dette krev NuGet-pakken Pomelo.EntityFrameworkCore.MySql.
 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
@@ -86,7 +95,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 // MVC
 // =======================
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

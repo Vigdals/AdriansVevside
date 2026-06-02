@@ -8,7 +8,6 @@ public class BarcaController : Controller
 {
     private readonly FotballDataApi _footballService;
 
-    // Hent klienten frå DI
     public BarcaController(FotballDataApi footballService)
     {
         _footballService = footballService;

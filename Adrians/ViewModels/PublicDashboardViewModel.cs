@@ -6,6 +6,8 @@ public sealed class PublicDashboardViewModel
 
     public KorttidsvarselViewModel? Korttidsvarsel { get; init; }
 
+    public NesteSogndalKampViewModel? NesteSogndalKamp { get; init; }
+
     public required DateTimeOffset SistOppdatert { get; init; }
 
     public required IReadOnlyList<DashboardCountdownViewModel> Countdowns { get; init; }

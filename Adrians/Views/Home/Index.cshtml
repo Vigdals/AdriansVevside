@@ -38,7 +38,7 @@
                 @if (Model.Korttidsvarsel is not null)
                 {
                     <div class="dashboard-weather-large">
-                        <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel" />
+                        <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel"/>
                     </div>
                 }
                 else
@@ -49,24 +49,75 @@
                 }
             </article>
 
-            <article class="dashboard-card">
-                <p class="dashboard-card-kicker">Neste</p>
-                <h2>Anna vas</h2>
+<article class="dashboard-card dashboard-sogndal-card">
+    <div class="dashboard-card-header">
+        <div>
+            <p class="dashboard-card-kicker">Neste Sogndal-kamp</p>
+        </div>
+        <span class="dashboard-card-badge">NIFS</span>
+    </div>
 
-                <div class="dashboard-mini-list">
-                    @foreach (var card in Model.InfoCards)
+    @if (Model.NesteSogndalKamp is not null)
+    {
+        <div class="dashboard-next-match">
+            <div class="dashboard-next-match-teams">
+                <div class="dashboard-next-match-team">
+                    @if (!string.IsNullOrWhiteSpace(Model.NesteSogndalKamp.HeimelagLogoUrl))
                     {
-                        <div class="dashboard-mini-row">
-                            <span class="dashboard-mini-icon">@card.Ikon</span>
-                            <div>
-                                <strong>@card.Tittel</strong>
-                                <span>@card.Verdi</span>
-                                <small>@card.Tekst</small>
-                            </div>
-                        </div>
+                        <img src="@Model.NesteSogndalKamp.HeimelagLogoUrl"
+                             alt="@Model.NesteSogndalKamp.Heimelag logo"
+                             class="dashboard-next-match-logo"/>
                     }
+
+                    <span>@Model.NesteSogndalKamp.Heimelag</span>
                 </div>
-            </article>
+
+                <div class="dashboard-next-match-vs">
+                    mot
+                </div>
+
+                <div class="dashboard-next-match-team">
+                    @if (!string.IsNullOrWhiteSpace(Model.NesteSogndalKamp.BortelagLogoUrl))
+                    {
+                        <img src="@Model.NesteSogndalKamp.BortelagLogoUrl"
+                             alt="@Model.NesteSogndalKamp.Bortelag logo"
+                             class="dashboard-next-match-logo"/>
+                    }
+
+                    <span>@Model.NesteSogndalKamp.Bortelag</span>
+                </div>
+            </div>
+
+            <div class="dashboard-next-match-meta">
+                <div class="dashboard-next-match-meta-row">
+                    <span class="dashboard-mini-icon">📅</span>
+                    <div>
+                        <strong>@Model.NesteSogndalKamp.DatoTekst</strong>
+                        <span>Kl. @Model.NesteSogndalKamp.KlokkeslettTekst</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-next-match-meta-row">
+                    <span class="dashboard-mini-icon">🏟️</span>
+                    <div>
+                        <strong>@Model.NesteSogndalKamp.Stadion</strong>
+
+                        @if (Model.NesteSogndalKamp.Runde is not null)
+                        {
+                            <span>Runde @Model.NesteSogndalKamp.Runde</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="dashboard-muted mb-0">
+            Klarte ikkje hente neste Sogndal-kamp akkurat no.
+        </p>
+    }
+</article>
 
         </div>
 
@@ -85,7 +136,7 @@
                     {
                         <img src="@countdown.BildeUrl"
                              alt="@countdown.AltTekst"
-                             class="@logoClass" />
+                             class="@logoClass"/>
                     }
 
                     <p class="dashboard-card-kicker">@countdown.Undertittel</p>

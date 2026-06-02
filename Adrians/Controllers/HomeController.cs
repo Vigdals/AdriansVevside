@@ -1,8 +1,7 @@
-﻿using Adrians.Services;
+﻿using System.Diagnostics;
+using Adrians.Services;
 using Adrians.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Client;
-using System.Diagnostics;
 
 namespace Adrians.Controllers;
 
@@ -13,13 +12,16 @@ public class HomeController : Controller
 
     private readonly ILogger<HomeController> _logger;
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
+    private readonly NifsKampService _nifsKampService;
 
     public HomeController(
         ILogger<HomeController> logger,
-        MeteorologiskInstituttKorttidsvarselService korttidsvarsel)
+        MeteorologiskInstituttKorttidsvarselService korttidsvarsel,
+        NifsKampService nifsKampService)
     {
         _logger = logger;
         _korttidsvarsel = korttidsvarsel;
+        _nifsKampService = nifsKampService;
     }
 
     [HttpGet]
@@ -32,6 +34,7 @@ public class HomeController : Controller
     private async Task<PublicDashboardViewModel> BuildPublicDashboardAsync()
     {
         KorttidsvarselViewModel? varsel = null;
+        NesteSogndalKampViewModel? nesteSogndalKamp = null;
 
         try
         {
@@ -45,10 +48,20 @@ public class HomeController : Controller
             _logger.LogWarning(ex, "Klarte ikkje hente korttidsvarsel.");
         }
 
+        try
+        {
+            nesteSogndalKamp = await _nifsKampService.HentNesteSogndalKampAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Klarte ikkje hente neste Sogndal-kamp.");
+        }
+
         return new PublicDashboardViewModel
         {
             Stadnamn = "Sogndal",
             Korttidsvarsel = varsel,
+            NesteSogndalKamp = nesteSogndalKamp,
             SistOppdatert = DateTimeOffset.Now,
 
             Countdowns =
@@ -88,13 +101,6 @@ public class HomeController : Controller
                     Verdi = "Kjem",
                     Tekst = "Koplar på FootballData i neste steg.",
                     Ikon = "🔵"
-                },
-                new DashboardInfoCardViewModel
-                {
-                    Tittel = "Neste Sogndal-kamp",
-                    Verdi = "Kjem",
-                    Tekst = "Må avklare beste datakjelde.",
-                    Ikon = "⚽"
                 }
             ],
 
