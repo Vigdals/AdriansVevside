@@ -34,7 +34,8 @@ public class HomeController : Controller
     private async Task<PublicDashboardViewModel> BuildPublicDashboardAsync()
     {
         KorttidsvarselViewModel? varsel = null;
-        NesteSogndalKampViewModel? nesteSogndalKamp = null;
+        NesteKampViewModel? nesteSogndalKamp = null;
+        NesteKampViewModel? nesteBarcelonaKamp = null;
 
         try
         {
@@ -57,11 +58,21 @@ public class HomeController : Controller
             _logger.LogWarning(ex, "Klarte ikkje hente neste Sogndal-kamp.");
         }
 
+        try
+        {
+            nesteBarcelonaKamp = await _nifsKampService.HentNesteBarcelonaKampAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Klarte ikkje hente neste Barcelona-kamp.");
+        }
+
         return new PublicDashboardViewModel
         {
             Stadnamn = "Sogndal",
             Korttidsvarsel = varsel,
             NesteSogndalKamp = nesteSogndalKamp,
+            NesteBarcelonaKamp = nesteBarcelonaKamp,
             SistOppdatert = DateTimeOffset.Now,
 
             Countdowns =
@@ -86,23 +97,7 @@ public class HomeController : Controller
                 }
             ],
 
-            InfoCards =
-            [
-                new DashboardInfoCardViewModel
-                {
-                    Tittel = "Pi-status",
-                    Verdi = "Oppe",
-                    Tekst = "Offentleg status. Detaljar kjem på privat dashboard.",
-                    Ikon = "🟢"
-                },
-                new DashboardInfoCardViewModel
-                {
-                    Tittel = "Neste Barça-kamp",
-                    Verdi = "Kjem",
-                    Tekst = "Koplar på FootballData i neste steg.",
-                    Ikon = "🔵"
-                }
-            ],
+            InfoCards = [],
 
             Links =
             [

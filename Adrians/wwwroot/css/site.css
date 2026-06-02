@@ -489,9 +489,14 @@ p {
   letter-spacing: -0.05em;
 }
 
-/* Sogndal-kort */
+/* Kampkort */
 
-.dashboard-sogndal-card {
+.dashboard-match-card-stack {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.dashboard-next-match-card {
   min-height: 0;
   overflow: hidden;
 }

@@ -61,7 +61,7 @@ builder.Services.AddHttpClient<NifsKampService>(client =>
 {
     client.BaseAddress = new Uri("https://api.nifs.no/");
     client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
 builder.Services.AddScoped<RssFeedService>();

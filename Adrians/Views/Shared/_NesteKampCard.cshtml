@@ -1,0 +1,71 @@
+@model Adrians.ViewModels.NesteKampViewModel?
+
+<article class="dashboard-card dashboard-next-match-card">
+    <div class="dashboard-card-header">
+        <div>
+            <p class="dashboard-card-kicker">@(Model?.Tittel ?? "Neste kamp")</p>
+        </div>
+        <span class="dashboard-card-badge">NIFS</span>
+    </div>
+
+    @if (Model is not null)
+    {
+        <div class="dashboard-next-match">
+            <div class="dashboard-next-match-teams">
+                <div class="dashboard-next-match-team">
+                    @if (!string.IsNullOrWhiteSpace(Model.HeimelagLogoUrl))
+                    {
+                        <img src="@Model.HeimelagLogoUrl"
+                             alt="@Model.Heimelag logo"
+                             class="dashboard-next-match-logo"/>
+                    }
+
+                    <span>@Model.Heimelag</span>
+                </div>
+
+                <div class="dashboard-next-match-vs">
+                    mot
+                </div>
+
+                <div class="dashboard-next-match-team">
+                    @if (!string.IsNullOrWhiteSpace(Model.BortelagLogoUrl))
+                    {
+                        <img src="@Model.BortelagLogoUrl"
+                             alt="@Model.Bortelag logo"
+                             class="dashboard-next-match-logo"/>
+                    }
+
+                    <span>@Model.Bortelag</span>
+                </div>
+            </div>
+
+            <div class="dashboard-next-match-meta">
+                <div class="dashboard-next-match-meta-row">
+                    <span class="dashboard-mini-icon">📅</span>
+                    <div>
+                        <strong>@Model.DatoTekst</strong>
+                        <span>Kl. @Model.KlokkeslettTekst</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-next-match-meta-row">
+                    <span class="dashboard-mini-icon">🏟️</span>
+                    <div>
+                        <strong>@Model.Stadion</strong>
+
+                        @if (Model.Runde is not null)
+                        {
+                            <span>Runde @Model.Runde</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="dashboard-muted mb-0">
+            Ingen komande kamp funnen.
+        </p>
+    }
+</article>

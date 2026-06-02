@@ -6,7 +6,9 @@ public sealed class PublicDashboardViewModel
 
     public KorttidsvarselViewModel? Korttidsvarsel { get; init; }
 
-    public NesteSogndalKampViewModel? NesteSogndalKamp { get; init; }
+    public NesteKampViewModel? NesteSogndalKamp { get; init; }
+
+    public NesteKampViewModel? NesteBarcelonaKamp { get; init; }
 
     public required DateTimeOffset SistOppdatert { get; init; }
 

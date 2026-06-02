@@ -1,8 +1,8 @@
 namespace Adrians.ViewModels;
 
-public sealed class NesteSogndalKampViewModel
+public sealed class NesteKampViewModel
 {
-    public required string Kampnamn { get; init; }
+    public required string Tittel { get; init; }
 
     public required string Heimelag { get; init; }
 

@@ -24,12 +24,21 @@ public sealed class NifsMatchDto
 
     [JsonPropertyName("result")]
     public NifsResultDto? Result { get; set; }
+
+    [JsonPropertyName("stageId")]
+    public int StageId { get; set; }
+
+    [JsonPropertyName("tournamentId")]
+    public int TournamentId { get; set; }
 }
 
 public sealed class NifsTeamDto
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
+
+    [JsonPropertyName("shortName")]
+    public string? ShortName { get; set; }
 
     [JsonPropertyName("logo")]
     public NifsLogoDto? Logo { get; set; }

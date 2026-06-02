@@ -49,75 +49,47 @@
                 }
             </article>
 
-<article class="dashboard-card dashboard-sogndal-card">
-    <div class="dashboard-card-header">
-        <div>
-            <p class="dashboard-card-kicker">Neste Sogndal-kamp</p>
-        </div>
-        <span class="dashboard-card-badge">NIFS</span>
-    </div>
+            <div class="dashboard-match-card-stack">
+                @if (Model.NesteSogndalKamp is not null)
+                {
+                    <partial name="_NesteKampCard" model="Model.NesteSogndalKamp"/>
+                }
+                else
+                {
+                    <article class="dashboard-card dashboard-next-match-card">
+                        <div class="dashboard-card-header">
+                            <div>
+                                <p class="dashboard-card-kicker">Neste Sogndal-kamp</p>
+                            </div>
+                            <span class="dashboard-card-badge">NIFS</span>
+                        </div>
 
-    @if (Model.NesteSogndalKamp is not null)
-    {
-        <div class="dashboard-next-match">
-            <div class="dashboard-next-match-teams">
-                <div class="dashboard-next-match-team">
-                    @if (!string.IsNullOrWhiteSpace(Model.NesteSogndalKamp.HeimelagLogoUrl))
-                    {
-                        <img src="@Model.NesteSogndalKamp.HeimelagLogoUrl"
-                             alt="@Model.NesteSogndalKamp.Heimelag logo"
-                             class="dashboard-next-match-logo"/>
-                    }
+                        <p class="dashboard-muted mb-0">
+                            Ingen komande seriekamp funnen akkurat no.
+                        </p>
+                    </article>
+                }
 
-                    <span>@Model.NesteSogndalKamp.Heimelag</span>
-                </div>
+                @if (Model.NesteBarcelonaKamp is not null)
+                {
+                    <partial name="_NesteKampCard" model="Model.NesteBarcelonaKamp"/>
+                }
+                else
+                {
+                    <article class="dashboard-card dashboard-next-match-card">
+                        <div class="dashboard-card-header">
+                            <div>
+                                <p class="dashboard-card-kicker">Neste Barça-kamp</p>
+                            </div>
+                            <span class="dashboard-card-badge">NIFS</span>
+                        </div>
 
-                <div class="dashboard-next-match-vs">
-                    mot
-                </div>
-
-                <div class="dashboard-next-match-team">
-                    @if (!string.IsNullOrWhiteSpace(Model.NesteSogndalKamp.BortelagLogoUrl))
-                    {
-                        <img src="@Model.NesteSogndalKamp.BortelagLogoUrl"
-                             alt="@Model.NesteSogndalKamp.Bortelag logo"
-                             class="dashboard-next-match-logo"/>
-                    }
-
-                    <span>@Model.NesteSogndalKamp.Bortelag</span>
-                </div>
+                        <p class="dashboard-muted mb-0">
+                            Ingen komande ligakamp funnen akkurat no.
+                        </p>
+                    </article>
+                }
             </div>
-
-            <div class="dashboard-next-match-meta">
-                <div class="dashboard-next-match-meta-row">
-                    <span class="dashboard-mini-icon">📅</span>
-                    <div>
-                        <strong>@Model.NesteSogndalKamp.DatoTekst</strong>
-                        <span>Kl. @Model.NesteSogndalKamp.KlokkeslettTekst</span>
-                    </div>
-                </div>
-
-                <div class="dashboard-next-match-meta-row">
-                    <span class="dashboard-mini-icon">🏟️</span>
-                    <div>
-                        <strong>@Model.NesteSogndalKamp.Stadion</strong>
-
-                        @if (Model.NesteSogndalKamp.Runde is not null)
-                        {
-                            <span>Runde @Model.NesteSogndalKamp.Runde</span>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <p class="dashboard-muted mb-0">
-            Klarte ikkje hente neste Sogndal-kamp akkurat no.
-        </p>
-    }
-</article>
 
         </div>
 
