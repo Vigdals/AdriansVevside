@@ -286,7 +286,7 @@ p {
     object-fit: contain;
 }
 
-/* Skjult toppmeny på framsida */
+/* Skjult toppmeny pï¿½ framsida */
 
 .dashboard-page .site-header {
     position: sticky;
@@ -431,7 +431,7 @@ p {
     margin-bottom: var(--space-md);
 }
 
-/* Vêrkort */
+/* Vï¿½rkort */
 
 .dashboard-weather-card {
     min-height: 300px;
@@ -493,7 +493,7 @@ p {
     font-size: 1.3rem;
 }
 
-/* Løpskort */
+/* Lï¿½pskort */
 
 .dashboard-countdown-card {
     text-align: center;

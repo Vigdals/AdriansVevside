@@ -1,41 +1,67 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Adrians/Adrians.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/Adrians/Adrians.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "--project",
-                "${workspaceFolder}/Adrians/Adrians.csproj"
-            ],
-            "problemMatcher": "$msCompile"
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker: start mariadb",
+      "type": "shell",
+      "command": "docker compose --project-directory \"${workspaceFolder}\" -f \"${workspaceFolder}/docker-compose.yml\" up -d mariadb",
+      "problemMatcher": []
+    },
+    {
+      "label": "dotnet: restore",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "restore",
+        "${workspaceFolder}/Adrians/Adrians.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dotnet: build",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Adrians/Adrians.csproj",
+        "--no-restore",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dev: start mariadb and build",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "docker: start mariadb",
+        "dotnet: restore",
+        "dotnet: build"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "dotnet: watch",
+      "type": "shell",
+      "command": "dotnet watch run --project \"${workspaceFolder}/Adrians/Adrians.csproj\"",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dotnet: publish release",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "${workspaceFolder}/Adrians/Adrians.csproj",
+        "--configuration",
+        "Release",
+        "--output",
+        "${workspaceFolder}/publish",
+        "/property:UseAppHost=false",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
 }
