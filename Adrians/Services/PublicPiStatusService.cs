@@ -44,11 +44,16 @@ public sealed class PublicPiStatusService
                 },
                 cancellationToken);
 
-            return status ?? new PublicPiStatus
+            if (status is null)
             {
-                Status = "unknown",
-                Message = "Klarte ikkje lese deploy-status."
-            };
+                return new PublicPiStatus
+                {
+                    Status = "unknown",
+                    Message = "Deploy-statusfila var tom eller ugyldig."
+                };
+            }
+
+            return status;
         }
         catch (Exception ex)
         {

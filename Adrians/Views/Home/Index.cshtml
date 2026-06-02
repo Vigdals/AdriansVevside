@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Dashboard";
+    var osloTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
 }
 
 <section class="public-dashboard fade-in">
@@ -102,6 +103,10 @@
                 ? "dashboard-pi-status-ok"
                 : "dashboard-pi-status-warning";
 
+            var statusText = Model.PiStatus.IsOk
+                ? "Siste deploy var OK"
+                : "Deploy-status er uklar";
+
             <article class="dashboard-card dashboard-hover-card dashboard-pi-status-card @piStatusClass">
                 <div class="dashboard-card-header">
                     <div>
@@ -117,15 +122,23 @@
                 <div class="dashboard-pi-status-main">
                     <div>
                         <span class="dashboard-pi-status-dot"></span>
-                        <strong>
-                            @(Model.PiStatus.IsOk ? "Siste deploy var OK" : "Deploy-status er uklar")
-                        </strong>
+                        <strong>@statusText</strong>
                     </div>
 
                     @if (Model.PiStatus.DeployedAt is not null)
                     {
+                        var deployedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.DeployedAt.Value, osloTimeZone);
+
                         <p class="dashboard-muted">
-                            Sist deploya @Model.PiStatus.DeployedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                            Sist deploya @deployedAtOslo.ToString("dd.MM.yyyy HH:mm")
+                        </p>
+                    }
+                    else if (Model.PiStatus.CheckedAt is not null)
+                    {
+                        var checkedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.CheckedAt.Value, osloTimeZone);
+
+                        <p class="dashboard-muted">
+                            Sist sjekka @checkedAtOslo.ToString("dd.MM.yyyy HH:mm")
                         </p>
                     }
                     else
@@ -153,6 +166,14 @@
                         </div>
                     }
 
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Temperature))
+                    {
+                        <div>
+                            <dt>Pi-temp</dt>
+                            <dd>@Model.PiStatus.Temperature</dd>
+                        </div>
+                    }
+
                     @if (!string.IsNullOrWhiteSpace(Model.PiStatus.DotnetRuntime))
                     {
                         <div>
@@ -166,6 +187,30 @@
                         <div>
                             <dt>Miljø</dt>
                             <dd>@Model.PiStatus.AppEnvironment</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.HostUptime))
+                    {
+                        <div>
+                            <dt>Oppetid</dt>
+                            <dd>@Model.PiStatus.HostUptime</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.LoadAverage))
+                    {
+                        <div>
+                            <dt>Last</dt>
+                            <dd>@Model.PiStatus.LoadAverage</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.DiskUsage))
+                    {
+                        <div>
+                            <dt>Disk</dt>
+                            <dd>@Model.PiStatus.DiskUsage</dd>
                         </div>
                     }
                 </dl>

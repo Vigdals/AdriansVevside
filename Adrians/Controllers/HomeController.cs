@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Adrians.Models;
 using Adrians.Services;
 using Adrians.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -78,6 +79,12 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Klarte ikkje hente public Pi-status.");
+
+            piStatus = new PublicPiStatus
+            {
+                Status = "unknown",
+                Message = "Pi-status kunne ikkje hentast akkurat no."
+            };
         }
 
         return new PublicDashboardViewModel
