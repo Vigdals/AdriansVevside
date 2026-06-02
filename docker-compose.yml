@@ -38,6 +38,7 @@ services:
       - "8080"
     volumes:
       - dataprotection_keys:/root/.aspnet/DataProtection-Keys
+      - ./Adrians/wwwroot/status:/app/wwwroot/status:ro
 
   nginx:
     image: nginx:1.29-alpine
