@@ -1,29 +1,38 @@
 :root {
   color-scheme: dark;
+
   --color-bg: #15191f;
   --color-bg-elevated: #20262e;
   --color-bg-card: rgba(33, 37, 41, 0.88);
   --color-bg-card-hover: rgba(52, 58, 64, 0.94);
+
   --color-text: #f8f9fa;
   --color-text-muted: rgba(255, 255, 255, 0.68);
   --color-text-soft: rgba(255, 255, 255, 0.82);
+
   --color-border: rgba(255, 255, 255, 0.12);
   --color-border-strong: rgba(255, 255, 255, 0.22);
+
   --color-primary: #8ab4f8;
   --color-primary-strong: #5f9cf7;
   --color-success: #4ade80;
   --color-warning: #facc15;
   --color-danger: #fb7185;
+
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
   --shadow-md: 0 16px 44px rgba(0, 0, 0, 0.24);
+  --shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.34);
+
   --radius-sm: 0.5rem;
   --radius-md: 0.9rem;
   --radius-lg: 1.25rem;
+
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
+
   --transition-fast: 140ms ease;
   --transition-normal: 240ms ease;
 }
@@ -339,18 +348,20 @@ p {
 
 .public-dashboard {
   min-height: calc(100vh - 120px);
-  padding: var(--space-xl) var(--space-md);
+  padding: clamp(1.25rem, 3vw, 2.25rem) var(--space-md);
 }
 
 .dashboard-shell {
-  width: min(1180px, 100%);
+  width: min(1120px, 100%);
   margin: 0 auto;
 }
+
+/* Dashboard header */
 
 .dashboard-header,
 .dashboard-footer {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-md);
   margin-bottom: 1.25rem;
@@ -358,10 +369,6 @@ p {
 
 .dashboard-header h1 {
   margin: 0;
-}
-
-.dashboard-header-minimal {
-  align-items: flex-end;
 }
 
 .dashboard-header-minimal .dashboard-clock {
@@ -373,31 +380,37 @@ p {
   text-align: right;
 }
 
-.dashboard-eyebrow,
-.dashboard-card-kicker {
-  margin: 0 0 var(--space-xs);
-  color: var(--color-primary);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.75rem;
+.dashboard-clock {
+  min-width: 9rem;
+}
+
+#DashboardClockTime {
+  font-size: clamp(2.7rem, 5.5vw, 4.2rem);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: -0.065em;
+}
+
+#DashboardClockDate {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
 }
 
 .dashboard-muted {
   color: var(--color-text-muted);
 }
 
-.dashboard-clock {
-  text-align: right;
-  min-width: 9rem;
+.dashboard-eyebrow,
+.dashboard-card-kicker {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-primary);
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
 }
 
-#DashboardClockTime {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.04em;
-}
+/* Dashboard grid */
 
 .dashboard-grid {
   display: grid;
@@ -406,7 +419,13 @@ p {
 }
 
 .dashboard-grid-main {
-  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(290px, 1fr);
+  align-items: stretch;
+}
+
+.dashboard-match-card-stack {
+  display: grid;
+  gap: var(--space-md);
 }
 
 .dashboard-grid-countdowns {
@@ -417,21 +436,110 @@ p {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* Felles dashboard-kort */
+
 .dashboard-card,
 .dashboard-link-card,
 .dashboard-alert {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   border: 1px solid var(--color-border);
-  background: var(--color-bg-card);
-  box-shadow: var(--shadow-md);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.018)
+    ),
+    var(--color-bg-card);
+  box-shadow: var(--shadow-md);
   backdrop-filter: blur(12px);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+  will-change: transform;
+}
+
+.dashboard-card,
+.dashboard-alert {
+  padding: 1.25rem;
+}
+
+.dashboard-link-card {
+  display: block;
+  padding: 1.15rem 1.25rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.dashboard-card::before,
+.dashboard-link-card::before,
+.dashboard-alert::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      520px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(138, 180, 248, 0.16),
+      transparent 42%
+    );
+  transition: opacity 180ms ease;
+}
+
+.dashboard-card::after,
+.dashboard-link-card::after,
+.dashboard-alert::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(138, 180, 248, 0.07),
+      transparent 18rem
+    );
+}
+
+.dashboard-card:hover,
+.dashboard-link-card:hover,
+.dashboard-alert:hover {
+  transform: translateY(-5px) scale(1.012);
+  border-color: rgba(138, 180, 248, 0.42);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.07),
+      rgba(255, 255, 255, 0.025)
+    ),
+    var(--color-bg-card-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+.dashboard-card:hover::before,
+.dashboard-link-card:hover::before,
+.dashboard-alert:hover::before {
+  opacity: 1;
+}
+
+.dashboard-card:focus-within,
+.dashboard-link-card:focus-visible {
+  outline: 2px solid rgba(138, 180, 248, 0.75);
+  outline-offset: 3px;
 }
 
 .dashboard-card h2 {
   margin: 0;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
 }
 
 .dashboard-card-wide {
@@ -440,15 +548,16 @@ p {
 
 .dashboard-card-header {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-md);
   margin-bottom: var(--space-md);
 }
 
 .dashboard-card-badge {
-  font-size: 0.8rem;
-  font-weight: 800;
+  flex: 0 0 auto;
+  font-size: 0.74rem;
+  font-weight: 850;
   color: var(--color-text-muted);
 }
 
@@ -462,20 +571,30 @@ p {
   min-height: 300px;
 }
 
+.dashboard-weather-large {
+  display: grid;
+  height: calc(100% - 2.5rem);
+  align-content: center;
+}
+
 .dashboard-weather-large .weather-icon {
   width: 64px;
   height: 64px;
 }
 
+.dashboard-weather-large .row {
+  row-gap: 1rem;
+}
+
 .dashboard-weather-large .row .col,
 .dashboard-weather-large .row [class*="col-"] {
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .dashboard-weather-large .row .col div:last-child,
 .dashboard-weather-large .row [class*="col-"] div:last-child {
-  font-size: 1.3rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 850;
   letter-spacing: -0.03em;
 }
 
@@ -483,27 +602,21 @@ p {
 .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
 .weather-temperature strong,
 .weather-temperature .weather-value {
-  font-size: 2.15rem;
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.05em;
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.06em;
 }
 
 /* Kampkort */
 
-.dashboard-match-card-stack {
-  display: grid;
-  gap: var(--space-md);
-}
-
 .dashboard-next-match-card {
   min-height: 0;
-  overflow: hidden;
 }
 
 .dashboard-next-match {
   display: grid;
-  gap: 1.15rem;
+  gap: 1rem;
 }
 
 .dashboard-next-match-teams {
@@ -511,10 +624,10 @@ p {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 0.75rem;
-  padding: 0.9rem;
+  padding: 0.85rem;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.065);
 }
 
 .dashboard-next-match-team {
@@ -527,8 +640,8 @@ p {
 
 .dashboard-next-match-team span {
   max-width: 100%;
-  font-weight: 800;
-  font-size: 0.95rem;
+  font-weight: 850;
+  font-size: 0.9rem;
   line-height: 1.15;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -537,10 +650,10 @@ p {
 
 .dashboard-next-match-logo {
   display: block;
-  width: 3.1rem !important;
-  height: 3.1rem !important;
-  max-width: 3.1rem !important;
-  max-height: 3.1rem !important;
+  width: 3rem !important;
+  height: 3rem !important;
+  max-width: 3rem !important;
+  max-height: 3rem !important;
   object-fit: contain;
 }
 
@@ -548,17 +661,17 @@ p {
   align-self: center;
   padding: 0.25rem 0.45rem;
   border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.65rem;
+  font-weight: 850;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.72);
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.075);
 }
 
 .dashboard-next-match-meta {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.7rem;
 }
 
 .dashboard-next-match-meta-row {
@@ -569,11 +682,11 @@ p {
 
 .dashboard-next-match-meta-row div {
   display: grid;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
 .dashboard-next-match-meta-row strong {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.2;
 }
 
@@ -607,37 +720,108 @@ p {
 }
 
 .dashboard-mini-icon {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
+}
+
+/* Pi-status */
+
+.dashboard-pi-status-card {
+  margin-bottom: var(--space-md);
+}
+
+.dashboard-pi-status-card.dashboard-pi-status-ok {
+  border-color: rgba(74, 222, 128, 0.26);
+}
+
+.dashboard-pi-status-card.dashboard-pi-status-warning {
+  border-color: rgba(250, 204, 21, 0.28);
+}
+
+.dashboard-pi-status-main {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: var(--space-md);
+}
+
+.dashboard-pi-status-main > div {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.dashboard-pi-status-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--color-warning);
+  box-shadow: 0 0 18px rgba(250, 204, 21, 0.7);
+}
+
+.dashboard-pi-status-ok .dashboard-pi-status-dot {
+  background: var(--color-success);
+  box-shadow: 0 0 18px rgba(74, 222, 128, 0.7);
+}
+
+.dashboard-pi-status-details {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 var(--space-md);
+}
+
+.dashboard-pi-status-details div {
+  min-width: 0;
+  padding: 0.75rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.dashboard-pi-status-details dt {
+  margin-bottom: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.dashboard-pi-status-details dd {
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Løpskort */
 
 .dashboard-countdown-card {
-  text-align: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
   display: flex;
+  min-height: 132px;
   flex-direction: column;
   justify-content: center;
-  min-height: 128px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
 }
 
 .dashboard-countdown-card .dashboard-card-kicker {
-  font-size: 0.62rem;
   margin-bottom: 0.15rem;
+  font-size: 0.62rem;
 }
 
 .dashboard-countdown-card h2 {
+  margin-bottom: 0.25rem;
   font-size: 0.95rem;
-  margin-bottom: 0.2rem;
 }
 
 .dashboard-event-logo {
   width: auto;
   object-fit: contain;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 0.45rem;
+  margin: 0 auto 0.45rem;
 }
 
 .dashboard-event-logo-str {
@@ -651,39 +835,33 @@ p {
 }
 
 .dashboard-countdown {
-  margin-top: 0.3rem;
-  font-size: 1.3rem;
-  font-weight: 850;
+  margin-top: 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 900;
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.045em;
 }
 
 /* Lenkekort */
-
-.dashboard-link-card {
-  color: var(--color-text);
-  text-decoration: none;
-  transition:
-    transform var(--transition-fast),
-    border-color var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.dashboard-link-card:hover {
-  color: var(--color-text);
-  transform: translateY(-2px);
-  border-color: rgba(138, 180, 248, 0.7);
-  background: var(--color-bg-card-hover);
-}
 
 .dashboard-link-card strong,
 .dashboard-link-card span {
   display: block;
 }
 
+.dashboard-link-card strong {
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
 .dashboard-link-card span {
   margin-top: 0.15rem;
   color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.dashboard-link-card:hover {
+  color: var(--color-text);
 }
 
 /* Debug-knappar */
@@ -704,6 +882,15 @@ p {
   transform: translateY(-2px);
   border-color: var(--color-primary);
   background-color: rgba(138, 180, 248, 0.08);
+}
+
+/* Footer */
+
+.dashboard-footer {
+  margin-top: 1.1rem;
+  margin-bottom: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 /* Animations */
@@ -743,10 +930,6 @@ p {
     flex-direction: column;
   }
 
-  .dashboard-header-minimal {
-    align-items: flex-start;
-  }
-
   .dashboard-clock,
   .dashboard-updated {
     text-align: left;
@@ -758,15 +941,16 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .dashboard-countdown {
-    font-size: 1.25rem;
+  .dashboard-pi-status-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .dashboard-weather-large .row .col:first-child div:last-child,
-  .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
-  .weather-temperature strong,
-  .weather-temperature .weather-value {
-    font-size: 2rem;
+  .dashboard-weather-card {
+    min-height: 240px;
+  }
+
+  .dashboard-countdown {
+    font-size: 1.25rem;
   }
 }
 
@@ -780,6 +964,10 @@ p {
   .dashboard-alert {
     border-radius: var(--radius-md);
     padding: var(--space-md);
+  }
+
+  .dashboard-pi-status-details {
+    grid-template-columns: 1fr;
   }
 
   .event-logo {
@@ -807,13 +995,6 @@ p {
   .dashboard-weather-large .row .col div:last-child,
   .dashboard-weather-large .row [class*="col-"] div:last-child {
     font-size: 1.15rem;
-  }
-
-  .dashboard-weather-large .row .col:first-child div:last-child,
-  .dashboard-weather-large .row [class*="col-"]:first-child div:last-child,
-  .weather-temperature strong,
-  .weather-temperature .weather-value {
-    font-size: 1.85rem;
   }
 
   .dashboard-next-match-teams {
@@ -845,7 +1026,9 @@ p {
 
   .btn:hover,
   .card:hover,
+  .dashboard-card:hover,
   .dashboard-link-card:hover,
+  .dashboard-alert:hover,
   .dashboard-debug-button:hover {
     transform: none;
   }

@@ -20,18 +20,19 @@
 
         @if (TempData["StatusMessage"] is string statusMessage)
         {
-            <div class="dashboard-alert">
+            <div class="dashboard-alert dashboard-hover-card">
                 @statusMessage
             </div>
         }
 
         <div class="dashboard-grid dashboard-grid-main">
 
-            <article class="dashboard-card dashboard-card-wide dashboard-weather-card">
+            <article class="dashboard-card dashboard-hover-card dashboard-card-wide dashboard-weather-card">
                 <div class="dashboard-card-header">
                     <div>
                         <p class="dashboard-card-kicker">Vêr</p>
                     </div>
+
                     <span class="dashboard-card-badge">met.no</span>
                 </div>
 
@@ -56,11 +57,12 @@
                 }
                 else
                 {
-                    <article class="dashboard-card dashboard-next-match-card">
+                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card">
                         <div class="dashboard-card-header">
                             <div>
                                 <p class="dashboard-card-kicker">Neste Sogndal-kamp</p>
                             </div>
+
                             <span class="dashboard-card-badge">NIFS</span>
                         </div>
 
@@ -76,11 +78,12 @@
                 }
                 else
                 {
-                    <article class="dashboard-card dashboard-next-match-card">
+                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card">
                         <div class="dashboard-card-header">
                             <div>
                                 <p class="dashboard-card-kicker">Neste Barça-kamp</p>
                             </div>
+
                             <span class="dashboard-card-badge">NIFS</span>
                         </div>
 
@@ -99,7 +102,7 @@
                 ? "dashboard-pi-status-ok"
                 : "dashboard-pi-status-warning";
 
-            <article class="dashboard-card dashboard-pi-status-card @piStatusClass">
+            <article class="dashboard-card dashboard-hover-card dashboard-pi-status-card @piStatusClass">
                 <div class="dashboard-card-header">
                     <div>
                         <p class="dashboard-card-kicker">Pi-status</p>
@@ -176,7 +179,6 @@
             </article>
         }
 
-
         <div class="dashboard-grid dashboard-grid-countdowns">
             @foreach (var countdown in Model.Countdowns)
             {
@@ -187,7 +189,7 @@
                     _ => "dashboard-event-logo"
                 };
 
-                <article class="dashboard-card dashboard-countdown-card">
+                <article class="dashboard-card dashboard-hover-card dashboard-countdown-card">
                     @if (!string.IsNullOrWhiteSpace(countdown.BildeUrl))
                     {
                         <img src="@countdown.BildeUrl"
@@ -210,7 +212,7 @@
         <div class="dashboard-grid dashboard-grid-links">
             @foreach (var link in Model.Links)
             {
-                <a class="dashboard-link-card" href="@link.Url">
+                <a class="dashboard-link-card dashboard-hover-card" href="@link.Url">
                     <strong>@link.Tittel</strong>
                     <span>@link.Tekst</span>
                 </a>
@@ -259,6 +261,22 @@
         element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
     }
 
+    function updateDashboardCardsPointer(event) {
+        const card = event.currentTarget;
+        const rect = card.getBoundingClientRect();
+
+        card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
+    }
+
+    function setupDashboardCards() {
+        document
+            .querySelectorAll(".dashboard-hover-card, .dashboard-card, .dashboard-link-card")
+            .forEach(card => {
+                card.addEventListener("pointermove", updateDashboardCardsPointer);
+            });
+    }
+
     function tick() {
         updateClock();
 
@@ -268,5 +286,7 @@
     }
 
     tick();
+    setupDashboardCards();
+
     setInterval(tick, 1000);
 </script>
