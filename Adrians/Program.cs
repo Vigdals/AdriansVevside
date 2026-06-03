@@ -21,9 +21,15 @@ var connectionString =
     ?? throw new InvalidOperationException("Database connection string not found.");
 
 // =======================
-// HTTP-klientar
+// Cache
 // =======================
-builder.Services.Configure<FootballDataOptions>(builder.Configuration.GetSection("FootballData"));
+builder.Services.AddMemoryCache();
+
+// =======================
+// HTTP-klientar / eksterne API
+// =======================
+builder.Services.Configure<FootballDataOptions>(
+    builder.Configuration.GetSection("FootballData"));
 
 builder.Services.AddHttpClient<FotballDataApi>(client =>
 {
@@ -35,21 +41,17 @@ builder.Services.AddHttpClient<FotballDataApi>(client =>
     }
 });
 
-builder.Services.AddMemoryCache();
-
 builder.Services.AddHttpClient("frost", client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
-builder.Services.AddScoped<FrostService>();
 
 builder.Services.AddHttpClient("met.no", client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (contact: adrvig92@gmail.com)");
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
-builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 
 builder.Services.AddHttpClient("hackernews", client =>
 {
@@ -64,11 +66,23 @@ builder.Services.AddHttpClient<NifsKampService>(client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
-builder.Services.AddHttpClient<SimasTommekalenderService>();
+builder.Services.AddHttpClient<SimasTommekalenderService>(client =>
+{
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
 
+// =======================
+// App-services
+// =======================
+builder.Services.AddScoped<FrostService>();
+builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 builder.Services.AddScoped<PublicPiStatusService>();
 builder.Services.AddScoped<RssFeedService>();
 
+// Merk:
+// NifsKampService og SimasTommekalenderService er registrerte som typed HttpClient-services
+// via AddHttpClient<TService>(). Dei treng normalt ikkje eigen AddScoped i tillegg.
 
 // =======================
 // Database / Identity
@@ -96,7 +110,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // =======================
-// MVC
+// MVC / Razor
 // =======================
 builder.Services.AddControllersWithViews();
 
@@ -115,8 +129,8 @@ else
     app.UseHsts();
 }
 
-// Nginx handterer HTTPS eksternt, men appen får X-Forwarded-Proto.
-// Denne kan stå, men dersom du får redirect-loop seinare må vi setje ForwardedHeaders.
+// Nginx handterer HTTPS eksternt.
+// Dersom du får redirect-loop bak nginx, bør vi heller setje opp ForwardedHeaders eksplisitt.
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
