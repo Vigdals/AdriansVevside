@@ -19,6 +19,7 @@ public sealed class PublicDashboardViewModel
     public required IReadOnlyList<DashboardInfoCardViewModel> InfoCards { get; init; }
 
     public required IReadOnlyList<DashboardLinkViewModel> Links { get; init; }
+    public TommekalenderViewModel? Tommekalender { get; set; }
 }
 
 public sealed class DashboardCountdownViewModel

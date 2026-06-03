@@ -26,22 +26,17 @@
             </div>
         }
 
-        <div class="dashboard-grid dashboard-grid-main">
+        <div class="dashboard-top-layout">
 
-            <article class="dashboard-card dashboard-hover-card dashboard-card-wide dashboard-weather-card">
-                <div class="dashboard-card-header">
-                    <div>
-                        <p class="dashboard-card-kicker">Vêr</p>
-                    </div>
-
+            <article class="dashboard-card dashboard-hover-card dashboard-weather-card">
+                <div class="dashboard-card-header dashboard-card-header-tight">
+                    <p class="dashboard-card-kicker">Vêr</p>
                     <span class="dashboard-card-badge">met.no</span>
                 </div>
 
                 @if (Model.Korttidsvarsel is not null)
                 {
-                    <div class="dashboard-weather-large">
-                        <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel"/>
-                    </div>
+                    <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel"/>
                 }
                 else
                 {
@@ -58,19 +53,7 @@
                 }
                 else
                 {
-                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card">
-                        <div class="dashboard-card-header">
-                            <div>
-                                <p class="dashboard-card-kicker">Neste Sogndal-kamp</p>
-                            </div>
-
-                            <span class="dashboard-card-badge">NIFS</span>
-                        </div>
-
-                        <p class="dashboard-muted mb-0">
-                            Ingen komande kamp funnen akkurat no.
-                        </p>
-                    </article>
+                    <partial name="_NesteKampCard" model="null"/>
                 }
 
                 @if (Model.NesteBarcelonaKamp is not null)
@@ -79,12 +62,9 @@
                 }
                 else
                 {
-                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card">
-                        <div class="dashboard-card-header">
-                            <div>
-                                <p class="dashboard-card-kicker">Neste Barça-kamp</p>
-                            </div>
-
+                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card dashboard-next-match-card-empty">
+                        <div class="dashboard-card-header dashboard-card-header-tight">
+                            <p class="dashboard-card-kicker">Neste Barça-kamp</p>
                             <span class="dashboard-card-badge">NIFS</span>
                         </div>
 
@@ -95,134 +75,12 @@
                 }
             </div>
 
+            @if (Model.Tommekalender is not null)
+            {
+                <partial name="_TommekalenderCard" model="Model.Tommekalender"/>
+            }
+
         </div>
-
-        @if (Model.PiStatus is not null)
-        {
-            var piStatusClass = Model.PiStatus.IsOk
-                ? "dashboard-pi-status-ok"
-                : "dashboard-pi-status-warning";
-
-            var statusText = Model.PiStatus.IsOk
-                ? "Siste deploy var OK"
-                : "Deploy-status er uklar";
-
-            <article class="dashboard-card dashboard-hover-card dashboard-pi-status-card @piStatusClass">
-                <div class="dashboard-card-header">
-                    <div>
-                        <p class="dashboard-card-kicker">Pi-status</p>
-                        <h2>VigdalPi</h2>
-                    </div>
-
-                    <span class="dashboard-card-badge">
-                        @(Model.PiStatus.IsOk ? "OK" : "Sjekk")
-                    </span>
-                </div>
-
-                <div class="dashboard-pi-status-main">
-                    <div>
-                        <span class="dashboard-pi-status-dot"></span>
-                        <strong>@statusText</strong>
-                    </div>
-
-                    @if (Model.PiStatus.DeployedAt is not null)
-                    {
-                        var deployedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.DeployedAt.Value, osloTimeZone);
-
-                        <p class="dashboard-muted">
-                            Sist deploya @deployedAtOslo.ToString("dd.MM.yyyy HH:mm")
-                        </p>
-                    }
-                    else if (Model.PiStatus.CheckedAt is not null)
-                    {
-                        var checkedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.CheckedAt.Value, osloTimeZone);
-
-                        <p class="dashboard-muted">
-                            Sist sjekka @checkedAtOslo.ToString("dd.MM.yyyy HH:mm")
-                        </p>
-                    }
-                    else
-                    {
-                        <p class="dashboard-muted">
-                            Ingen deploy-tid registrert.
-                        </p>
-                    }
-                </div>
-
-                <dl class="dashboard-pi-status-details">
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.CommitShort))
-                    {
-                        <div>
-                            <dt>Commit</dt>
-                            <dd>@Model.PiStatus.CommitShort</dd>
-                        </div>
-                    }
-
-                    @if (Model.PiStatus.ResponseMs is not null)
-                    {
-                        <div>
-                            <dt>Respons</dt>
-                            <dd>@Model.PiStatus.ResponseMs ms</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Temperature))
-                    {
-                        <div>
-                            <dt>Pi-temp</dt>
-                            <dd>@Model.PiStatus.Temperature</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.DotnetRuntime))
-                    {
-                        <div>
-                            <dt>.NET</dt>
-                            <dd>@Model.PiStatus.DotnetRuntime</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.AppEnvironment))
-                    {
-                        <div>
-                            <dt>Miljø</dt>
-                            <dd>@Model.PiStatus.AppEnvironment</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.HostUptime))
-                    {
-                        <div>
-                            <dt>Oppetid</dt>
-                            <dd>@Model.PiStatus.HostUptime</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.LoadAverage))
-                    {
-                        <div>
-                            <dt>Last</dt>
-                            <dd>@Model.PiStatus.LoadAverage</dd>
-                        </div>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PiStatus.DiskUsage))
-                    {
-                        <div>
-                            <dt>Disk</dt>
-                            <dd>@Model.PiStatus.DiskUsage</dd>
-                        </div>
-                    }
-                </dl>
-
-                @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Message))
-                {
-                    <p class="dashboard-muted mb-0">
-                        @Model.PiStatus.Message
-                    </p>
-                }
-            </article>
-        }
 
         <div class="dashboard-grid dashboard-grid-countdowns">
             @foreach (var countdown in Model.Countdowns)
@@ -253,6 +111,62 @@
                 </article>
             }
         </div>
+
+        @if (Model.PiStatus is not null)
+        {
+            var piStatusClass = Model.PiStatus.IsOk
+                ? "dashboard-pi-status-ok"
+                : "dashboard-pi-status-warning";
+
+            var statusText = Model.PiStatus.IsOk
+                ? "Siste deploy var OK"
+                : "Deploy-status er uklar";
+
+            <article class="dashboard-card dashboard-hover-card dashboard-pi-status-card dashboard-pi-status-compact @piStatusClass">
+                <div class="dashboard-pi-status-compact-main">
+                    <div>
+                        <p class="dashboard-card-kicker">Pi-status</p>
+                        <strong>VigdalPi</strong>
+                    </div>
+
+                    <div class="dashboard-pi-status-compact-state">
+                        <span class="dashboard-pi-status-dot"></span>
+                        <span>@statusText</span>
+                    </div>
+
+                    <div class="dashboard-pi-status-compact-meta">
+                        @if (Model.PiStatus.DeployedAt is not null)
+                        {
+                            var deployedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.DeployedAt.Value, osloTimeZone);
+                            <span>Deploy @deployedAtOslo.ToString("dd.MM HH:mm")</span>
+                        }
+                        else if (Model.PiStatus.CheckedAt is not null)
+                        {
+                            var checkedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.CheckedAt.Value, osloTimeZone);
+                            <span>Sjekka @checkedAtOslo.ToString("dd.MM HH:mm")</span>
+                        }
+                        else
+                        {
+                            <span>Ikkje sjekka</span>
+                        }
+
+                        @if (Model.PiStatus.ResponseMs is not null)
+                        {
+                            <span>@Model.PiStatus.ResponseMs ms</span>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Temperature))
+                        {
+                            <span>@Model.PiStatus.Temperature</span>
+                        }
+                    </div>
+
+                    <span class="dashboard-card-badge">
+                        @(Model.PiStatus.IsOk ? "OK" : "Sjekk")
+                    </span>
+                </div>
+            </article>
+        }
 
         <div class="dashboard-grid dashboard-grid-links">
             @foreach (var link in Model.Links)

@@ -64,8 +64,11 @@ builder.Services.AddHttpClient<NifsKampService>(client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
 
+builder.Services.AddHttpClient<SimasTommekalenderService>();
+
 builder.Services.AddScoped<PublicPiStatusService>();
 builder.Services.AddScoped<RssFeedService>();
+
 
 // =======================
 // Database / Identity

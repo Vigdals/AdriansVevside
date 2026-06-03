@@ -15,17 +15,20 @@ public class HomeController : Controller
     private readonly MeteorologiskInstituttKorttidsvarselService _korttidsvarsel;
     private readonly NifsKampService _nifsKampService;
     private readonly PublicPiStatusService _piStatusService;
+    private readonly SimasTommekalenderService _tommekalenderService;
 
     public HomeController(
         ILogger<HomeController> logger,
         MeteorologiskInstituttKorttidsvarselService korttidsvarsel,
         NifsKampService nifsKampService,
-        PublicPiStatusService piStatusService)
+        PublicPiStatusService piStatusService,
+        SimasTommekalenderService tommekalenderService)
     {
         _logger = logger;
         _korttidsvarsel = korttidsvarsel;
         _nifsKampService = nifsKampService;
         _piStatusService = piStatusService;
+        _tommekalenderService = tommekalenderService;
     }
 
     [HttpGet]
@@ -41,6 +44,7 @@ public class HomeController : Controller
         NesteKampViewModel? nesteSogndalKamp = null;
         NesteKampViewModel? nesteBarcelonaKamp = null;
         PublicPiStatus? piStatus = null;
+        TommekalenderViewModel? tommekalender = null;
 
         try
         {
@@ -87,6 +91,21 @@ public class HomeController : Controller
             };
         }
 
+        try
+        {
+            tommekalender = await _tommekalenderService.HentTommekalenderAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Klarte ikkje hente tømmekalender.");
+
+            tommekalender = new TommekalenderViewModel
+            {
+                Adresse = "Leitevegen 15",
+                Feilmelding = "Tømmekalender kunne ikkje hentast akkurat no."
+            };
+        }
+
         return new PublicDashboardViewModel
         {
             Stadnamn = "Sogndal",
@@ -94,6 +113,7 @@ public class HomeController : Controller
             NesteSogndalKamp = nesteSogndalKamp,
             NesteBarcelonaKamp = nesteBarcelonaKamp,
             PiStatus = piStatus,
+            Tommekalender = tommekalender,
             SistOppdatert = DateTimeOffset.Now,
 
             Countdowns =

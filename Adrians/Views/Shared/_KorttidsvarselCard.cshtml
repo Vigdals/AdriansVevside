@@ -4,67 +4,54 @@
 @{
     var iconCode = MetIconHelper.GetIconFile(Model.SymbolCode);
     var iconUrl = Url.Content($"~/assets/met-icons/svg/{iconCode}.svg");
-    //var iconUrl = Url.Content($"~/assets/met-icons/svg/clearsky_day.svg");
     var fallbackUrl = Url.Content("~/assets/met-icons/svg/unknown.svg");
 }
 
-<div class="card border-0 shadow-sm bg-body-tertiary mb-4">
-    <div class="card-body">
+<div class="dashboard-weather-compact">
+    <div class="dashboard-weather-summary">
+        <img src="@iconUrl"
+             alt="@Model.SymbolCode"
+             class="dashboard-weather-icon"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='@fallbackUrl';"/>
 
-        <div class="d-flex justify-content-between align-items-start">
-            <div class="d-flex align-items-center gap-2">
-                <img src="@iconUrl"
-                     alt="@Model.SymbolCode"
-                     class="weather-icon"
-                     loading="lazy"
-                     onerror="this.onerror=null;this.src='@fallbackUrl';"/>
-                <div>
-                    <h5 class="mb-1">@Model.LocationName – no</h5>
-                    <small class="text-body-secondary">
-                        Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")
-                    </small>
-                </div>
-            </div>
+        <div>
+            <strong>@Model.LocationName – no</strong>
+            <span>Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")</span>
+        </div>
+    </div>
 
-            <span class="badge text-bg-secondary">met.no</span>
+    <div class="dashboard-weather-metrics dashboard-weather-metrics-three">
+        <div class="dashboard-weather-metric dashboard-weather-temperature">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌡️</span>
+                Temperatur
+            </span>
+            <strong>@Model.TemperatureC?.ToString("0.#") °C</strong>
         </div>
 
-        <hr />
-
-        <div class="row text-center g-3">
-            <div class="col-6 col-md-3">
-                <div class="fw-semibold">🌡 Temperatur</div>
-                <div>@Model.TemperatureC?.ToString("0.#") °C</div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="fw-semibold">💨 Vind</div>
-                <div>@Model.WindSpeedMs?.ToString("0.#") m/s</div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="fw-semibold">💨 Kast</div>
-                <div>@Model.WindGustMs?.ToString("0.#") m/s</div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="fw-semibold">❄️ Nedbør neste time</div>
-                <div>
-                    @if (Model.PrecipNext1hMm is > 0)
-                    {
-                        <strong>@Model.PrecipNext1hMm?.ToString("0.#") mm</strong>
-                        @if (Model.TemperatureC <= 0)
-                        {
-                            <span class="text-info ms-1">(snø)</span>
-                        }
-                    }
-                    else
-                    {
-                        <span>0 mm</span>
-                    }
-                </div>
-            </div>
+        <div class="dashboard-weather-metric">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">💨</span>
+                Vind
+            </span>
+            <strong>@Model.WindSpeedMs?.ToString("0.#") m/s</strong>
         </div>
 
+        <div class="dashboard-weather-metric">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌧️</span>
+                Nedbør
+            </span>
+
+            @if (Model.PrecipNext1hMm is > 0)
+            {
+                <strong>@Model.PrecipNext1hMm?.ToString("0.#") mm</strong>
+            }
+            else
+            {
+                <strong>0 mm</strong>
+            }
+        </div>
     </div>
 </div>

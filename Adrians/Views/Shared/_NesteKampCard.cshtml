@@ -1,10 +1,8 @@
 @model Adrians.ViewModels.NesteKampViewModel?
 
-<article class="dashboard-card dashboard-next-match-card">
-    <div class="dashboard-card-header">
-        <div>
-            <p class="dashboard-card-kicker">@(Model?.Tittel ?? "Neste kamp")</p>
-        </div>
+<article class="dashboard-card dashboard-hover-card dashboard-next-match-card">
+    <div class="dashboard-card-header dashboard-card-header-tight">
+        <p class="dashboard-card-kicker">@(Model?.Tittel ?? "Neste kamp")</p>
         <span class="dashboard-card-badge">NIFS</span>
     </div>
 

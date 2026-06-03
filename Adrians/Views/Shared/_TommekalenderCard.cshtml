@@ -1,0 +1,108 @@
+@model Adrians.ViewModels.TommekalenderViewModel
+
+@functions {
+
+    private static string GetUrgencyClass(DateOnly? date)
+    {
+        if (date is null)
+        {
+            return "dashboard-waste-urgency-none";
+        }
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var daysUntil = date.Value.DayNumber - today.DayNumber;
+
+        return daysUntil switch
+        {
+            <= 1 => "dashboard-waste-urgency-now",
+            <= 3 => "dashboard-waste-urgency-soon",
+            <= 7 => "dashboard-waste-urgency-week",
+            _ => "dashboard-waste-urgency-later"
+        };
+    }
+
+    private static string GetDaysText(DateOnly? date)
+    {
+        if (date is null)
+        {
+            return "";
+        }
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var daysUntil = date.Value.DayNumber - today.DayNumber;
+
+        return daysUntil switch
+        {
+            < 0 => "",
+            0 => "i dag",
+            1 => "i morgon",
+            _ => $"{daysUntil} dagar"
+        };
+    }
+
+}
+
+<article class="dashboard-card dashboard-hover-card dashboard-waste-card">
+    <div class="dashboard-waste-header">
+        <div>
+            <p class="dashboard-card-kicker">Tømmekalender</p>
+            <h2>@Model.Adresse</h2>
+        </div>
+
+        <div class="dashboard-waste-meta">
+            <span class="dashboard-card-badge">SIMAS</span>
+
+            @if (Model.SistOppdatert is not null)
+            {
+                <span class="dashboard-muted">@Model.SistOppdatert.Value.ToString("HH:mm")</span>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Feilmelding))
+    {
+        <p class="dashboard-muted mb-0">@Model.Feilmelding</p>
+    }
+    else if (!Model.HarData)
+    {
+        <p class="dashboard-muted mb-0">Ingen tømmingar funne akkurat no.</p>
+    }
+    else
+    {
+        <div class="dashboard-waste-items">
+            @foreach (var tomming in Model.Tommingar)
+            {
+                var urgencyClass = GetUrgencyClass(tomming.NesteTomming);
+                var daysText = GetDaysText(tomming.NesteTomming);
+
+                <div class="dashboard-waste-item @tomming.CssClass @urgencyClass">
+                    <span class="dashboard-waste-icon" aria-hidden="true">
+                        @tomming.Ikon
+                    </span>
+
+                    <span class="dashboard-waste-name">
+                        @tomming.Namn
+                    </span>
+
+                    <span class="dashboard-waste-date">
+                        @(tomming.NesteTomming?.ToString("dd.MM") ?? "-")
+                    </span>
+
+                    @if (tomming.TommingDeretter is not null)
+                    {
+                        <span class="dashboard-waste-next">
+                            @tomming.TommingDeretter.Value.ToString("dd.MM")
+                        </span>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(daysText))
+                    {
+                        <span class="dashboard-waste-days">
+                            @daysText
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+    }
+</article>
