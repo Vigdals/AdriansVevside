@@ -5,6 +5,10 @@
     var osloTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true"/>
+}
+
 <section class="public-dashboard fade-in">
     <div class="dashboard-shell">
 
@@ -27,7 +31,6 @@
         }
 
         <div class="dashboard-top-layout">
-
             <article class="dashboard-card dashboard-hover-card dashboard-weather-card">
                 <div class="dashboard-card-header dashboard-card-header-tight">
                     <p class="dashboard-card-kicker">Vêr</p>
@@ -36,7 +39,7 @@
 
                 @if (Model.Korttidsvarsel is not null)
                 {
-                    <partial name="_KorttidsvarselCard" model="Model.Korttidsvarsel"/>
+                    <partial name="_DashboardKorttidsvarselCard" model="Model.Korttidsvarsel"/>
                 }
                 else
                 {
@@ -79,7 +82,6 @@
             {
                 <partial name="_TommekalenderCard" model="Model.Tommekalender"/>
             }
-
         </div>
 
         <div class="dashboard-grid dashboard-grid-countdowns">
@@ -185,67 +187,69 @@
     </div>
 </section>
 
-<script>
-    function updateClock() {
-        const now = new Date();
+@section Scripts {
+    <script>
+        function updateClock() {
+            const now = new Date();
 
-        document.getElementById("DashboardClockTime").textContent =
-            now.toLocaleTimeString("nb-NO", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+            document.getElementById("DashboardClockTime").textContent =
+                now.toLocaleTimeString("nb-NO", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
 
-        document.getElementById("DashboardClockDate").textContent =
-            now.toLocaleDateString("nb-NO", {
-                weekday: "long",
-                day: "numeric",
-                month: "long"
-            });
-    }
-
-    function updateCountdown(element) {
-        const target = Number(element.dataset.target);
-        const diff = target - Date.now();
-
-        if (diff <= 0) {
-            element.textContent = "No!";
-            return;
+            document.getElementById("DashboardClockDate").textContent =
+                now.toLocaleDateString("nb-NO", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long"
+                });
         }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
+        function updateCountdown(element) {
+            const target = Number(element.dataset.target);
+            const diff = target - Date.now();
 
-        element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
-    }
+            if (diff <= 0) {
+                element.textContent = "No!";
+                return;
+            }
 
-    function updateDashboardCardsPointer(event) {
-        const card = event.currentTarget;
-        const rect = card.getBoundingClientRect();
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
 
-        card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-        card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-    }
+            element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
+        }
 
-    function setupDashboardCards() {
-        document
-            .querySelectorAll(".dashboard-hover-card, .dashboard-card, .dashboard-link-card")
-            .forEach(card => {
-                card.addEventListener("pointermove", updateDashboardCardsPointer);
-            });
-    }
+        function updateDashboardCardsPointer(event) {
+            const card = event.currentTarget;
+            const rect = card.getBoundingClientRect();
 
-    function tick() {
-        updateClock();
+            card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
+            card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
+        }
 
-        document
-            .querySelectorAll(".dashboard-countdown[data-target]")
-            .forEach(updateCountdown);
-    }
+        function setupDashboardCards() {
+            document
+                .querySelectorAll(".dashboard-hover-card, .dashboard-card, .dashboard-link-card")
+                .forEach(card => {
+                    card.addEventListener("pointermove", updateDashboardCardsPointer);
+                });
+        }
 
-    tick();
-    setupDashboardCards();
+        function tick() {
+            updateClock();
 
-    setInterval(tick, 1000);
-</script>
+            document
+                .querySelectorAll(".dashboard-countdown[data-target]")
+                .forEach(updateCountdown);
+        }
+
+        tick();
+        setupDashboardCards();
+
+        setInterval(tick, 1000);
+    </script>
+}

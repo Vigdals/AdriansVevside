@@ -1,0 +1,57 @@
+@model Adrians.ViewModels.KorttidsvarselViewModel
+@using Adrians.Helpers
+
+@{
+    var iconCode = MetIconHelper.GetIconFile(Model.SymbolCode);
+    var iconUrl = Url.Content($"~/assets/met-icons/svg/{iconCode}.svg");
+    var fallbackUrl = Url.Content("~/assets/met-icons/svg/unknown.svg");
+}
+
+<div class="dashboard-weather-compact">
+    <div class="dashboard-weather-summary">
+        <img src="@iconUrl"
+             alt="@Model.SymbolCode"
+             class="dashboard-weather-icon"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='@fallbackUrl';"/>
+
+        <div>
+            <strong>@Model.LocationName – no</strong>
+            <span>Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")</span>
+        </div>
+    </div>
+
+    <div class="dashboard-weather-metrics dashboard-weather-metrics-three">
+        <div class="dashboard-weather-metric dashboard-weather-temperature">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌡️</span>
+                Temperatur
+            </span>
+            <strong>@Model.TemperatureC?.ToString("0.#") °C</strong>
+        </div>
+
+        <div class="dashboard-weather-metric">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">💨</span>
+                Vind
+            </span>
+            <strong>@Model.WindSpeedMs?.ToString("0.#") m/s</strong>
+        </div>
+
+        <div class="dashboard-weather-metric">
+            <span>
+                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌧️</span>
+                Nedbør neste time
+            </span>
+
+            @if (Model.PrecipNext1hMm is > 0)
+            {
+                <strong>@Model.PrecipNext1hMm?.ToString("0.#") mm</strong>
+            }
+            else
+            {
+                <strong>0 mm</strong>
+            }
+        </div>
+    </div>
+</div>
