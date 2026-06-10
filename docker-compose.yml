@@ -13,15 +13,17 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -u root -p$${MARIADB_ROOT_PASSWORD} --silent"]
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p\"$${MARIADB_ROOT_PASSWORD}\" --silent"]
       interval: 10s
       timeout: 5s
       retries: 10
+      start_period: 30s
 
   web:
+    image: adriansvevside-web
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.pi
     container_name: adriansvevside
     restart: unless-stopped
     depends_on:
@@ -30,9 +32,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
+
       Frost__ClientId: ${FROST_CLIENT_ID}
       Frost__ClientSecret: ${FROST_CLIENT_SECRET}
       FootballData__ApiKey: ${FOOTBALLDATA_API_KEY}
+
       ConnectionStrings__DefaultConnection: "Server=mariadb;Port=3306;Database=${MARIADB_DATABASE};User=${MARIADB_USER};Password=${MARIADB_PASSWORD};TreatTinyAsBoolean=false"
     expose:
       - "8080"
@@ -45,7 +49,8 @@ services:
     container_name: nginx
     restart: unless-stopped
     depends_on:
-      - web
+      web:
+        condition: service_healthy
     ports:
       - "80:80"
       - "443:443"

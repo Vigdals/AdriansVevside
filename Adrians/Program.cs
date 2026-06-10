@@ -87,9 +87,16 @@ builder.Services.AddScoped<RssFeedService>();
 // =======================
 // Database / Identity
 // =======================
-// Raspberry Pi-oppsettet brukar MariaDB.
-// Dette krev NuGet-pakken Pomelo.EntityFrameworkCore.MySql.
-var serverVersion = ServerVersion.AutoDetect(connectionString);
+// Raspberry Pi-oppsettet brukar MariaDB 11.4.
+//
+// Viktig:
+// Ikkje bruk ServerVersion.AutoDetect(connectionString) her.
+// AutoDetect opnar MySQL-tilkopling under app-startup. Dersom MariaDB ikkje er heilt klar
+// akkurat ved reboot, døyr heile web-appen før Kestrel lyttar på 8080.
+//
+// Fast versjon gjer startup meir robust. Databasefeil kan framleis skje ved faktiske DB-kall,
+// men appen kjem opp og nginx får ein levande upstream.
+var serverVersion = new MariaDbServerVersion(new Version(11, 4, 0));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
@@ -128,6 +135,10 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+// Enkel liveness-sjekk for Docker/nginx.
+// Denne skal ikkje sjekke database. Poenget er å vite at Kestrel faktisk lyttar.
+app.MapGet("/healthz", () => Results.Ok("ok"));
 
 // Nginx handterer HTTPS eksternt.
 // Dersom du får redirect-loop bak nginx, bør vi heller setje opp ForwardedHeaders eksplisitt.
