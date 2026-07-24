@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
 }
 
 <section class="public-dashboard fade-in">
@@ -39,7 +39,7 @@
 
                 @if (Model.Korttidsvarsel is not null)
                 {
-                    <partial name="_DashboardKorttidsvarselCard" model="Model.Korttidsvarsel"/>
+                    <partial name="_DashboardKorttidsvarselCard" model="Model.Korttidsvarsel" />
                 }
                 else
                 {
@@ -52,20 +52,21 @@
             <div class="dashboard-match-card-stack">
                 @if (Model.NesteSogndalKamp is not null)
                 {
-                    <partial name="_NesteKampCard" model="Model.NesteSogndalKamp"/>
+                    <partial name="_NesteKampCard" model="Model.NesteSogndalKamp" />
                 }
                 else
                 {
-                    <partial name="_NesteKampCard" model="null"/>
+                    <partial name="_NesteKampCard" model="null" />
                 }
 
                 @if (Model.NesteBarcelonaKamp is not null)
                 {
-                    <partial name="_NesteKampCard" model="Model.NesteBarcelonaKamp"/>
+                    <partial name="_NesteKampCard" model="Model.NesteBarcelonaKamp" />
                 }
                 else
                 {
-                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card dashboard-next-match-card-empty">
+                    <article
+                        class="dashboard-card dashboard-hover-card dashboard-next-match-card dashboard-next-match-card-empty">
                         <div class="dashboard-card-header dashboard-card-header-tight">
                             <p class="dashboard-card-kicker">Neste Barça-kamp</p>
                             <span class="dashboard-card-badge">NIFS</span>
@@ -80,7 +81,7 @@
 
             @if (Model.Tommekalender is not null)
             {
-                <partial name="_TommekalenderCard" model="Model.Tommekalender"/>
+                <partial name="_TommekalenderCard" model="Model.Tommekalender" />
             }
         </div>
 
@@ -97,16 +98,13 @@
                 <article class="dashboard-card dashboard-hover-card dashboard-countdown-card">
                     @if (!string.IsNullOrWhiteSpace(countdown.BildeUrl))
                     {
-                        <img src="@countdown.BildeUrl"
-                             alt="@countdown.AltTekst"
-                             class="@logoClass"/>
+                        <img src="@countdown.BildeUrl" alt="@countdown.AltTekst" class="@logoClass" />
                     }
 
                     <p class="dashboard-card-kicker">@countdown.Undertittel</p>
                     <h2>@countdown.Tittel</h2>
 
-                    <div class="dashboard-countdown"
-                         id="@countdown.Id"
+                    <div class="dashboard-countdown" id="@countdown.Id"
                          data-target="@countdown.Tidspunkt.ToUnixTimeMilliseconds()">
                         --
                     </div>
@@ -124,7 +122,8 @@
                 ? "Siste deploy var OK"
                 : "Deploy-status er uklar";
 
-            <article class="dashboard-card dashboard-hover-card dashboard-pi-status-card dashboard-pi-status-compact @piStatusClass">
+            <article
+                class="dashboard-card dashboard-hover-card dashboard-pi-status-card dashboard-pi-status-compact @piStatusClass">
                 <div class="dashboard-pi-status-compact-main">
                     <div>
                         <p class="dashboard-card-kicker">Pi-status</p>
@@ -189,67 +188,99 @@
 
 @section Scripts {
     <script>
-        function updateClock() {
-            const now = new Date();
+        (() => {
+            const refreshIntervalMs = 5 * 60 * 1000;
 
-            document.getElementById("DashboardClockTime").textContent =
-                now.toLocaleTimeString("nb-NO", {
+            function updateClock() {
+                const timeElement = document.getElementById("DashboardClockTime");
+                const dateElement = document.getElementById("DashboardClockDate");
+
+                if (!timeElement || !dateElement) {
+                    return;
+                }
+
+                const now = new Date();
+
+                timeElement.textContent = now.toLocaleTimeString("nb-NO", {
                     hour: "2-digit",
                     minute: "2-digit"
                 });
 
-            document.getElementById("DashboardClockDate").textContent =
-                now.toLocaleDateString("nb-NO", {
+                dateElement.textContent = now.toLocaleDateString("nb-NO", {
                     weekday: "long",
                     day: "numeric",
                     month: "long"
                 });
-        }
-
-        function updateCountdown(element) {
-            const target = Number(element.dataset.target);
-            const diff = target - Date.now();
-
-            if (diff <= 0) {
-                element.textContent = "Ferdig!";
-                return;
             }
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
+            function updateCountdown(element) {
+                const target = Number(element.dataset.target);
 
-            element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
-        }
+                if (!Number.isFinite(target)) {
+                    element.textContent = "--";
+                    return;
+                }
 
-        function updateDashboardCardsPointer(event) {
-            const card = event.currentTarget;
-            const rect = card.getBoundingClientRect();
+                const diff = target - Date.now();
 
-            card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-            card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-        }
+                if (diff <= 0) {
+                    element.textContent = "Ferdig!";
+                    return;
+                }
 
-        function setupDashboardCards() {
-            document
-                .querySelectorAll(".dashboard-hover-card, .dashboard-card, .dashboard-link-card")
-                .forEach(card => {
-                    card.addEventListener("pointermove", updateDashboardCardsPointer);
-                });
-        }
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
 
-        function tick() {
-            updateClock();
+                element.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
+            }
 
-            document
-                .querySelectorAll(".dashboard-countdown[data-target]")
-                .forEach(updateCountdown);
-        }
+            function updateDashboardCardsPointer(event) {
+                const card = event.currentTarget;
+                const rect = card.getBoundingClientRect();
 
-        tick();
-        setupDashboardCards();
+                card.style.setProperty(
+                    "--mouse-x",
+                    `${event.clientX - rect.left}px`
+                );
 
-        setInterval(tick, 1000);
+                card.style.setProperty(
+                    "--mouse-y",
+                    `${event.clientY - rect.top}px`
+                );
+            }
+
+            function setupDashboardCards() {
+                document
+                    .querySelectorAll(
+                        ".dashboard-hover-card, .dashboard-card, .dashboard-link-card"
+                    )
+                    .forEach(card => {
+                        card.addEventListener(
+                            "pointermove",
+                            updateDashboardCardsPointer
+                        );
+                    });
+            }
+
+            function tick() {
+                updateClock();
+
+                document
+                    .querySelectorAll(".dashboard-countdown[data-target]")
+                    .forEach(updateCountdown);
+            }
+
+            function refreshDashboard() {
+                window.location.reload();
+            }
+
+            tick();
+            setupDashboardCards();
+
+            window.setInterval(tick, 1000);
+            window.setTimeout(refreshDashboard, refreshIntervalMs);
+        })();
     </script>
 }
