@@ -1,5 +1,6 @@
 /* =========================================================
    AdriansVevside – Raspberry Pi-informasjonsskjerm
+   KORREKT UTGÅVE: vêr utan vind, større vêrkort, tre tømmingar
    ========================================================= */
 
 :root {
@@ -192,12 +193,12 @@ body.pi-page {
     display: grid;
 
     /*
-       Vêrkortet får om lag 42 %.
-       Tømmekalenderen får resten.
+       Vêrkortet får mest plass.
+       Tømmekalenderen blir meir kompakt.
     */
     grid-template-rows:
-        minmax(0, 0.82fr)
-        minmax(0, 1.18fr);
+        minmax(0, 1.15fr)
+        minmax(0, 0.85fr);
 
     gap: var(--pi-gap);
 }
@@ -393,8 +394,7 @@ body.pi-page {
 
     display: grid;
     grid-template-columns:
-        minmax(0, 1.15fr)
-        minmax(0, 1fr);
+        repeat(2, minmax(0, 1fr)) !important;
 
     gap: clamp(0.5rem, 1vw, 0.75rem);
 }
@@ -403,7 +403,7 @@ body.pi-page {
    Vind er framleis med i den delte partialen, men blir berre
    skjult på Pi-dashboardet.
 */
-.pi-dashboard .dashboard-weather-wind {
+.pi-dashboard .dashboard-weather-metric.dashboard-weather-wind {
     display: none;
 }
 
@@ -420,6 +420,18 @@ body.pi-page {
     border-radius: var(--pi-radius-md);
 
     background: rgba(255, 255, 255, 0.04);
+}
+
+/*
+   Skjul vind berre på Pi-dashboardet.
+
+   Første selector bruker den eigne vind-klassen.
+   Andre selector er reserve og skjuler element nummer to
+   i den eksisterande partialen: temperatur, vind, nedbør.
+*/
+.pi-dashboard .dashboard-weather-metrics > .dashboard-weather-wind,
+.pi-dashboard .dashboard-weather-metrics > .dashboard-weather-metric:nth-child(2) {
+    display: none !important;
 }
 
 .pi-dashboard .dashboard-weather-metric > span {
@@ -560,7 +572,7 @@ body.pi-page {
     display: grid;
 
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(3, minmax(0, 1fr)) !important;
 
     align-content: stretch;
 
@@ -795,8 +807,8 @@ body.pi-page {
 
     .pi-content {
         grid-template-rows:
-            minmax(0, 0.76fr)
-            minmax(0, 1.24fr);
+            minmax(0, 1.2fr)
+            minmax(0, 0.8fr);
     }
 
     .pi-status-line {
@@ -835,7 +847,7 @@ body.pi-page {
     }
 
     .pi-dashboard .dashboard-waste-items {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 }
 
