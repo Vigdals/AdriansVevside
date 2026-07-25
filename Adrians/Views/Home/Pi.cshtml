@@ -1,0 +1,172 @@
+@model Adrians.ViewModels.PublicDashboardViewModel
+
+@{
+    ViewData["Title"] = "Informasjonsskjerm";
+    Layout = "_PiLayout";
+}
+
+<section class="pi-dashboard">
+
+    <header class="pi-header">
+        <div class="pi-clock">
+            <div id="PiClockTime" class="pi-clock-time" aria-label="Klokkeslett">
+                --:--
+            </div>
+
+            <div id="PiClockDate" class="pi-clock-date">
+                --
+            </div>
+        </div>
+
+        <div class="pi-header-meta">
+            <strong>@Model.Stadnamn</strong>
+
+            <span>
+                Oppdatert
+                <time datetime="@Model.SistOppdatert.ToString("O")">
+                    @Model.SistOppdatert.ToString("HH:mm")
+                </time>
+            </span>
+        </div>
+    </header>
+
+    <div class="pi-content">
+
+        <article class="pi-card pi-weather-card">
+            <div class="pi-card-heading">
+                <p class="pi-card-kicker">Vêr</p>
+                <span class="pi-card-source">met.no</span>
+            </div>
+
+            @if (Model.Korttidsvarsel is not null)
+            {
+                <partial name="_DashboardKorttidsvarselCard" model="Model.Korttidsvarsel" />
+            }
+            else
+            {
+                <div class="pi-empty-state">
+                    Klarte ikkje hente vêr akkurat no.
+                </div>
+            }
+        </article>
+
+        <section class="pi-waste-section" aria-label="Tømmekalender">
+
+            @if (Model.Tommekalender is not null)
+            {
+                <partial name="_TommekalenderCard" model="Model.Tommekalender" />
+            }
+            else
+            {
+                <article class="pi-card pi-empty-card">
+                    <div>
+                        <p class="pi-card-kicker">Tømmekalender</p>
+                        <h2>Leitevegen 15</h2>
+                    </div>
+
+                    <div class="pi-empty-state">
+                        Klarte ikkje hente tømmekalender akkurat no.
+                    </div>
+                </article>
+            }
+        </section>
+
+    </div>
+
+    <footer class="pi-status-line">
+        <span id="PiConnectionStatus">
+            Tilkopla
+        </span>
+
+        <span aria-hidden="true">·</span>
+
+        <span>
+            Oppdaterer automatisk kvart femte minutt
+        </span>
+    </footer>
+
+</section>
+
+@section Scripts {
+    <script>
+        (() => {
+            "use strict";
+
+            const refreshIntervalMs = 5 * 60 * 1000;
+
+            const timeElement =
+                document.getElementById("PiClockTime");
+
+            const dateElement =
+                document.getElementById("PiClockDate");
+
+            const connectionElement =
+                document.getElementById("PiConnectionStatus");
+
+            function updateClock() {
+                const now = new Date();
+
+                if (timeElement) {
+                    timeElement.textContent =
+                        now.toLocaleTimeString("nb-NO", {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        });
+                }
+
+                if (dateElement) {
+                    const formattedDate =
+                        now.toLocaleDateString("nb-NO", {
+                            weekday: "long",
+                            day: "numeric",
+                            month: "long"
+                        });
+
+                    dateElement.textContent =
+                        formattedDate.charAt(0).toUpperCase() +
+                        formattedDate.slice(1);
+                }
+            }
+
+            function updateConnectionStatus() {
+                if (!connectionElement) {
+                    return;
+                }
+
+                const isOnline = navigator.onLine;
+
+                connectionElement.textContent =
+                    isOnline ? "Tilkopla" : "Ingen nettverk";
+
+                connectionElement.classList.toggle(
+                    "pi-status-offline",
+                    !isOnline
+                );
+            }
+
+            function refreshDashboard() {
+                window.location.reload();
+            }
+
+            updateClock();
+            updateConnectionStatus();
+
+            window.setInterval(updateClock, 1000);
+
+            window.setTimeout(
+                refreshDashboard,
+                refreshIntervalMs
+            );
+
+            window.addEventListener(
+                "online",
+                updateConnectionStatus
+            );
+
+            window.addEventListener(
+                "offline",
+                updateConnectionStatus
+            );
+        })();
+    </script>
+}

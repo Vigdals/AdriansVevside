@@ -84,6 +84,13 @@ public sealed class HomeController : Controller
         var model = await BuildPublicDashboardAsync(cancellationToken);
         return View(model);
     }
+    [HttpGet]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public async Task<IActionResult> Pi(CancellationToken cancellationToken)
+    {
+        var model = await BuildPublicDashboardAsync(cancellationToken);
+        return View(model);
+    }
 
     private async Task<PublicDashboardViewModel> BuildPublicDashboardAsync(
         CancellationToken cancellationToken)

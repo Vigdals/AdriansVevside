@@ -1,0 +1,796 @@
+/* =========================================================
+   AdriansVevside – Raspberry Pi-informasjonsskjerm
+   ========================================================= */
+
+:root {
+    --pi-bg-top: #10254d;
+    --pi-bg-middle: #0a1934;
+    --pi-bg-bottom: #050d1d;
+
+    --pi-card-bg: rgba(17, 35, 68, 0.78);
+    --pi-card-bg-strong: rgba(19, 40, 78, 0.92);
+
+    --pi-border: rgba(255, 255, 255, 0.12);
+    --pi-border-soft: rgba(255, 255, 255, 0.075);
+
+    --pi-text: rgba(255, 255, 255, 0.96);
+    --pi-text-muted: rgba(226, 235, 255, 0.7);
+    --pi-text-faint: rgba(226, 235, 255, 0.52);
+
+    --pi-accent: #9bc0ff;
+
+    --pi-radius-lg: 1.35rem;
+    --pi-radius-md: 1rem;
+
+    --pi-gap: clamp(0.7rem, 1.5vh, 1.15rem);
+    --pi-padding-x: clamp(0.9rem, 2vw, 1.7rem);
+    --pi-padding-y: clamp(0.75rem, 1.7vh, 1.25rem);
+}
+
+/* =========================================================
+   Grunnlayout
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+html {
+    background: var(--pi-bg-bottom);
+}
+
+body.pi-page {
+    min-width: 320px;
+    min-height: 100%;
+    overflow: hidden;
+
+    color: var(--pi-text);
+
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(68, 116, 203, 0.28),
+            transparent 42%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(73, 99, 176, 0.15),
+            transparent 42%
+        ),
+        linear-gradient(
+            150deg,
+            var(--pi-bg-top) 0%,
+            var(--pi-bg-middle) 48%,
+            var(--pi-bg-bottom) 100%
+        );
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.pi-main {
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+}
+
+.pi-dashboard {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    padding:
+        var(--pi-padding-y)
+        var(--pi-padding-x);
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    gap: var(--pi-gap);
+
+    overflow: hidden;
+}
+
+/* =========================================================
+   Topp
+   ========================================================= */
+
+.pi-header {
+    min-width: 0;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+}
+
+.pi-clock {
+    min-width: 0;
+}
+
+.pi-clock-time {
+    font-size: clamp(3.15rem, 8.4vh, 5.25rem);
+    font-weight: 950;
+    line-height: 0.86;
+
+    letter-spacing: -0.075em;
+
+    color: #fff;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.pi-clock-date {
+    margin-top: clamp(0.3rem, 0.8vh, 0.55rem);
+
+    color: var(--pi-text-muted);
+
+    font-size: clamp(0.95rem, 2.1vh, 1.2rem);
+    font-weight: 650;
+    line-height: 1.1;
+}
+
+.pi-header-meta {
+    min-width: 0;
+
+    display: grid;
+    justify-items: end;
+
+    gap: 0.18rem;
+
+    padding-bottom: 0.12rem;
+
+    text-align: right;
+}
+
+.pi-header-meta strong {
+    max-width: 100%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: var(--pi-text);
+
+    font-size: clamp(1rem, 2.3vh, 1.3rem);
+    font-weight: 850;
+}
+
+.pi-header-meta span {
+    color: var(--pi-text-muted);
+
+    font-size: clamp(0.78rem, 1.75vh, 1rem);
+    line-height: 1.15;
+}
+
+/* =========================================================
+   Hovudinnhald
+   ========================================================= */
+
+.pi-content {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    /*
+       Vêrkortet får om lag 42 %.
+       Tømmekalenderen får resten.
+    */
+    grid-template-rows:
+        minmax(0, 0.82fr)
+        minmax(0, 1.18fr);
+
+    gap: var(--pi-gap);
+}
+
+.pi-card,
+.pi-waste-section > .dashboard-waste-card {
+    position: relative;
+    isolation: isolate;
+
+    box-sizing: border-box;
+
+    min-width: 0;
+    min-height: 0;
+
+    border: 1px solid var(--pi-border);
+    border-radius: var(--pi-radius-lg);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.025)
+        ),
+        var(--pi-card-bg);
+
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.055);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    overflow: hidden;
+}
+
+.pi-card {
+    padding: clamp(0.85rem, 1.8vh, 1.15rem);
+}
+
+.pi-card::after,
+.pi-waste-section > .dashboard-waste-card::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(143, 184, 255, 0.1),
+            transparent 45%
+        );
+}
+
+.pi-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-bottom: clamp(0.45rem, 1vh, 0.7rem);
+}
+
+.pi-card-kicker,
+.pi-card-source,
+.pi-dashboard .dashboard-card-kicker,
+.pi-dashboard .dashboard-card-badge {
+    margin: 0;
+
+    color: var(--pi-accent);
+
+    font-size: clamp(0.67rem, 1.45vh, 0.82rem);
+    font-weight: 850;
+    line-height: 1;
+
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.pi-card-source,
+.pi-dashboard .dashboard-card-badge {
+    color: var(--pi-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: none;
+}
+
+.pi-empty-state {
+    min-height: 4rem;
+
+    display: grid;
+    place-items: center;
+
+    padding: 1rem;
+
+    border: 1px solid var(--pi-border-soft);
+    border-radius: var(--pi-radius-md);
+
+    color: var(--pi-text-muted);
+    text-align: center;
+}
+
+/* =========================================================
+   Vêr – overstyrer eksisterande dashboard-partial
+   ========================================================= */
+
+.pi-weather-card {
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr);
+}
+
+.pi-dashboard .dashboard-weather-compact {
+    min-width: 0;
+    min-height: 0;
+
+    height: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(15rem, 0.9fr)
+        minmax(0, 1.65fr);
+
+    align-items: stretch;
+
+    gap: clamp(0.65rem, 1.4vw, 1rem);
+}
+
+.pi-dashboard .dashboard-weather-summary {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: clamp(0.7rem, 1.3vw, 1rem);
+
+    padding: clamp(0.65rem, 1.5vh, 0.95rem);
+
+    border: 1px solid var(--pi-border-soft);
+    border-radius: var(--pi-radius-md);
+
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.pi-dashboard .dashboard-weather-summary > div {
+    min-width: 0;
+}
+
+.pi-dashboard .dashboard-weather-summary strong,
+.pi-dashboard .dashboard-weather-summary span {
+    display: block;
+}
+
+.pi-dashboard .dashboard-weather-summary strong {
+    overflow: hidden;
+
+    color: var(--pi-text);
+
+    font-size: clamp(1rem, 2.1vh, 1.25rem);
+    font-weight: 850;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-weather-summary span {
+    margin-top: 0.18rem;
+
+    color: var(--pi-text-muted);
+
+    font-size: clamp(0.74rem, 1.55vh, 0.9rem);
+}
+
+.pi-dashboard .dashboard-weather-icon {
+    flex: 0 0 auto;
+
+    width: clamp(3.6rem, 8vh, 5.25rem);
+    height: clamp(3.6rem, 8vh, 5.25rem);
+
+    object-fit: contain;
+}
+
+.pi-dashboard .dashboard-weather-metrics,
+.pi-dashboard .dashboard-weather-metrics-three {
+    min-width: 0;
+
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 1fr;
+
+    gap: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.pi-dashboard .dashboard-weather-metric {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: clamp(0.55rem, 1.35vh, 0.85rem);
+
+    border: 1px solid var(--pi-border-soft);
+    border-radius: var(--pi-radius-md);
+
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pi-dashboard .dashboard-weather-metric > span {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.3rem;
+
+    margin-bottom: clamp(0.3rem, 0.75vh, 0.5rem);
+
+    overflow: hidden;
+
+    color: var(--pi-text-muted);
+
+    font-size: clamp(0.65rem, 1.45vh, 0.82rem);
+    font-weight: 750;
+    line-height: 1.1;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-weather-metric-icon {
+    display: inline-flex;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.pi-dashboard .dashboard-weather-metric strong {
+    display: block;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: #fff;
+
+    font-size: clamp(1.15rem, 3.15vh, 1.85rem);
+    font-weight: 900;
+    line-height: 1;
+
+    letter-spacing: -0.045em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-weather-temperature strong {
+    font-size: clamp(2.25rem, 6.5vh, 4rem);
+    letter-spacing: -0.075em;
+}
+
+/* =========================================================
+   Tømmekalender – overstyrer eksisterande partial
+   ========================================================= */
+
+.pi-waste-section {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+}
+
+.pi-waste-section > .dashboard-waste-card {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr);
+
+    padding: clamp(0.8rem, 1.7vh, 1.1rem);
+}
+
+.pi-dashboard .dashboard-waste-header {
+    min-width: 0;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-bottom: clamp(0.45rem, 1vh, 0.7rem);
+}
+
+.pi-dashboard .dashboard-waste-header > div:first-child {
+    min-width: 0;
+}
+
+.pi-dashboard .dashboard-waste-header h2 {
+    max-width: 100%;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: var(--pi-text);
+
+    font-size: clamp(1rem, 2.1vh, 1.25rem);
+    font-weight: 850;
+    line-height: 1.1;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-waste-meta {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: var(--pi-text-muted);
+
+    font-size: clamp(0.7rem, 1.45vh, 0.85rem);
+}
+
+.pi-dashboard .dashboard-muted {
+    color: var(--pi-text-muted);
+}
+
+.pi-dashboard .dashboard-waste-items {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    align-content: stretch;
+
+    gap: clamp(0.45rem, 1vh, 0.7rem);
+
+    overflow: hidden;
+}
+
+.pi-dashboard .dashboard-waste-item {
+    position: relative;
+
+    min-width: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    grid-template-areas:
+        "icon name date"
+        "icon days next";
+
+    align-items: center;
+
+    column-gap: clamp(0.55rem, 1.1vw, 0.8rem);
+    row-gap: 0.1rem;
+
+    padding:
+        clamp(0.48rem, 1.05vh, 0.72rem)
+        clamp(0.65rem, 1.25vw, 0.9rem);
+
+    border: 1px solid var(--pi-border-soft);
+    border-radius: var(--pi-radius-md);
+
+    background: rgba(255, 255, 255, 0.045);
+
+    overflow: hidden;
+}
+
+.pi-dashboard .dashboard-waste-icon {
+    grid-area: icon;
+
+    display: grid;
+    place-items: center;
+
+    width: clamp(2rem, 4.5vh, 2.7rem);
+    height: clamp(2rem, 4.5vh, 2.7rem);
+
+    border-radius: 0.75rem;
+
+    background: rgba(255, 255, 255, 0.075);
+
+    font-size: clamp(1.1rem, 2.7vh, 1.55rem);
+    line-height: 1;
+}
+
+.pi-dashboard .dashboard-waste-name {
+    grid-area: name;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: var(--pi-text);
+
+    font-size: clamp(0.78rem, 1.75vh, 1rem);
+    font-weight: 800;
+    line-height: 1.1;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-waste-date {
+    grid-area: date;
+
+    color: #fff;
+
+    font-size: clamp(0.95rem, 2.1vh, 1.25rem);
+    font-weight: 900;
+    line-height: 1;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.pi-dashboard .dashboard-waste-days {
+    grid-area: days;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: var(--pi-accent);
+
+    font-size: clamp(0.67rem, 1.45vh, 0.82rem);
+    font-weight: 750;
+    line-height: 1.1;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pi-dashboard .dashboard-waste-next {
+    grid-area: next;
+
+    color: var(--pi-text-faint);
+
+    font-size: clamp(0.65rem, 1.4vh, 0.8rem);
+    font-weight: 700;
+    line-height: 1;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.pi-dashboard .dashboard-waste-next::before {
+    content: "Deretter ";
+}
+
+/*
+   Dei eksisterande urgency-klassane får eit diskret
+   visuelt signal utan at fargane tek over skjermen.
+*/
+
+.pi-dashboard .dashboard-waste-urgency-now {
+    border-color: rgba(255, 177, 90, 0.65);
+    background: rgba(255, 142, 43, 0.11);
+}
+
+.pi-dashboard .dashboard-waste-urgency-soon {
+    border-color: rgba(255, 216, 112, 0.48);
+    background: rgba(255, 210, 80, 0.075);
+}
+
+.pi-dashboard .dashboard-waste-urgency-week {
+    border-color: rgba(138, 180, 248, 0.34);
+}
+
+/* =========================================================
+   Statuslinje
+   ========================================================= */
+
+.pi-status-line {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 0.45rem;
+
+    overflow: hidden;
+
+    color: var(--pi-text-faint);
+
+    font-size: clamp(0.62rem, 1.3vh, 0.78rem);
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+.pi-status-offline {
+    color: #ffb36b;
+    font-weight: 800;
+}
+
+/* =========================================================
+   Lågare eller smalare skjermar
+   ========================================================= */
+
+@media (max-height: 650px) {
+    :root {
+        --pi-gap: 0.55rem;
+        --pi-padding-y: 0.6rem;
+    }
+
+    .pi-dashboard {
+        grid-template-rows:
+            auto
+            minmax(0, 1fr);
+    }
+
+    .pi-content {
+        grid-template-rows:
+            minmax(0, 0.76fr)
+            minmax(0, 1.24fr);
+    }
+
+    .pi-status-line {
+        display: none;
+    }
+
+    .pi-dashboard .dashboard-weather-summary,
+    .pi-dashboard .dashboard-weather-metric,
+    .pi-waste-section > .dashboard-waste-card {
+        padding-top: 0.55rem;
+        padding-bottom: 0.55rem;
+    }
+}
+
+@media (max-width: 760px) {
+    body.pi-page {
+        overflow: auto;
+    }
+
+    .pi-main,
+    .pi-dashboard {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    .pi-dashboard {
+        overflow: visible;
+    }
+
+    .pi-content {
+        grid-template-rows: auto auto;
+    }
+
+    .pi-dashboard .dashboard-weather-compact {
+        grid-template-columns: 1fr;
+    }
+
+    .pi-dashboard .dashboard-waste-items {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   Redusert rørsle
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

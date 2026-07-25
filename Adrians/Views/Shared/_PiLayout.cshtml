@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nn" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1,
+    maximum-scale=1,
+    user-scalable=no,
+    viewport-fit=cover" />
+
+    <meta name="description" content="Informasjonsskjerm for AdriansVevside" />
+
+    <meta name="theme-color" content="#071326" />
+
+    <title>
+        @(ViewData["Title"] is string title &&
+          !string.IsNullOrWhiteSpace(title)
+            ? $"{title} - AdriansVevside"
+            : "Pi-skjerm - AdriansVevside")
+    </title>
+
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/pi-dashboard.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body class="pi-page">
+    <main class="pi-main" role="main">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
