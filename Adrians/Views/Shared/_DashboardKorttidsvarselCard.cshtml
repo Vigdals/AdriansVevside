@@ -9,11 +9,8 @@
 
 <div class="dashboard-weather-compact">
     <div class="dashboard-weather-summary">
-        <img src="@iconUrl"
-             alt="@Model.SymbolCode"
-             class="dashboard-weather-icon"
-             loading="lazy"
-             onerror="this.onerror=null;this.src='@fallbackUrl';"/>
+        <img src="@iconUrl" alt="@Model.SymbolCode" class="dashboard-weather-icon" loading="lazy"
+             onerror="this.onerror=null;this.src='@fallbackUrl';" />
 
         <div>
             <strong>@Model.LocationName – no</strong>
@@ -30,7 +27,7 @@
             <strong>@Model.TemperatureC?.ToString("0.#") °C</strong>
         </div>
 
-        <div class="dashboard-weather-metric">
+        <div class="dashboard-weather-metric dashboard-weather-wind">
             <span>
                 <span class="dashboard-weather-metric-icon" aria-hidden="true">💨</span>
                 Vind

@@ -1,8 +1,21 @@
 @model Adrians.ViewModels.PublicDashboardViewModel
+@using Adrians.ViewModels
 
 @{
     ViewData["Title"] = "Informasjonsskjerm";
     Layout = "_PiLayout";
+
+    var piTommekalender = Model.Tommekalender is null
+    ? null
+    : new TommekalenderViewModel
+    {
+        Adresse = Model.Tommekalender.Adresse,
+        SistOppdatert = Model.Tommekalender.SistOppdatert,
+        Feilmelding = Model.Tommekalender.Feilmelding,
+        Tommingar = Model.Tommekalender.Tommingar
+            .Take(3)
+            .ToList()
+    };
 }
 
 <section class="pi-dashboard">
@@ -52,9 +65,9 @@
 
         <section class="pi-waste-section" aria-label="Tømmekalender">
 
-            @if (Model.Tommekalender is not null)
+            @if (piTommekalender is not null)
             {
-                <partial name="_TommekalenderCard" model="Model.Tommekalender" />
+                <partial name="_TommekalenderCard" model="piTommekalender" />
             }
             else
             {
