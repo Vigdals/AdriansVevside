@@ -35,4 +35,5 @@ public sealed class PublicPiStatus
     public string BuildSource { get; set; } = "";
 
     public bool IsOk => string.Equals(Status, "ok", StringComparison.OrdinalIgnoreCase);
+
 }

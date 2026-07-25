@@ -30,6 +30,7 @@ services:
       mariadb:
         condition: service_healthy
     environment:
+      TZ: "Europe/Oslo"
       ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
 
