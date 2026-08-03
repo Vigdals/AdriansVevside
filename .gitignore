@@ -167,7 +167,6 @@ _ReSharper*/
 
 # Cake / FAKE
 # tools/**
-# !tools/packages.config
 .fake/
 
 # Ionide (VS Code F#)
