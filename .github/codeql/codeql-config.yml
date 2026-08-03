@@ -1,4 +1,0 @@
-name: "AdriansVevside CodeQL config"
-
-queries:
-  - uses: security-extended
