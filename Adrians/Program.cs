@@ -3,7 +3,6 @@
 using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,14 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // =======================
 // Database connection string
 // =======================
-// Prioritet:
-// 1. ConnectionStrings:DefaultConnection frå miljøvariabel / appsettings
-// 2. db-connection-adriansvevside frå Key Vault, dersom Key Vault er aktivt
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
     ?? builder.Configuration["db-connection-adriansvevside"]
-    ?? throw new InvalidOperationException("Database connection string not found.");
+    ?? throw new InvalidOperationException(
+        "Database connection string not found.");
 
 // =======================
 // Cache
@@ -43,33 +40,49 @@ builder.Services.AddHttpClient<FotballDataApi>(client =>
 
 builder.Services.AddHttpClient("frost", client =>
 {
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "AdriansVevside/1.0 (vigdalpi.duckdns.org)");
+
+    client.DefaultRequestHeaders.Accept.ParseAdd(
+        "application/json");
 });
 
 builder.Services.AddHttpClient("met.no", client =>
 {
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (contact: adrvig92@gmail.com)");
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "AdriansVevside/1.0 (contact: adrvig92@gmail.com)");
+
+    client.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
 builder.Services.AddHttpClient("hackernews", client =>
 {
-    client.BaseAddress = new Uri("https://hacker-news.firebaseio.com/");
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+    client.BaseAddress = new Uri(
+        "https://hacker-news.firebaseio.com/");
+
+    client.DefaultRequestHeaders.Accept.ParseAdd(
+        "application/json");
 });
 
 builder.Services.AddHttpClient<NifsKampService>(client =>
 {
     client.BaseAddress = new Uri("https://api.nifs.no/");
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "AdriansVevside/1.0 (vigdalpi.duckdns.org)");
+
+    client.DefaultRequestHeaders.Accept.ParseAdd(
+        "application/json");
 });
 
 builder.Services.AddHttpClient<SimasTommekalenderService>(client =>
 {
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (vigdalpi.duckdns.org)");
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "AdriansVevside/1.0 (vigdalpi.duckdns.org)");
+
+    client.DefaultRequestHeaders.Accept.ParseAdd(
+        "application/json");
 });
 
 // =======================
@@ -80,80 +93,62 @@ builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 builder.Services.AddScoped<PublicPiStatusService>();
 builder.Services.AddScoped<RssFeedService>();
 
-// Merk:
-// NifsKampService og SimasTommekalenderService er registrerte som typed HttpClient-services
-// via AddHttpClient<TService>(). Dei treng normalt ikkje eigen AddScoped i tillegg.
+// NifsKampService og SimasTommekalenderService er registrerte
+// som typed HttpClient-services via AddHttpClient<TService>().
 
 // =======================
-// Database / Identity
+// Database
 // =======================
 // Raspberry Pi-oppsettet brukar MariaDB 11.4.
 //
-// Viktig:
 // Ikkje bruk ServerVersion.AutoDetect(connectionString) her.
-// AutoDetect opnar MySQL-tilkopling under app-startup. Dersom MariaDB ikkje er heilt klar
-// akkurat ved reboot, døyr heile web-appen før Kestrel lyttar på 8080.
-//
-// Fast versjon gjer startup meir robust. Databasefeil kan framleis skje ved faktiske DB-kall,
-// men appen kjem opp og nginx får ein levande upstream.
-var serverVersion = new MariaDbServerVersion(new Version(11, 4, 0));
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
+// AutoDetect opnar ei databasetilkopling under oppstart.
+// Dersom MariaDB ikkje er klar etter reboot, kan webappen stoppe
+// før Kestrel byrjar å lytte.
+var serverVersion =
+    new MariaDbServerVersion(new Version(11, 4, 0));
 
 builder.Services.AddDbContext<GameContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-}
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-})
-.AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<ApplicationDbContext>();
-
 // =======================
-// MVC / Razor
+// MVC
 // =======================
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 // =======================
-// Middleware
+// Feilhandtering
 // =======================
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
+// =======================
+// Health check
+// =======================
 // Enkel liveness-sjekk for Docker/nginx.
-// Denne skal ikkje sjekke database. Poenget er å vite at Kestrel faktisk lyttar.
+// Denne sjekkar ikkje databasen.
 app.MapGet("/healthz", () => Results.Ok("ok"));
 
+// =======================
+// Middleware
+// =======================
 // Nginx handterer HTTPS eksternt.
-// Dersom du får redirect-loop bak nginx, bør vi heller setje opp ForwardedHeaders eksplisitt.
+// Ved redirect-loop bør ForwardedHeaders konfigurerast.
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
+// =======================
+// Routing
+// =======================
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapRazorPages();
 
 app.Run();
