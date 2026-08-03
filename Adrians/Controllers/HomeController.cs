@@ -19,7 +19,7 @@ public sealed class HomeController : Controller
             Id = "CountdownSTR",
             Tittel = "Sognefjord Trail Run",
             Undertittel = "",
-            Tidspunkt = new DateTimeOffset(2026, 6, 6, 8, 0, 0, TimeSpan.FromHours(2)),
+            Tidspunkt = new DateTimeOffset(2027, 6, 6, 8, 0, 0, TimeSpan.FromHours(2)),
             BildeUrl = "/img/STR.png",
             AltTekst = "Sognefjord Trail Run"
         },
