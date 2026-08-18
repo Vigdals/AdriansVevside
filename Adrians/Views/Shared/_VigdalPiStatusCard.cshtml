@@ -1,0 +1,307 @@
+﻿@model Adrians.ViewModels.VigdalPiStatusViewModel
+
+@using Adrians.ViewModels
+
+@{
+    var overallClass =
+        Model.OverallState switch
+        {
+            VigdalPiOverallState.Healthy =>
+                "dashboard-vigdalpi-ok",
+
+            VigdalPiOverallState.Warning =>
+                "dashboard-vigdalpi-warning",
+
+            VigdalPiOverallState.Critical =>
+                "dashboard-vigdalpi-critical",
+
+            _ =>
+                "dashboard-vigdalpi-unknown"
+        };
+
+    var deployClass =
+        Model.PiStatus?.Status
+            .ToLowerInvariant() switch
+        {
+            "ok" =>
+                "dashboard-vigdalpi-deploy-ok",
+
+            "failed" =>
+                "dashboard-vigdalpi-deploy-critical",
+
+            "deploying" =>
+                "dashboard-vigdalpi-deploy-warning",
+
+            _ =>
+                "dashboard-vigdalpi-deploy-unknown"
+        };
+
+    var osloTimeZone =
+        TimeZoneInfo.FindSystemTimeZoneById(
+            "Europe/Oslo");
+
+    var deployTime =
+        Model.PiStatus?.DeployedAt ??
+        Model.PiStatus?.CheckedAt;
+}
+
+<article class="
+    dashboard-card
+    dashboard-hover-card
+    dashboard-vigdalpi-card
+    @overallClass">
+
+    <div class="
+        dashboard-card-header
+        dashboard-card-header-tight">
+
+        <div>
+            <p class="dashboard-card-kicker">
+                Drift og tenester
+            </p>
+
+            <h2>
+                VigdalPi
+            </h2>
+        </div>
+
+        <span class="dashboard-card-badge">
+            @Model.OverallStatusText
+        </span>
+
+    </div>
+
+    <div class="dashboard-vigdalpi-layout">
+
+        <section class="dashboard-vigdalpi-panel">
+
+            <div class="dashboard-vigdalpi-panel-header">
+
+                <strong>
+                    Tenester
+                </strong>
+
+                <span>
+                    @Model.ServiceSummary
+                </span>
+
+            </div>
+
+            @if (Model.HasServiceStatus &&
+                 Model.UptimeKumaStatus is { } uptimeStatus)
+            {
+                <div class="dashboard-services-grid">
+
+                    @foreach (var monitor in uptimeStatus.Monitors)
+                    {
+                        var statusClass =
+                            monitor.Status switch
+                            {
+                                UptimeKumaMonitorState.Up =>
+                                    "dashboard-service-up",
+
+                                UptimeKumaMonitorState.Down =>
+                                    "dashboard-service-down",
+
+                                UptimeKumaMonitorState.Pending =>
+                                    "dashboard-service-pending",
+
+                                UptimeKumaMonitorState.Maintenance =>
+                                    "dashboard-service-maintenance",
+
+                                _ =>
+                                    "dashboard-service-unknown"
+                            };
+
+                        <div class="
+                            dashboard-service-item
+                            @statusClass">
+
+                            <div class="dashboard-service-name">
+
+                                <span class="dashboard-service-dot"
+                                      aria-hidden="true">
+                                </span>
+
+                                <strong>
+                                    @monitor.Name
+                                </strong>
+
+                            </div>
+
+                            <div class="dashboard-service-meta">
+
+                                <span>
+                                    @monitor.StatusText
+                                </span>
+
+                                @if (monitor.PingMilliseconds.HasValue)
+                                {
+                                    <span>
+                                        @monitor.PingMilliseconds ms
+                                    </span>
+                                }
+
+                                @if (monitor.Uptime24HoursPercent.HasValue)
+                                {
+                                    <span>
+                                        @monitor.Uptime24HoursPercent.Value.ToString("0.##") %
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <p class="dashboard-muted dashboard-vigdalpi-empty">
+                    Tenestestatus er ikkje tilgjengeleg akkurat no.
+                </p>
+            }
+
+        </section>
+
+        <section class="dashboard-vigdalpi-panel">
+
+            <div class="dashboard-vigdalpi-panel-header">
+
+                <strong>
+                    Pi
+                </strong>
+
+                <span>
+                    System
+                </span>
+
+            </div>
+
+            @if (Model.HasHostMetrics &&
+                 Model.PiStatus is { } piStatus)
+            {
+                <div class="dashboard-vigdalpi-metrics">
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        piStatus.Temperature))
+                    {
+                        <div class="dashboard-vigdalpi-metric">
+                            <span>
+                                Temperatur
+                            </span>
+
+                            <strong>
+                                @piStatus.Temperature
+                            </strong>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        piStatus.HostUptime))
+                    {
+                        <div class="dashboard-vigdalpi-metric">
+                            <span>
+                                Uptime
+                            </span>
+
+                            <strong>
+                                @piStatus.HostUptime
+                            </strong>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        piStatus.LoadAverage))
+                    {
+                        <div class="dashboard-vigdalpi-metric">
+                            <span>
+                                Load
+                            </span>
+
+                            <strong>
+                                @piStatus.LoadAverage
+                            </strong>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        piStatus.DiskUsage))
+                    {
+                        <div class="dashboard-vigdalpi-metric">
+                            <span>
+                                Disk
+                            </span>
+
+                            <strong>
+                                @piStatus.DiskUsage
+                            </strong>
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <p class="dashboard-muted dashboard-vigdalpi-empty">
+                    Systemdata er ikkje tilgjengeleg her.
+                </p>
+            }
+
+        </section>
+
+    </div>
+
+    <div class="
+        dashboard-vigdalpi-deploy
+        @deployClass">
+
+        <div class="dashboard-vigdalpi-deploy-state">
+
+            <span class="dashboard-vigdalpi-dot"
+                  aria-hidden="true">
+            </span>
+
+            <strong>
+                @Model.DeployStatusText
+            </strong>
+
+        </div>
+
+        <div class="dashboard-vigdalpi-deploy-meta">
+
+            @if (deployTime.HasValue)
+            {
+                var osloDeployTime =
+                    TimeZoneInfo.ConvertTime(
+                        deployTime.Value,
+                        osloTimeZone);
+
+                <span>
+                    <time datetime="@deployTime.Value.ToString("O")">
+                        @osloDeployTime.ToString("dd.MM HH:mm")
+                    </time>
+                </span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(
+                Model.PiStatus?.CommitShort))
+            {
+                <span>
+                    @Model.PiStatus.CommitShort
+                </span>
+            }
+
+            @if (Model.PiStatus?.ResponseMs is long responseMs)
+            {
+                <span>
+                    @responseMs ms
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+</article>

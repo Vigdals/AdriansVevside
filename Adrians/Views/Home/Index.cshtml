@@ -112,68 +112,8 @@
             }
         </div>
 
-        @if (Model.PiStatus is not null)
-        {
-            var piStatusClass = Model.PiStatus.IsOk
-                ? "dashboard-pi-status-ok"
-                : "dashboard-pi-status-warning";
-
-            var statusText = Model.PiStatus.IsOk
-                ? "Siste deploy var OK"
-                : "Deploy-status er uklar";
-
-            <article
-                class="dashboard-card dashboard-hover-card dashboard-pi-status-card dashboard-pi-status-compact @piStatusClass">
-                <div class="dashboard-pi-status-compact-main">
-                    <div>
-                        <p class="dashboard-card-kicker">Pi-status</p>
-                        <strong>VigdalPi</strong>
-                    </div>
-
-                    <div class="dashboard-pi-status-compact-state">
-                        <span class="dashboard-pi-status-dot"></span>
-                        <span>@statusText</span>
-                    </div>
-
-                    <div class="dashboard-pi-status-compact-meta">
-                        @if (Model.PiStatus.DeployedAt is not null)
-                        {
-                            var deployedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.DeployedAt.Value, osloTimeZone);
-                            <span>Deploy @deployedAtOslo.ToString("dd.MM HH:mm")</span>
-                        }
-                        else if (Model.PiStatus.CheckedAt is not null)
-                        {
-                            var checkedAtOslo = TimeZoneInfo.ConvertTime(Model.PiStatus.CheckedAt.Value, osloTimeZone);
-                            <span>Sjekka @checkedAtOslo.ToString("dd.MM HH:mm")</span>
-                        }
-                        else
-                        {
-                            <span>Ikkje sjekka</span>
-                        }
-
-                        @if (Model.PiStatus.ResponseMs is not null)
-                        {
-                            <span>@Model.PiStatus.ResponseMs ms</span>
-                        }
-
-                        @if (!string.IsNullOrWhiteSpace(Model.PiStatus.Temperature))
-                        {
-                            <span>@Model.PiStatus.Temperature</span>
-                        }
-                    </div>
-
-                    <span class="dashboard-card-badge">
-                        @(Model.PiStatus.IsOk ? "OK" : "Sjekk")
-                    </span>
-                </div>
-            </article>
-        }
-
-        @if (Model.UptimeKumaStatus is not null)
-        {
-            <partial name="_UptimeKumaCard"
-                     model="Model.UptimeKumaStatus" />
-        }
+        <partial name="_VigdalPiStatusCard"
+                 model="Model.VigdalPiStatus" />
 
         <div class="dashboard-grid dashboard-grid-links">
             @foreach (var link in Model.Links)

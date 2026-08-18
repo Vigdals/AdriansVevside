@@ -8,6 +8,16 @@ public sealed class PublicDashboardViewModel
 
     public UptimeKumaStatusViewModel? UptimeKumaStatus { get; init; }
 
+    public VigdalPiStatusViewModel VigdalPiStatus =>
+    new()
+    {
+        PiStatus =
+            PiStatus,
+
+        UptimeKumaStatus =
+            UptimeKumaStatus
+    };
+
     public required string Stadnamn { get; init; }
 
     public KorttidsvarselViewModel? Korttidsvarsel { get; init; }
