@@ -1,0 +1,112 @@
+﻿@model Adrians.ViewModels.UptimeKumaStatusViewModel
+
+@using Adrians.ViewModels
+
+@{
+    var cardStatusClass =
+        Model.AllUp
+            ? "dashboard-services-ok"
+            : Model.DownCount > 0
+                ? "dashboard-services-down"
+                : "dashboard-services-warning";
+}
+
+<article class="
+    dashboard-card
+    dashboard-hover-card
+    dashboard-services-card
+    @cardStatusClass">
+
+    <div class="
+        dashboard-card-header
+        dashboard-card-header-tight">
+
+        <div>
+            <p class="dashboard-card-kicker">
+                Tenestestatus
+            </p>
+
+            <h2>
+                VigdalPi
+            </h2>
+        </div>
+
+        <span class="dashboard-card-badge">
+            @Model.SummaryText
+        </span>
+    </div>
+
+    @if (Model.Monitors.Count == 0)
+    {
+        <p class="dashboard-muted mb-0">
+            Ingen monitorar er publiserte frå Uptime Kuma.
+        </p>
+    }
+    else
+    {
+        <div class="dashboard-services-grid">
+
+            @foreach (var monitor in Model.Monitors)
+            {
+                var statusClass =
+                    monitor.Status switch
+                    {
+                        UptimeKumaMonitorState.Up =>
+                            "dashboard-service-up",
+
+                        UptimeKumaMonitorState.Down =>
+                            "dashboard-service-down",
+
+                        UptimeKumaMonitorState.Pending =>
+                            "dashboard-service-pending",
+
+                        UptimeKumaMonitorState.Maintenance =>
+                            "dashboard-service-maintenance",
+
+                        _ =>
+                            "dashboard-service-unknown"
+                    };
+
+                <div class="
+                    dashboard-service-item
+                    @statusClass">
+
+                    <div class="dashboard-service-name">
+                        <span class="dashboard-service-dot"
+                              aria-hidden="true">
+                        </span>
+
+                        <strong>
+                            @monitor.Name
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-service-meta">
+
+                        <span>
+                            @monitor.StatusText
+                        </span>
+
+                        @if (monitor.PingMilliseconds.HasValue)
+                        {
+                            <span>
+                                @monitor.PingMilliseconds ms
+                            </span>
+                        }
+
+                        @if (monitor.Uptime24HoursPercent.HasValue)
+                        {
+                            <span>
+                                @monitor.Uptime24HoursPercent.Value.ToString("0.##") %
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</article>

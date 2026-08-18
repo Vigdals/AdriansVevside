@@ -13,7 +13,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p\"$${MARIADB_ROOT_PASSWORD}\" --silent"]
+      test: [ "CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p\"$${MARIADB_ROOT_PASSWORD}\" --silent" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -29,6 +29,9 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
     environment:
       TZ: "Europe/Oslo"
       ASPNETCORE_ENVIRONMENT: "Production"
@@ -39,6 +42,11 @@ services:
       FootballData__ApiKey: ${FOOTBALLDATA_API_KEY}
 
       ConnectionStrings__DefaultConnection: "Server=mariadb;Port=3306;Database=${MARIADB_DATABASE};User=${MARIADB_USER};Password=${MARIADB_PASSWORD};TreatTinyAsBoolean=false"
+
+      UptimeKuma__Enabled: "true"
+      UptimeKuma__BaseUrl: "http://host.docker.internal:3001/"
+      UptimeKuma__StatusPageSlug: "vigdalpi"
+      UptimeKuma__CacheSeconds: "60"
     expose:
       - "8080"
     volumes:

@@ -1155,6 +1155,145 @@
         0 0 14px rgba(52, 211, 153, 0.60);
 }
 
+/* ==========================================================
+   Tenestestatus / Uptime Kuma
+   ========================================================== */
+
+.dashboard-services-card {
+    margin-bottom: 1rem;
+    padding: 0.95rem 1rem;
+}
+
+    .dashboard-services-card.dashboard-services-ok {
+        border-color: rgba(52, 211, 153, 0.20);
+    }
+
+    .dashboard-services-card.dashboard-services-warning {
+        border-color: rgba(251, 191, 36, 0.24);
+    }
+
+    .dashboard-services-card.dashboard-services-down {
+        border-color: rgba(251, 113, 133, 0.32);
+        background: linear-gradient( 110deg, rgba(251, 113, 133, 0.045), rgba(15, 23, 42, 0.82) 30% );
+    }
+
+.dashboard-services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+}
+
+.dashboard-service-item {
+    min-width: 0;
+    padding: 0.7rem 0.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.10);
+    border-radius: 0.85rem;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.dashboard-service-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+    .dashboard-service-name strong {
+        overflow: hidden;
+        color: var(--color-text-soft);
+        font-size: 0.84rem;
+        font-weight: 780;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+.dashboard-service-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: #64748b;
+}
+
+.dashboard-service-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.55rem;
+    margin-top: 0.42rem;
+    margin-left: 1.05rem;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* UP */
+
+.dashboard-service-up
+.dashboard-service-dot {
+    background: var(--color-success);
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.55);
+}
+
+
+/* DOWN */
+
+.dashboard-service-down {
+    border-color: rgba(251, 113, 133, 0.28);
+    background: rgba(251, 113, 133, 0.055);
+}
+
+    .dashboard-service-down
+    .dashboard-service-dot {
+        background: #fb7185;
+        box-shadow: 0 0 12px rgba(251, 113, 133, 0.55);
+    }
+
+
+/* PENDING */
+
+.dashboard-service-pending
+.dashboard-service-dot {
+    background: #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+}
+
+
+/* MAINTENANCE */
+
+.dashboard-service-maintenance
+.dashboard-service-dot {
+    background: #60a5fa;
+    box-shadow: 0 0 12px rgba(96, 165, 250, 0.45);
+}
+
+
+/* UNKNOWN */
+
+.dashboard-service-unknown
+.dashboard-service-dot {
+    background: #64748b;
+}
+
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+    .dashboard-services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* Mobil */
+
+@media (max-width: 560px) {
+    .dashboard-services-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* ==========================================================
    Countdown

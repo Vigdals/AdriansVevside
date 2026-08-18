@@ -1,5 +1,6 @@
 ﻿global using Adrians.Models;
-
+using Adrians.Resources;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using Adrians.Data;
 using Adrians.Services;
@@ -84,6 +85,73 @@ builder.Services.AddHttpClient<SimasTommekalenderService>(client =>
     client.DefaultRequestHeaders.Accept.ParseAdd(
         "application/json");
 });
+
+builder.Services
+    .AddOptions<UptimeKumaOptions>()
+    .Bind(
+        builder.Configuration.GetSection(
+            UptimeKumaOptions.SectionName))
+    .Validate(
+        options =>
+            !options.Enabled ||
+            (
+                Uri.TryCreate(
+                    options.BaseUrl,
+                    UriKind.Absolute,
+                    out var uri) &&
+                (
+                    uri.Scheme == Uri.UriSchemeHttp ||
+                    uri.Scheme == Uri.UriSchemeHttps
+                )
+            ),
+        "UptimeKuma:BaseUrl må vere ei gyldig HTTP/HTTPS-adresse.")
+    .Validate(
+        options =>
+            !options.Enabled ||
+            !string.IsNullOrWhiteSpace(
+                options.StatusPageSlug),
+        "UptimeKuma:StatusPageSlug manglar.")
+    .Validate(
+        options =>
+            options.CacheSeconds
+            is >= 5 and <= 300,
+        "UptimeKuma:CacheSeconds må vere mellom 5 og 300.")
+    .ValidateOnStart();
+
+builder.Services.AddHttpClient<UptimeKumaService>(
+    (serviceProvider, client) =>
+    {
+        var options =
+            serviceProvider
+                .GetRequiredService<
+                    IOptions<UptimeKumaOptions>>()
+                .Value;
+
+        if (options.Enabled)
+        {
+            var baseUrl =
+                options.BaseUrl.TrimEnd('/') +
+                "/";
+
+            client.BaseAddress =
+                new Uri(
+                    baseUrl);
+        }
+
+        client.Timeout =
+            TimeSpan.FromSeconds(
+                5);
+
+        client.DefaultRequestHeaders
+            .UserAgent
+            .ParseAdd(
+                "AdriansVevside/1.0");
+
+        client.DefaultRequestHeaders
+            .Accept
+            .ParseAdd(
+                "application/json");
+    });
 
 // =======================
 // App-services

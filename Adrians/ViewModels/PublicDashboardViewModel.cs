@@ -1,9 +1,13 @@
 ﻿namespace Adrians.ViewModels;
+
 using Adrians.Models;
 
 public sealed class PublicDashboardViewModel
 {
     public PublicPiStatus? PiStatus { get; set; }
+
+    public UptimeKumaStatusViewModel? UptimeKumaStatus { get; init; }
+
     public required string Stadnamn { get; init; }
 
     public KorttidsvarselViewModel? Korttidsvarsel { get; init; }
@@ -14,11 +18,24 @@ public sealed class PublicDashboardViewModel
 
     public required DateTimeOffset SistOppdatert { get; init; }
 
-    public required IReadOnlyList<DashboardCountdownViewModel> Countdowns { get; init; }
+    public required IReadOnlyList<DashboardCountdownViewModel> Countdowns
+    {
+        get;
+        init;
+    }
 
-    public required IReadOnlyList<DashboardInfoCardViewModel> InfoCards { get; init; }
+    public required IReadOnlyList<DashboardInfoCardViewModel> InfoCards
+    {
+        get;
+        init;
+    }
 
-    public required IReadOnlyList<DashboardLinkViewModel> Links { get; init; }
+    public required IReadOnlyList<DashboardLinkViewModel> Links
+    {
+        get;
+        init;
+    }
+
     public TommekalenderViewModel? Tommekalender { get; set; }
 }
 
