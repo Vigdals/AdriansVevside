@@ -1,0 +1,28 @@
+name: ChainDrop-kontroll
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Hent repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Kontroller Shai-Hulud og ChainDrop
+        uses: gensecaihq/Shai-Hulud-2.0-Detector@2755f94762bf5012bc7be82c93e172eabbcd0802 # v2.2.0
+        with:
+          scan-lockfiles: true
+          scan-node-modules: false
+          fail-on-critical: true
+          fail-on-high: true
+          output-format: text
+          ignore-allowlist: true
