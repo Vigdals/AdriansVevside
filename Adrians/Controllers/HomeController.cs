@@ -28,9 +28,9 @@ public sealed class HomeController : Controller
                 Tidspunkt =
                     new DateTimeOffset(
                         2027,
-                        6,
-                        6,
                         8,
+                        28,
+                        6,
                         0,
                         0,
                         TimeSpan.FromHours(2)),
