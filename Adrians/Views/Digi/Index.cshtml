@@ -36,33 +36,19 @@
     <div class="news-header">
         <div>
             <div class="news-kicker">Adrians / Nyheitsoversikt</div>
-            <h1 class="news-heading" id="newsTitle">Teknologi og sikkerheit</h1>
-            <p class="news-muted mb-0">Sårbarheiter, truslar, .NET og programvareutvikling. Nyaste saker først.</p>
         </div>
         <div class="text-end">
             <a class="btn btn-outline-success" asp-controller="Digi" asp-action="Index" aria-label="Hent oppdaterte nyheiter">↻ Oppdater sida</a>
-            <div class="news-muted small mt-2">RSS mellomlagra i opptil 10 minutt</div>
         </div>
     </div>
-
+@* 
     @if (failed > 0)
     {
         <div class="news-warning" role="status">
             @failed av @Model.Sources.Count kjelder er mellombels utilgjengelege.
             Dei andre kjeldene blir viste som normalt. Tidlegare innhenta saker kan vere viste.
         </div>
-    }
-
-    <div class="news-status" aria-label="Status for nyheitskjelder">
-        @foreach (var source in Model.Sources)
-        {
-            <span class="source-pill @(source.Stale ? "stale" : !source.Available ? "offline" : "")"
-                  title="@(source.Stale ? "Viser mellomlagra saker" : source.Available ? "Kjelde tilgjengeleg" : "Kjelde utilgjengeleg")">
-                @(source.Available ? "●" : source.Stale ? "◐" : "○") @source.Name
-                <span aria-label="Tal på saker">(@source.ArticleCount)</span>
-            </span>
-        }
-    </div>
+    } *@
 
     <div class="news-controls" role="search" aria-label="Filtrer nyheiter">
         <label for="newsSearch" class="visually-hidden">Søk etter nyheit</label>
@@ -125,6 +111,18 @@
         }
     </div>
     <p id="newsEmpty" class="news-empty" @(Model.Articles.Count == 0 ? "" : "hidden")>Ingen saker passar med søket eller filtreringa. Prøv eit anna filter.</p>
+
+        <div class="news-status" aria-label="Status for nyheitskjelder">
+        @foreach (var source in Model.Sources)
+        {
+            <span class="source-pill @(source.Stale ? "stale" : !source.Available ? "offline" : "")"
+                  title="@(source.Stale ? "Viser mellomlagra saker" : source.Available ? "Kjelde tilgjengeleg" : "Kjelde utilgjengeleg")">
+                @(source.Available ? "●" : source.Stale ? "◐" : "○") @source.Name
+                <span aria-label="Tal på saker">(@source.ArticleCount)</span>
+            </span>
+        }
+    </div>
+    
 </section>
 @section Scripts {
 <script>
