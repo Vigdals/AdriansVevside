@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <!-- Barca's JSON DTOs use Newtonsoft.Json attributes. Keep this dependency explicit. -->
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
   <ItemGroup>
