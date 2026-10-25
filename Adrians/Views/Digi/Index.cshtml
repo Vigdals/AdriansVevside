@@ -1,27 +1,164 @@
-﻿@model List<Adrians.Models.RssItem>
+@model Adrians.Controllers.DigiNewsViewModel
 @{
-    ViewData["Title"] = "Digi.no";
+    ViewData["Title"] = "Teknologi og sikkerheit";
+    var failed = Model.Sources.Count(source => !source.Available);
 }
-
-<h4 class="mb-3">Digi.no</h4>
-
-@foreach (var item in Model)
-{
-    <div class="card bg-secondary mb-2">
-        <div class="card-body">
-            @if (item.ImageUrl is not null)
-            {
-                <img src="@item.ImageUrl" class="float-end ms-2 mb-1" style="max-width:120px" />
-            }
-            <h6 class="card-title">
-                <a href="@item.Link" target="_blank" class="text-light">@item.Title</a>
-                @if (item.IsPremium)
-                {
-                    <span class="badge bg-warning text-dark ms-1">Ekstra</span>
-                }
-            </h6>
-            <p class="card-text small text-muted mb-1">@item.Description</p>
-            <small class="text-muted">@item.PubDate.ToString("dd.MM HH:mm")</small>
+@section Styles {
+<style>
+    .news-header{display:flex;justify-content:space-between;align-items:start;gap:1rem;flex-wrap:wrap;margin:1rem 0 1.6rem}
+    .news-kicker{text-transform:uppercase;letter-spacing:.13em;color:#7ed5ae;font-size:.72rem;font-weight:700}
+    .news-heading{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:760;letter-spacing:-.045em;margin:.4rem 0}
+    .news-muted{color:#a2b4ad}
+    .news-controls{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin:1rem 0}
+    .news-search{flex:1 1 270px;min-width:0;background:#141e1b;border:1px solid #34443c;color:#f3faf5;border-radius:9px;padding:.7rem .9rem}
+    .news-search:focus,.news-select:focus{outline:2px solid #7ed5ae;outline-offset:2px}
+    .news-select{background:#141e1b;border:1px solid #34443c;color:#f3faf5;border-radius:9px;padding:.7rem .9rem;max-width:100%}
+    .news-status{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+    .source-pill{background:#14221d;border:1px solid #334b3f;border-radius:25px;color:#bcd4c5;font-size:.78rem;padding:.33rem .7rem}
+    .source-pill.offline{border-color:#775747;color:#eab89a}
+    .source-pill.stale{border-color:#776c44;color:#edd49a}
+    .news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:.9rem}
+    .news-card{background:#141c19;border:1px solid #2e3e35;border-radius:12px;padding:1.15rem 1.2rem;display:flex;flex-direction:column;gap:.65rem;min-width:0;transition:border-color .15s}
+    .news-card:hover{border-color:#5a9577}
+    .news-card a{color:#f5faf7;text-decoration:none;font-size:1.06rem;font-weight:650;line-height:1.45}
+    .news-card a:hover{text-decoration:underline;text-decoration-color:#7ed5ae}
+    .news-card p{font-size:.87rem;color:#b1c0b7;margin:0;line-height:1.6}
+    .news-card-meta{font-size:.76rem;color:#a1b4a9;display:flex;align-items:center;flex-wrap:wrap;gap:.45rem}
+    .news-category{background:#254132;color:#b1edc9;padding:.15rem .42rem;border-radius:5px}
+    .news-card[hidden]{display:none!important}
+    .news-empty{padding:2rem 0;color:#b6c8bb}
+    .news-stats{color:#b1c7b8;font-size:.84rem;margin:.8rem 0}
+    .news-warning{border-left:3px solid #d8a35f;padding:.7rem 1rem;background:#2c261d;color:#f0d9ba;margin-bottom:1rem}
+    .news-card:focus-within{outline:2px solid #7ed5ae;outline-offset:2px}
+</style>
+}
+<section aria-labelledby="newsTitle">
+    <div class="news-header">
+        <div>
+            <div class="news-kicker">Adrians / Nyheitsoversikt</div>
+            <h1 class="news-heading" id="newsTitle">Teknologi og sikkerheit</h1>
+            <p class="news-muted mb-0">Sårbarheiter, truslar, .NET og programvareutvikling. Nyaste saker først.</p>
+        </div>
+        <div class="text-end">
+            <a class="btn btn-outline-success" asp-controller="Digi" asp-action="Index" aria-label="Hent oppdaterte nyheiter">↻ Oppdater sida</a>
+            <div class="news-muted small mt-2">RSS mellomlagra i opptil 10 minutt</div>
         </div>
     </div>
+
+    @if (failed > 0)
+    {
+        <div class="news-warning" role="status">
+            @failed av @Model.Sources.Count kjelder er mellombels utilgjengelege.
+            Dei andre kjeldene blir viste som normalt. Tidlegare innhenta saker kan vere viste.
+        </div>
+    }
+
+    <div class="news-status" aria-label="Status for nyheitskjelder">
+        @foreach (var source in Model.Sources)
+        {
+            <span class="source-pill @(source.Stale ? "stale" : !source.Available ? "offline" : "")"
+                  title="@(source.Stale ? "Viser mellomlagra saker" : source.Available ? "Kjelde tilgjengeleg" : "Kjelde utilgjengeleg")">
+                @(source.Available ? "●" : source.Stale ? "◐" : "○") @source.Name
+                <span aria-label="Tal på saker">(@source.ArticleCount)</span>
+            </span>
+        }
+    </div>
+
+    <div class="news-controls" role="search" aria-label="Filtrer nyheiter">
+        <label for="newsSearch" class="visually-hidden">Søk etter nyheit</label>
+        <input id="newsSearch" class="news-search" type="search" placeholder="Søk i titlar, omtalar og kjelder …" autocomplete="off" />
+        <label for="newsSource" class="visually-hidden">Vel kjelde</label>
+        <select id="newsSource" class="news-select">
+            <option value="">Alle kjelder</option>
+            @foreach (var source in Model.Sources)
+            {
+                <option value="@source.Key">@source.Name</option>
+            }
+        </select>
+        <label for="newsCategory" class="visually-hidden">Vel kategori</label>
+        <select id="newsCategory" class="news-select">
+            <option value="">Alle kategoriar</option>
+            <option value="Varsel">Varsel</option>
+            <option value="Sikkerheit">Sikkerheit</option>
+            <option value="Utvikling">Utvikling</option>
+        </select>
+        <label for="newsPeriod" class="visually-hidden">Vel tidsrom</label>
+        <select id="newsPeriod" class="news-select">
+            <option value="0">Alle datoar</option>
+            <option value="1">Siste døgn</option>
+            <option value="7">Siste 7 dagar</option>
+            <option value="30">Siste 30 dagar</option>
+        </select>
+    </div>
+
+    <p id="newsCount" class="news-stats" role="status" aria-live="polite">@Model.Articles.Count saker frå @Model.Sources.Count kjelder</p>
+
+    <div id="newsList" class="news-list">
+        @foreach (var article in Model.Articles)
+        {
+            <article class="news-card"
+                     data-source="@article.SourceKey"
+                     data-category="@article.Category"
+                     data-date="@(article.PublishedAt?.ToUnixTimeSeconds().ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                <div class="news-card-meta">
+                    <span class="news-category">@article.Category</span>
+                    <span>@article.SourceName</span>
+                    <span aria-hidden="true">·</span>
+                    @if (article.PublishedAt is { } published)
+                    {
+                        <time datetime="@published.ToString("O")"
+                              title="@published.ToString("yyyy-MM-dd HH:mm 'UTC'")">
+                            @published.ToString("dd.MM.yyyy HH:mm") UTC
+                        </time>
+                    }
+                    else
+                    {
+                        <span>Ukjend dato</span>
+                    }
+                </div>
+                <h2 class="h6 mb-0"><a href="@article.Url" target="_blank" rel="noopener noreferrer">@article.Title</a></h2>
+                @if (!string.IsNullOrWhiteSpace(article.Description))
+                {
+                    <p>@article.Description</p>
+                }
+            </article>
+        }
+    </div>
+    <p id="newsEmpty" class="news-empty" @(Model.Articles.Count == 0 ? "" : "hidden")>Ingen saker passar med søket eller filtreringa. Prøv eit anna filter.</p>
+</section>
+@section Scripts {
+<script>
+(() => {
+    const search = document.getElementById('newsSearch');
+    const source = document.getElementById('newsSource');
+    const category = document.getElementById('newsCategory');
+    const period = document.getElementById('newsPeriod');
+    const cards = [...document.querySelectorAll('.news-card')];
+    const counter = document.getElementById('newsCount');
+    const empty = document.getElementById('newsEmpty');
+    const normalize = value => (value || '').toLocaleLowerCase('nb-NO');
+    function filterNews() {
+        const query = normalize(search.value.trim());
+        const sourceValue = source.value;
+        const categoryValue = category.value;
+        const days = Number(period.value);
+        const cutoff = days ? Date.now() / 1000 - days * 86400 : 0;
+        let visible = 0;
+        for (const card of cards) {
+            const published = Number(card.dataset.date || 0);
+            const show = (!query || normalize(card.textContent).includes(query))
+                && (!sourceValue || card.dataset.source === sourceValue)
+                && (!categoryValue || card.dataset.category === categoryValue)
+                && (!days || (published > 0 && published >= cutoff));
+            card.hidden = !show;
+            if (show) visible++;
+        }
+        counter.textContent = visible + ' av ' + cards.length + ' saker';
+        empty.hidden = visible !== 0;
+    }
+    [search, source, category, period].forEach(element =>
+        element.addEventListener(element === search ? 'input' : 'change', filterNews));
+    filterNews();
+})();
+</script>
 }
