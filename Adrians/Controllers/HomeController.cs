@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Adrians.Models;
 using Adrians.Services;
 using Adrians.ViewModels;
@@ -324,11 +324,6 @@ public sealed class HomeController : Controller
 
             return fallback;
         }
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(

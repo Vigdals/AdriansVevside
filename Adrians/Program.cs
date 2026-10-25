@@ -1,22 +1,10 @@
-﻿global using Adrians.Models;
+global using Adrians.Models;
 using Adrians.Resources;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
-using Adrians.Data;
 using Adrians.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// =======================
-// Database connection string
-// =======================
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
-    ?? builder.Configuration["db-connection-adriansvevside"]
-    ?? throw new InvalidOperationException(
-        "Database connection string not found.");
 
 // =======================
 // Cache
@@ -159,25 +147,9 @@ builder.Services.AddHttpClient<UptimeKumaService>(
 builder.Services.AddScoped<FrostService>();
 builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 builder.Services.AddScoped<PublicPiStatusService>();
-builder.Services.AddScoped<RssFeedService>();
 
 // NifsKampService og SimasTommekalenderService er registrerte
 // som typed HttpClient-services via AddHttpClient<TService>().
-
-// =======================
-// Database
-// =======================
-// Raspberry Pi-oppsettet brukar MariaDB 11.4.
-//
-// Ikkje bruk ServerVersion.AutoDetect(connectionString) her.
-// AutoDetect opnar ei databasetilkopling under oppstart.
-// Dersom MariaDB ikkje er klar etter reboot, kan webappen stoppe
-// før Kestrel byrjar å lytte.
-var serverVersion =
-    new MariaDbServerVersion(new Version(11, 4, 0));
-
-builder.Services.AddDbContext<GameContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
 
 // =======================
 // MVC

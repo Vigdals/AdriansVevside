@@ -1,4 +1,4 @@
-﻿using Adrians.Services;
+using Adrians.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -80,11 +80,4 @@ public class LangrennController : Controller
         return View();
     }
 
-    public string DagerTilBirken()
-    {
-        var birkenStartDato = new DateTime(2023, 03, 17, 8, 0, 0);
-        var daysToBirken = (birkenStartDato - DateTime.Now).TotalDays.ToString().Substring(0, 2);
-
-        return daysToBirken;
-    }
 }

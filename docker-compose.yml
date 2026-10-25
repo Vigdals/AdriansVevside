@@ -1,24 +1,4 @@
 services:
-  mariadb:
-    image: mariadb:11.4
-    container_name: mariadb
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:3306:3306"
-    environment:
-      MARIADB_DATABASE: ${MARIADB_DATABASE}
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    healthcheck:
-      test: [ "CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p\"$${MARIADB_ROOT_PASSWORD}\" --silent" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
-
   web:
     image: adriansvevside-web
     build:
@@ -26,23 +6,15 @@ services:
       dockerfile: Dockerfile.pi
     container_name: adriansvevside
     restart: unless-stopped
-    depends_on:
-      mariadb:
-        condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
     environment:
       TZ: "Europe/Oslo"
       ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
-
-      Frost__ClientId: ${FROST_CLIENT_ID}
-      Frost__ClientSecret: ${FROST_CLIENT_SECRET}
-      FootballData__ApiKey: ${FOOTBALLDATA_API_KEY}
-
-      ConnectionStrings__DefaultConnection: "Server=mariadb;Port=3306;Database=${MARIADB_DATABASE};User=${MARIADB_USER};Password=${MARIADB_PASSWORD};TreatTinyAsBoolean=false"
-
+      Frost__ClientId: ${FROST_CLIENT_ID:-}
+      Frost__ClientSecret: ${FROST_CLIENT_SECRET:-}
+      FootballData__ApiKey: ${FOOTBALLDATA_API_KEY:-}
       UptimeKuma__Enabled: "true"
       UptimeKuma__BaseUrl: "http://host.docker.internal:3001/"
       UptimeKuma__StatusPageSlug: "vigdalpi"
@@ -70,7 +42,6 @@ services:
       - nginx_cache:/var/cache/nginx
 
 volumes:
-  mariadb_data:
   nginx_conf:
   certbot_www:
   letsencrypt:
