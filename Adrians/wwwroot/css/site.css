@@ -165,18 +165,16 @@ p {
    ========================================================== */
 
 .site-header {
-    position: sticky;
-    top: 0;
+    /* Keep the navigation in normal document flow, not over the dashboard. */
+    position: relative;
     z-index: 1030;
     padding: 0.85rem clamp(0.75rem, 3vw, 2rem) 0;
-    pointer-events: none;
 }
 
 .site-navbar {
     width: min(1240px, 100%);
     margin: 0 auto;
     padding: 0.45rem 0.7rem;
-    pointer-events: auto;
     border: 1px solid var(--color-border) !important;
     border-radius: var(--radius-lg);
     background: rgba(20, 30, 39, 0.96) !important;
