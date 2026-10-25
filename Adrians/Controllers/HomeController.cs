@@ -300,7 +300,7 @@ public sealed class HomeController : Controller
     }
 
     private async Task<T?> TryLoadAsync<T>(
-        Func<CancellationToken, Task<T?>> operation,
+        Func<CancellationToken, Task<T>> operation,
         string errorMessage,
         CancellationToken cancellationToken,
         T? fallback = default)
