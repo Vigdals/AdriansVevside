@@ -147,7 +147,6 @@ builder.Services.AddHttpClient<UptimeKumaService>(
 builder.Services.AddScoped<FrostService>();
 builder.Services.AddScoped<MeteorologiskInstituttKorttidsvarselService>();
 builder.Services.AddScoped<PublicPiStatusService>();
-builder.Services.AddScoped<RssFeedService>();
 
 // NifsKampService og SimasTommekalenderService er registrerte
 // som typed HttpClient-services via AddHttpClient<TService>().
