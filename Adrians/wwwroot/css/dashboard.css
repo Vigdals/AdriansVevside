@@ -1306,3 +1306,410 @@
         font-size: clamp(1.15rem, 6vw, 1.75rem);
     }
 }
+
+
+/* ----------------------------------------------------------
+   Editorial dashboard. Data first, decoration second.
+   ---------------------------------------------------------- */
+.public-dashboard {
+    padding: clamp(1rem, 2.5vw, 1.6rem) clamp(0.75rem, 3vw, 2rem) 2.5rem;
+}
+
+.dashboard-header {
+    margin-bottom: 1.1rem;
+    padding: 1rem 0 1.35rem;
+}
+
+#DashboardClockTime {
+    font-size: clamp(3.6rem, 7vw, 5.5rem);
+    font-weight: 620;
+    letter-spacing: -0.075em;
+}
+
+#DashboardClockDate {
+    color: var(--color-text-soft);
+    font-size: 0.9rem;
+}
+
+.dashboard-updated {
+    border: 0;
+    border-radius: 0;
+    padding: 0.45rem 0 0.45rem 0.8rem;
+    background: transparent;
+    font-size: 0.82rem;
+}
+
+.dashboard-eyebrow,
+.dashboard-card-kicker {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 730;
+    letter-spacing: 0.085em;
+}
+
+.dashboard-grid,
+.dashboard-top-layout,
+.dashboard-match-card-stack {
+    gap: 0.85rem;
+}
+
+.dashboard-card,
+.dashboard-link-card,
+.dashboard-alert {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-bg-card);
+    box-shadow: none;
+    transition: border-color 170ms ease, background-color 170ms ease;
+}
+
+.dashboard-card,
+.dashboard-alert,
+.dashboard-weather-card,
+.dashboard-waste-card,
+.dashboard-next-match-card,
+.dashboard-vigdalpi-card {
+    padding: clamp(1rem, 1.5vw, 1.25rem);
+}
+
+.dashboard-card h2 {
+    font-size: 1.06rem;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.dashboard-card-header {
+    margin-bottom: 0.85rem;
+}
+
+.dashboard-card-badge {
+    border-color: var(--color-border);
+    border-radius: 0.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.025em;
+    font-weight: 650;
+}
+
+.dashboard-weather-summary,
+.dashboard-weather-metric,
+.dashboard-next-match-teams,
+.dashboard-vigdalpi-panel,
+.dashboard-service-item,
+.dashboard-vigdalpi-metric,
+.dashboard-vigdalpi-deploy {
+    background: rgba(255, 255, 255, 0.018);
+    border-color: var(--color-border);
+    border-radius: 0.55rem;
+}
+
+.dashboard-weather-summary {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 0.6rem 0.2rem 0.85rem;
+}
+
+.dashboard-weather-summary strong {
+    font-size: 1.07rem;
+    font-weight: 720;
+}
+
+.dashboard-weather-summary span,
+.dashboard-next-match-meta-row span:not(.dashboard-mini-icon),
+.dashboard-weather-metric span,
+.dashboard-service-meta,
+.dashboard-link-card span {
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.dashboard-weather-metric strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.dashboard-weather-temperature {
+    background: rgba(185, 235, 147, 0.045);
+}
+
+.dashboard-weather-temperature strong {
+    font-weight: 700;
+}
+
+.dashboard-next-match-team span,
+.dashboard-next-match-meta-row strong {
+    font-size: 0.88rem;
+    line-height: 1.3;
+    font-weight: 680;
+}
+
+.dashboard-next-match-vs {
+    border: 0;
+    background: transparent;
+    font-size: 0.69rem;
+}
+
+.dashboard-vigdalpi-panel-header strong,
+.dashboard-service-name strong {
+    font-size: 0.83rem;
+    font-weight: 690;
+}
+
+.dashboard-vigdalpi-metric span {
+    font-size: 0.72rem;
+}
+
+.dashboard-vigdalpi-metric strong {
+    font-size: 0.88rem;
+    font-weight: 690;
+}
+
+.dashboard-countdown-card {
+    min-height: 156px;
+}
+
+.dashboard-countdown-card h2 {
+    font-size: 0.96rem;
+}
+
+.dashboard-countdown {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-link-card {
+    padding: 1.1rem 2.75rem 1.1rem 1.2rem;
+}
+
+.dashboard-link-card strong {
+    color: var(--color-text);
+    font-size: 0.97rem;
+    font-weight: 710;
+}
+
+.dashboard-link-card::after {
+    color: var(--color-text-muted);
+}
+
+@media (hover: hover) {
+    .dashboard-card:hover,
+    .dashboard-link-card:hover,
+    .dashboard-alert:hover {
+        transform: none;
+        border-color: var(--color-border-strong);
+        background: var(--color-bg-card);
+        box-shadow: none;
+    }
+
+    .dashboard-link-card:hover {
+        background: var(--color-bg-card-hover);
+    }
+
+    .dashboard-link-card:hover::after {
+        color: var(--color-primary);
+        transform: translateY(-50%) translate(2px, -2px);
+    }
+}
+
+/* Waste collection is a compact timetable, not five more cards. */
+.dashboard-waste-card {
+    min-width: 0;
+}
+
+.dashboard-waste-header {
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-waste-meta {
+    font-size: 0.77rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-waste-items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.dashboard-waste-item {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    grid-template-areas:
+        "icon name date"
+        "icon days next";
+    column-gap: 0.45rem;
+    row-gap: 0.18rem;
+    padding: 0.8rem 0.55rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: background-color 160ms ease;
+}
+
+.dashboard-waste-item:nth-child(odd):not(:last-child) {
+    border-right: 1px solid var(--color-border);
+    padding-left: 0.1rem;
+}
+
+.dashboard-waste-item:nth-child(even) {
+    padding-left: 0.65rem;
+    padding-right: 0.1rem;
+}
+
+.dashboard-waste-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.dashboard-waste-icon {
+    display: inline-grid;
+    width: 1.4rem;
+    height: 1.4rem;
+    place-items: center;
+    border-radius: 0;
+    background: transparent !important;
+    font-size: 0.95rem;
+}
+
+.dashboard-waste-name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+    font-weight: 650;
+    line-height: 1.3;
+    white-space: normal;
+    text-overflow: initial;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-waste-date {
+    color: var(--color-text);
+    font-size: 0.87rem;
+    font-weight: 740;
+    line-height: 1.3;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-waste-next,
+.dashboard-waste-days {
+    color: var(--color-text-muted);
+    font-size: 0.71rem;
+    line-height: 1.35;
+    font-weight: 500;
+}
+
+.dashboard-waste-urgency-week,
+.dashboard-waste-urgency-soon,
+.dashboard-waste-urgency-now,
+.dashboard-waste-urgency-later {
+    border-top: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.dashboard-waste-urgency-now .dashboard-waste-days {
+    color: var(--color-danger);
+}
+.dashboard-waste-urgency-soon .dashboard-waste-days {
+    color: var(--color-warning);
+}
+.dashboard-waste-urgency-week .dashboard-waste-days {
+    color: var(--color-warning);
+}
+
+@media (hover: hover) {
+    .dashboard-waste-item:hover {
+        background: rgba(255, 255, 255, 0.025);
+    }
+}
+
+/* A balanced weather/collection row prevents the empty hole in the grid. */
+@media (min-width: 1100px) {
+    .dashboard-top-layout {
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        grid-template-areas:
+            "weather waste"
+            "matches matches";
+        align-items: start;
+    }
+    .dashboard-waste-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .dashboard-weather-compact {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .dashboard-match-card-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1099.98px) {
+    .dashboard-top-layout {
+        grid-template-columns: 1fr;
+        grid-template-areas: "weather" "waste" "matches";
+    }
+    .dashboard-match-card-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .dashboard-top-layout {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-match-card-stack {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-waste-items {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-waste-item,
+    .dashboard-waste-item:nth-child(odd):not(:last-child),
+    .dashboard-waste-item:nth-child(even) {
+        padding: 0.72rem 0.1rem;
+        border-right: 0;
+    }
+    .dashboard-waste-item:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 560px) {
+    .public-dashboard {
+        padding: 0.85rem 0.75rem 1.6rem;
+    }
+    .dashboard-header {
+        gap: 0.75rem;
+        padding: 0.8rem 0 1.2rem;
+    }
+    .dashboard-card,
+    .dashboard-alert,
+    .dashboard-weather-card,
+    .dashboard-waste-card,
+    .dashboard-next-match-card,
+    .dashboard-vigdalpi-card {
+        padding: 1rem;
+        border-radius: 0.7rem;
+    }
+    .dashboard-waste-items {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-waste-item,
+    .dashboard-link-card::after {
+        transition: none;
+    }
+}
