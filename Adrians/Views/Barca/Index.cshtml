@@ -1,5 +1,9 @@
 @model Adrians.ViewModels.BarcaViewModel
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/barca.css" asp-append-version="true" />
+}
+
 <h2 class="text-center mb-4">Upcoming Matches for FC Barcelona</h2>
 <div class="row g-4">
     @foreach (var match in Model.Matches)
@@ -13,13 +17,13 @@
                         @if (!string.IsNullOrEmpty(match.HomeTeamLogo))
                         {
                             <img src="@match.HomeTeamLogo" alt="@match.HomeTeamShortName logo"
-                                 class="rounded-circle" style="width: 50px; height: 50px;" />
+                                 class="rounded-circle barca-team-logo" />
                         }
                         <h5 class="card-title mx-2 mb-0">@match.HomeTeamShortName vs @match.AwayTeamShortName</h5>
                         @if (!string.IsNullOrEmpty(match.AwayTeamLogo))
                         {
                             <img src="@match.AwayTeamLogo" alt="@match.AwayTeamShortName logo"
-                                 class="rounded-circle" style="width: 50px; height: 50px;" />
+                                 class="rounded-circle barca-team-logo" />
                         }
                     </div>
 
