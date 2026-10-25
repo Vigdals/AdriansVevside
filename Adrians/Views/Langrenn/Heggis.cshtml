@@ -2,6 +2,10 @@
     ViewData["Title"] = "Heggis";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/heggis.css" asp-append-version="true" />
+}
+
 @using Adrians.ViewModels
 @{
     var varsel = ViewData["Korttidsvarsel"] as KorttidsvarselViewModel;
@@ -47,7 +51,7 @@
                 </div>
 
                 <div class="card-body pt-3">
-                    <div class="rounded overflow-hidden" style="height: 700px;">
+                    <div class="rounded overflow-hidden heggis-tracks-map">
                         <iframe class="w-100 h-100 border-0"
                                 src="https://www.loyper.net/location/sognskisenter?lat=61.335538222693714&lng=7.21928243332502&zoom=14.757321853632988"
                                 loading="lazy"
