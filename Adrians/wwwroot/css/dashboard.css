@@ -1306,3 +1306,202 @@
         font-size: clamp(1.15rem, 6vw, 1.75rem);
     }
 }
+
+
+/* 2026 visual refinement: quieter surfaces, clearer hierarchy and spacing. */
+.public-dashboard {
+    padding: 1.5rem clamp(0.85rem, 3vw, 2rem) 2.5rem;
+}
+.dashboard-header {
+    margin-bottom: 1.35rem;
+    padding: 1rem 0 1.5rem;
+}
+#DashboardClockTime {
+    font-size: clamp(3.25rem, 6.5vw, 5rem);
+    font-weight: 650;
+    letter-spacing: -0.065em;
+}
+#DashboardClockDate {
+    color: var(--color-text-soft);
+    font-size: 0.95rem;
+}
+.dashboard-updated {
+    background: rgba(255, 255, 255, 0.025);
+    border-color: var(--color-border);
+}
+.dashboard-eyebrow,
+.dashboard-card-kicker {
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.075em;
+}
+.dashboard-grid,
+.dashboard-top-layout,
+.dashboard-match-card-stack {
+    gap: 0.9rem;
+}
+.dashboard-card,
+.dashboard-link-card,
+.dashboard-alert {
+    border-radius: var(--radius-md);
+    background: var(--color-bg-card);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.10);
+}
+.dashboard-card,
+.dashboard-alert,
+.dashboard-weather-card,
+.dashboard-waste-card,
+.dashboard-next-match-card,
+.dashboard-vigdalpi-card {
+    padding: clamp(1rem, 1.75vw, 1.45rem);
+}
+.dashboard-card h2 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+.dashboard-card-header {
+    margin-bottom: 0.95rem;
+}
+.dashboard-card-badge {
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+    font-size: 0.71rem;
+    letter-spacing: 0.025em;
+}
+.dashboard-weather-summary,
+.dashboard-weather-metric,
+.dashboard-next-match-teams,
+.dashboard-waste-item,
+.dashboard-vigdalpi-panel,
+.dashboard-service-item,
+.dashboard-vigdalpi-metric,
+.dashboard-vigdalpi-deploy {
+    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 0.75rem;
+}
+.dashboard-weather-summary {
+    background: rgba(185, 235, 147, 0.045);
+}
+.dashboard-weather-summary strong {
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+.dashboard-weather-summary span,
+.dashboard-next-match-meta-row span:not(.dashboard-mini-icon),
+.dashboard-weather-metric span,
+.dashboard-service-meta,
+.dashboard-link-card span {
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+.dashboard-weather-metric strong {
+    font-size: 1.24rem;
+    font-weight: 700;
+}
+.dashboard-weather-temperature strong {
+    font-weight: 700;
+}
+.dashboard-next-match-team span,
+.dashboard-next-match-meta-row strong {
+    font-size: 0.87rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+.dashboard-next-match-vs {
+    font-size: 0.68rem;
+}
+.dashboard-waste-name {
+    font-size: 0.83rem;
+    font-weight: 650;
+    line-height: 1.25;
+}
+.dashboard-waste-date {
+    font-size: 0.91rem;
+    font-weight: 700;
+}
+.dashboard-waste-days,
+.dashboard-waste-next {
+    font-size: 0.73rem;
+    line-height: 1.3;
+}
+.dashboard-vigdalpi-panel-header strong {
+    font-size: 0.81rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+.dashboard-service-name strong {
+    font-size: 0.83rem;
+    font-weight: 650;
+}
+.dashboard-vigdalpi-metric span {
+    font-size: 0.71rem;
+}
+.dashboard-vigdalpi-metric strong {
+    font-size: 0.87rem;
+    font-weight: 700;
+}
+.dashboard-countdown-card {
+    min-height: 155px;
+}
+.dashboard-countdown-card h2 {
+    font-size: 0.95rem;
+}
+.dashboard-countdown {
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+.dashboard-link-card {
+    padding: 1.1rem 2.8rem 1.1rem 1.2rem;
+}
+.dashboard-link-card strong {
+    color: var(--color-text);
+    font-size: 0.97rem;
+    font-weight: 700;
+}
+.dashboard-link-card::after {
+    color: var(--color-text-muted);
+}
+@media (hover: hover) {
+    .dashboard-card:hover,
+    .dashboard-link-card:hover,
+    .dashboard-alert:hover {
+        border-color: var(--color-border-strong);
+        background: var(--color-bg-card-hover);
+        box-shadow: 0 7px 24px rgba(0, 0, 0, 0.13);
+    }
+    .dashboard-link-card:hover {
+        transform: translateY(-1px);
+    }
+}
+@media (max-width: 720px) {
+    .dashboard-header {
+        padding: 0.8rem 0 1.2rem;
+    }
+    .dashboard-match-card-stack {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 560px) {
+    .public-dashboard {
+        padding: 0.85rem 0.75rem 1.6rem;
+    }
+    .dashboard-card,
+    .dashboard-alert,
+    .dashboard-weather-card,
+    .dashboard-waste-card,
+    .dashboard-next-match-card,
+    .dashboard-vigdalpi-card {
+        padding: 1rem;
+    }
+    .dashboard-card,
+    .dashboard-link-card,
+    .dashboard-alert {
+        border-radius: var(--radius-md);
+    }
+    .dashboard-waste-items {
+        grid-template-columns: 1fr;
+    }
+}
