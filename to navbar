@@ -1,0 +1,279 @@
+[1mdiff --git a/Adrians/Views/Shared/_Layout.cshtml b/Adrians/Views/Shared/_Layout.cshtml[m
+[1mindex f0737ef..b145fba 100644[m
+[1m--- a/Adrians/Views/Shared/_Layout.cshtml[m
+[1m+++ b/Adrians/Views/Shared/_Layout.cshtml[m
+[36m@@ -1,10 +1,8 @@[m
+ ﻿@{[m
+     var controller =[m
+         ViewContext.RouteData.Values["controller"]?.ToString();[m
+[31m-[m
+     var action =[m
+         ViewContext.RouteData.Values["action"]?.ToString();[m
+[31m-[m
+     var isHomeIndex =[m
+         string.Equals([m
+             controller,[m
+[36m@@ -15,194 +13,124 @@[m
+             action,[m
+             "Index",[m
+             StringComparison.OrdinalIgnoreCase);[m
+[31m-[m
+     var bodyClass =[m
+         isHomeIndex[m
+             ? "site-body dashboard-page"[m
+             : "site-body";[m
+[31m-[m
+     var mainClass =[m
+         isHomeIndex[m
+             ? "site-main site-main-dashboard"[m
+             : "site-main container-fluid px-4 py-3";[m
+ }[m
+[31m-[m
+ <!DOCTYPE html>[m
+[31m-[m
+ <html lang="nn" data-bs-theme="dark">[m
+ [m
+ <head>[m
+     <meta charset="utf-8" />[m
+[31m-[m
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />[m
+[31m-[m
+     <meta name="description" content="Adrians personlege dashboard og nettside." />[m
+[31m-[m
+     <meta name="author" content="Adrians" />[m
+[31m-[m
+     <meta name="theme-color" content="#070b14" />[m
+[31m-[m
+     <title>[m
+         @(ViewData["Title"] is string title[m
+             && !string.IsNullOrWhiteSpace(title)[m
+                 ? $"{title} - AdriansVevside"[m
+                 : "AdriansVevside")[m
+     </title>[m
+[31m-[m
+     <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />[m
+[31m-[m
+     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />[m
+[31m-[m
+     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />[m
+[31m-[m
+     @await RenderSectionAsync([m
+         "Styles",[m
+         required: false)[m
+ </head>[m
+ [m
+[31m-[m
+ <body class="@bodyClass">[m
+[31m-[m
+     <header class="site-header" role="banner">[m
+[31m-[m
+         <nav class="navbar navbar-expand-md navbar-dark site-navbar" aria-label="Hovudmeny">[m
+[31m-[m
+             <div class="container-fluid">[m
+[31m-[m
+                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Til framsida">[m
+[31m-[m
+                     Adrians[m
+[31m-[m
+                 </a>[m
+[31m-[m
+                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"[m
+                         aria-controls="mainNavbar" aria-expanded="false" aria-label="Vis eller skjul meny">[m
+[31m-[m
+                     <span class="navbar-toggler-icon"></span>[m
+[31m-[m
+                 </button>[m
+[31m-[m
+                 <div id="mainNavbar" class="navbar-collapse collapse">[m
+[31m-[m
+                     <ul class="navbar-nav">[m
+[31m-[m
+                         <li class="nav-item">[m
+[31m-[m
+                             <a class="nav-link @(string.Equals(controller, "Fpl", StringComparison.OrdinalIgnoreCase) ? "active" : "")"[m
+                                asp-area="" asp-controller="Fpl" asp-action="Index">[m
+[31m-[m
+                                 FPL[m
+[31m-[m
+                             </a>[m
+[31m-[m
+                         </li>[m
+[31m-[m
+[31m-[m
+                         <li class="nav-item dropdown">[m
+[31m-[m
+                             <a class="nav-link dropdown-toggle @(string.Equals(controller, "Langrenn", StringComparison.OrdinalIgnoreCase) ? "active" : "")"[m
+                                href="#" id="langrennDropdown" role="button" data-bs-toggle="dropdown"[m
+                                aria-expanded="false">[m
+[31m-[m
+                                 Langrenn[m
+[31m-[m
+                             </a>[m
+[31m-[m
+                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="langrennDropdown">[m
+[31m-[m
+                                 <li>[m
+[31m-[m
+                                     <a class="dropdown-item" asp-controller="Langrenn" asp-action="Index">[m
+[31m-[m
+                                         Snøoversikt[m
+[31m-[m
+                                     </a>[m
+[31m-[m
+                                 </li>[m
+[31m-[m
+                                 <li>[m
+[31m-[m
+                                     <a class="dropdown-item" asp-controller="Langrenn" asp-action="Brunestegen">[m
+[31m-[m
+                                         Brunestegen[m
+[31m-[m
+                                     </a>[m
+[31m-[m
+                                 </li>[m
+[31m-[m
+                                 <li>[m
+[31m-[m
+                                     <a class="dropdown-item" asp-controller="Langrenn" asp-action="Heggis">[m
+[31m-[m
+                                         Heggis[m
+[31m-[m
+                                     </a>[m
+[31m-[m
+                                 </li>[m
+[31m-[m
+                                 <li>[m
+[31m-[m
+                                     <a class="dropdown-item" asp-controller="Langrenn" asp-action="Hodlekve">[m
+[31m-[m
+                                         Hodlekve[m
+[31m-[m
+                                     </a>[m
+[31m-[m
+                                 </li>[m
+[31m-[m
+                             </ul>[m
+[31m-[m
+                         </li>[m
+[31m-[m
+[31m-[m
+                         <li class="nav-item">[m
+[31m-[m
+                             <a class="nav-link @(string.Equals(controller, "Barca", StringComparison.OrdinalIgnoreCase) ? "active" : "")"[m
+                                asp-area="" asp-controller="Barca" asp-action="Index">[m
+[31m-[m
+                                 Barca[m
+[31m-[m
+                             </a>[m
+[31m-[m
+                         </li>[m
+[31m-[m
+[31m-[m
+                         <li class="nav-item">[m
+[31m-[m
+                             <a class="nav-link @(string.Equals(controller, "HackerNews", StringComparison.OrdinalIgnoreCase) ? "active" : "")"[m
+                                asp-area="" asp-controller="HackerNews" asp-action="Index">[m
+[31m-[m
+                                 HackerNews[m
+[31m-[m
+                             </a>[m
+[31m-[m
+                         </li>[m
+[31m-[m
+[31m-[m
+                         <li class="nav-item">[m
+[31m-[m
+                             <a class="nav-link @(string.Equals(controller, "Digi", StringComparison.OrdinalIgnoreCase) ? "active" : "")"[m
+                                asp-area="" asp-controller="Digi" asp-action="Index">[m
+[31m-[m
+                                 IT-sec[m
+[31m-[m
+                             </a>[m
+[31m-[m
+                         </li>[m
+[31m-[m
+                     </ul>[m
+[31m-[m
+[32m+[m[32m                    <ul class="navbar-nav ms-md-auto">[m
+[32m+[m[32m                        <li class="nav-item">[m
+[32m+[m[32m                            <a class="nav-link" href="https://wowforevercountdown.duckdns.org/" target="_blank"[m
+[32m+[m[32m                               rel="noopener noreferrer">[m
+[32m+[m[32m                                WoW Forever[m
+[32m+[m[32m                            </a>[m
+[32m+[m[32m                        </li>[m
+[32m+[m[32m                        <li class="nav-item">[m
+[32m+[m[32m                            <a class="nav-link" href="https://morningsguide.duckdns.org/" target="_blank"[m
+[32m+[m[32m                               rel="noopener noreferrer">[m
+[32m+[m[32m                                Mornings Guide[m
+[32m+[m[32m                            </a>[m
+[32m+[m[32m                        </li>[m
+[32m+[m[32m                    </ul>[m
+                 </div>[m
+[31m-[m
+             </div>[m
+[31m-[m
+         </nav>[m
+[31m-[m
+     </header>[m
+[31m-[m
+[31m-[m
+     <main role="main" class="@mainClass">[m
+[31m-[m
+         @if (isHomeIndex)[m
+         {[m
+             @RenderBody()[m
+[36m@@ -210,53 +138,33 @@[m
+         else[m
+         {[m
+             <div class="container">[m
+[31m-[m
+                 @RenderBody()[m
+[31m-[m
+             </div>[m
+         }[m
+[31m-[m
+     </main>[m
+[31m-[m
+[31m-[m
+     @if (!isHomeIndex)[m
+     {[m
+         <footer class="footer" role="contentinfo">[m
+[31m-[m
+             <div class="container">[m
+[31m-[m
+                 <span>[m
+                     © @DateTime.Now.Year · Adrians[m
+                 </span>[m
+[31m-[m
+                 <span aria-hidden="true">[m
+                     ·[m
+                 </span>[m
+[31m-[m
+                 <a href="https://github.com/Vigdals/AdriansVevside" target="_blank" rel="noopener noreferrer">[m
+[31m-[m
+                     GitHub[m
+[31m-[m
+                 </a>[m
+[31m-[m
+             </div>[m
+[31m-[m
+         </footer>[m
+     }[m
+[31m-[m
+[31m-[m
+     <script src="~/lib/jquery/dist/jquery.min.js"></script>[m
+[31m-[m
+     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>[m
+[31m-[m
+     <script src="~/js/site.js" asp-append-version="true">[m
+     </script>[m
+[31m-[m
+[31m-[m
+     @await RenderSectionAsync([m
+         "Scripts",[m
+         required: false)[m
+[31m-[m
+ </body>[m
+ [m
+ </html>[m
+\ No newline at end of file[m
