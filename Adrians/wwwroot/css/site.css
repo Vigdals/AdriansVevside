@@ -250,7 +250,7 @@ p {
         0 0 0 0.2rem rgba(184, 233, 134, 0.18);
 }
 
-.dropdown-menu-dark {
+.site-navbar .dropdown-menu {
     margin-top: 0.45rem !important;
     padding: 0.4rem;
     border: 1px solid var(--color-border);
@@ -259,7 +259,7 @@ p {
     box-shadow: var(--shadow-md);
 }
 
-.dropdown-menu-dark .dropdown-item {
+.site-navbar .dropdown-menu .dropdown-item {
     padding: 0.62rem 0.8rem;
     border-radius: 0.5rem;
     color: var(--color-text-soft);
@@ -267,8 +267,8 @@ p {
     line-height: 1.35;
 }
 
-.dropdown-menu-dark .dropdown-item:hover,
-.dropdown-menu-dark .dropdown-item:focus {
+.site-navbar .dropdown-menu .dropdown-item:hover,
+.site-navbar .dropdown-menu .dropdown-item:focus {
     color: var(--color-text);
     background:
         rgba(184, 233, 134, 0.09);
@@ -782,4 +782,26 @@ p {
     .site-main:not(.site-main-dashboard) .card-body {
         padding: 1.1rem;
     }
+}
+
+
+/* Bootstrap 5.3: keep contextual utilities inside the site's dark palette. */
+.site-body .card.bg-body-tertiary {
+    background-color: var(--color-bg-card) !important;
+}
+
+.site-body .text-body-secondary {
+    color: var(--color-text-muted) !important;
+}
+
+.site-body .btn-outline-success {
+    --bs-btn-color: var(--color-primary);
+    --bs-btn-border-color: var(--color-border-strong);
+    --bs-btn-hover-color: var(--color-bg-deep);
+    --bs-btn-hover-bg: var(--color-primary);
+    --bs-btn-hover-border-color: var(--color-primary);
+    --bs-btn-focus-shadow-rgb: 185, 235, 147;
+    --bs-btn-active-color: var(--color-bg-deep);
+    --bs-btn-active-bg: var(--color-primary-strong);
+    --bs-btn-active-border-color: var(--color-primary-strong);
 }

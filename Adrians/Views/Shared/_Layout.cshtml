@@ -30,7 +30,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <meta name="description" content="Adrians personlege dashboard og nettside." />
     <meta name="author" content="Adrians" />
-    <meta name="theme-color" content="#070b14" />
+    <meta name="theme-color" content="#0b1219" />
     <title>
         @(ViewData["Title"] is string title
             && !string.IsNullOrWhiteSpace(title)
@@ -38,7 +38,7 @@
                 : "AdriansVevside")
     </title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync(
         "Styles",
@@ -47,7 +47,7 @@
 
 <body class="@bodyClass">
     <header class="site-header" role="banner">
-        <nav class="navbar navbar-expand-xl navbar-dark site-navbar" aria-label="Hovudmeny">
+        <nav class="navbar navbar-expand-xl site-navbar" data-bs-theme="dark" aria-label="Hovudmeny">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Til framsida">
                     Adrians
@@ -70,7 +70,7 @@
                                aria-expanded="false">
                                 Langrenn
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="langrennDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="langrennDropdown">
                                 <li>
                                     <a class="dropdown-item" asp-controller="Langrenn" asp-action="Index">
                                         Snøoversikt
@@ -159,7 +159,7 @@
         </footer>
     }
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true">
     </script>
     @await RenderSectionAsync(
