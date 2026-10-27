@@ -37,6 +37,7 @@
                 ? $"{title} - AdriansVevside"
                 : "AdriansVevside")
     </title>
+    <script src="~/js/theme-init.js" asp-append-version="true"></script>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -47,7 +48,7 @@
 
 <body class="@bodyClass">
     <header class="site-header" role="banner">
-        <nav class="navbar navbar-expand-xl site-navbar" data-bs-theme="dark" aria-label="Hovudmeny">
+        <nav class="navbar navbar-expand-xl site-navbar" aria-label="Hovudmeny">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Til framsida">
                     Adrians
@@ -127,6 +128,11 @@
                         </li>
                     </ul>
                 </div>
+                <button type="button" class="site-theme-toggle" id="themeToggle"
+                        aria-label="Aktiver lys modus" title="Aktiver lys modus">
+                    <span class="site-theme-toggle-icon" aria-hidden="true">☀</span>
+                    <span class="site-theme-toggle-label">Lys modus</span>
+                </button>
             </div>
         </nav>
     </header>

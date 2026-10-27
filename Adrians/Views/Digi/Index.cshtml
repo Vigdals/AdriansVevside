@@ -15,14 +15,13 @@
             <a class="btn btn-outline-success" asp-controller="Digi" asp-action="Index" aria-label="Hent oppdaterte nyheiter">↻ Oppdater sida</a>
         </div>
     </div>
-@* 
     @if (failed > 0)
     {
         <div class="news-warning" role="status">
             @failed av @Model.Sources.Count kjelder er mellombels utilgjengelege.
-            Dei andre kjeldene blir viste som normalt. Tidlegare innhenta saker kan vere viste.
+            Me viser ikkje mellomlagra artiklar.
         </div>
-    } *@
+    }
 
     <div class="news-controls" role="search" aria-label="Filtrer nyheiter">
         <label for="newsSearch" class="visually-hidden">Søk etter nyheit</label>
@@ -52,6 +51,7 @@
     </div>
 
     <p id="newsCount" class="news-stats" role="status" aria-live="polite">@Model.Articles.Count saker frå @Model.Sources.Count kjelder</p>
+    <p class="news-loaded">Sist henta frå kjeldene: @Model.LoadedAt.ToString("dd.MM.yyyy HH:mm:ss") UTC</p>
 
     <div id="newsList" class="news-list">
         @foreach (var article in Model.Articles)
@@ -89,9 +89,9 @@
         <div class="news-status" aria-label="Status for nyheitskjelder">
         @foreach (var source in Model.Sources)
         {
-            <span class="source-pill @(source.Stale ? "stale" : !source.Available ? "offline" : "")"
-                  title="@(source.Stale ? "Viser mellomlagra saker" : source.Available ? "Kjelde tilgjengeleg" : "Kjelde utilgjengeleg")">
-                @(source.Available ? "●" : source.Stale ? "◐" : "○") @source.Name
+            <span class="source-pill @(!source.Available ? "offline" : "")"
+                  title="@(source.Available ? "Kjelde tilgjengeleg" : "Kjelde utilgjengeleg")">
+                @(source.Available ? "●" : "○") @source.Name
                 <span aria-label="Tal på saker">(@source.ArticleCount)</span>
             </span>
         }
