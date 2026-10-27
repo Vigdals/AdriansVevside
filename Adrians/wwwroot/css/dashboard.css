@@ -1963,3 +1963,244 @@
         transition: none;
     }
 }
+
+/* CHRISTMAS EASTER EGG: one nine-second scene, December 1 to January 1. */
+.christmas-fx {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+    isolation: isolate;
+    animation: christmas-fx-scene 9s ease-in-out both;
+}
+
+.christmas-fx-warmth {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 100%, rgba(251, 167, 78, .15), transparent 55%),
+        linear-gradient(to bottom, rgba(18, 44, 42, .14), transparent 55%);
+}
+
+/* Small, glowing fairy lights across the top. */
+.christmas-fx-lights {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: space-around;
+    z-index: 5;
+}
+
+.christmas-fx-lights::before {
+    content: "";
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    top: -21px;
+    height: 45px;
+    border-bottom: 2px solid rgba(90, 70, 47, .85);
+    border-radius: 0 0 50% 50%;
+}
+
+.christmas-fx-light {
+    position: relative;
+    flex: 0 0 12px;
+    height: 40px;
+    transform-origin: center top;
+    animation: christmas-light-sway 2.5s ease-in-out infinite alternate;
+}
+
+.christmas-fx-light::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    width: 2px;
+    height: 11px;
+    background: #67584b;
+}
+
+.christmas-fx-light::after {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 22px;
+    width: 10px;
+    height: 15px;
+    border-radius: 45% 45% 55% 55%;
+    background: var(--bulb);
+    box-shadow: 0 0 9px 3px var(--bulb), 0 0 24px var(--bulb);
+    animation: christmas-light-glow 1.6s ease-in-out infinite alternate;
+    animation-delay: inherit;
+}
+
+/* Snow is already mid-fall on the first frame. */
+.christmas-fx-snow {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+}
+
+.christmas-fx-flake {
+    position: absolute;
+    top: 0;
+    display: block;
+    color: #ecf7ff;
+    line-height: 1;
+    font-family: system-ui, sans-serif;
+    text-shadow: 0 0 5px rgba(235, 250, 255, .8);
+    will-change: transform;
+    animation: christmas-snow-fall var(--duration) linear var(--delay) infinite;
+}
+
+:root[data-bs-theme="light"] .christmas-fx-flake {
+    color: #6c94ad;
+    text-shadow: 0 0 4px rgba(104, 149, 180, .3);
+}
+
+/* Little pine forests along the bottom edges. */
+.christmas-fx-forest {
+    position: absolute;
+    bottom: -6px;
+    display: flex;
+    align-items: end;
+    gap: 0;
+    z-index: 4;
+    filter: drop-shadow(0 4px 14px rgba(12, 39, 31, .33));
+}
+
+.christmas-fx-forest--left { left: -23px; }
+.christmas-fx-forest--right { right: -23px; transform: scaleX(-1); }
+
+.christmas-fx-tree {
+    position: relative;
+    display: block;
+    width: 75px;
+    height: 125px;
+    flex: 0 0 75px;
+    transform-origin: center bottom;
+    animation: christmas-tree-appear 8.5s ease-out both;
+}
+
+.christmas-fx-tree::before {
+    content: "";
+    position: absolute;
+    inset: 20px 0 9px;
+    clip-path: polygon(50% 0, 69% 29%, 61% 29%, 84% 56%, 73% 56%, 100% 90%, 0 90%, 27% 56%, 16% 56%, 39% 29%, 31% 29%);
+    background:
+        radial-gradient(circle at 43% 46%, #ffe7a0 0 2px, transparent 3px),
+        radial-gradient(circle at 61% 66%, #f67679 0 2px, transparent 3px),
+        radial-gradient(circle at 38% 80%, #a8decc 0 2px, transparent 3px),
+        linear-gradient(115deg, #164733, #257455 52%, #103c31);
+}
+
+.christmas-fx-tree::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 44%;
+    width: 12%;
+    height: 17px;
+    background: #805c43;
+}
+
+.christmas-fx-tree-star {
+    position: absolute;
+    z-index: 1;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffda84;
+    text-shadow: 0 0 12px #ffc35b;
+    font-size: 20px;
+}
+
+/* The reindeer are in front; Santa and the sleigh follow behind. */
+.christmas-fx-flight {
+    position: absolute;
+    left: 0;
+    top: 11%;
+    width: clamp(580px, 70vw, 930px);
+    z-index: 6;
+    opacity: 0;
+    filter: drop-shadow(0 0 10px rgba(255, 219, 143, .24));
+    animation: christmas-flight 7.3s cubic-bezier(.22, .45, .4, .87) .6s both;
+}
+
+.christmas-fx-flight-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.christmas-fx-message {
+    position: absolute;
+    left: 50%;
+    bottom: 26px;
+    z-index: 7;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    font: 600 clamp(19px, 3.5vw, 35px)/1.2 Georgia, serif;
+    letter-spacing: .04em;
+    color: #fff2d5;
+    text-shadow: 0 2px 10px #6b3432, 0 0 24px rgba(255, 194, 110, .6);
+    animation: christmas-message 9s ease-in-out both;
+}
+
+@keyframes christmas-fx-scene {
+    0% { opacity: 0; }
+    8%, 86% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes christmas-light-sway {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
+}
+
+@keyframes christmas-light-glow {
+    from { opacity: .5; filter: brightness(.8); }
+    to { opacity: 1; filter: brightness(1.2); }
+}
+
+@keyframes christmas-snow-fall {
+    from { transform: translate3d(0, -15vh, 0) rotate(0deg); }
+    to { transform: translate3d(var(--drift), 115vh, 0) rotate(var(--spin)); }
+}
+
+@keyframes christmas-tree-appear {
+    0% { opacity: 0; transform: translateY(25px) scale(calc(var(--tree-scale) * .9)); }
+    15%, 85% { opacity: .93; transform: translateY(0) scale(var(--tree-scale)); }
+    100% { opacity: 0; transform: translateY(10px) scale(var(--tree-scale)); }
+}
+
+@keyframes christmas-flight {
+    0% { opacity: 0; transform: translate3d(-110%, 7vh, 0) rotate(2deg); }
+    8% { opacity: 1; }
+    50% { transform: translate3d(calc(50vw - 50%), 0, 0) rotate(-2deg); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translate3d(calc(100vw + 5rem), -8vh, 0) rotate(-4deg); }
+}
+
+@keyframes christmas-message {
+    0%, 40% { opacity: 0; transform: translate(-50%, 12px); }
+    53%, 76% { opacity: 1; transform: translate(-50%, 0); }
+    92%, 100% { opacity: 0; transform: translate(-50%, -8px); }
+}
+
+@media (max-width: 640px) {
+    .christmas-fx-forest { opacity: .75; }
+    .christmas-fx-tree { margin-right: -22px; }
+    .christmas-fx-flight { top: 18%; }
+    .christmas-fx-message { bottom: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .christmas-fx { display: none; }
+}

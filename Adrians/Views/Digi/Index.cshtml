@@ -15,13 +15,6 @@
             <a class="btn btn-outline-success" asp-controller="Digi" asp-action="Index" aria-label="Hent oppdaterte nyheiter">↻ Oppdater sida</a>
         </div>
     </div>
-    @if (failed > 0)
-    {
-        <div class="news-warning" role="status">
-            @failed av @Model.Sources.Count kjelder er mellombels utilgjengelege.
-            Me viser ikkje mellomlagra artiklar.
-        </div>
-    }
 
     <div class="news-controls" role="search" aria-label="Filtrer nyheiter">
         <label for="newsSearch" class="visually-hidden">Søk etter nyheit</label>
@@ -49,9 +42,6 @@
             <option value="30">Siste 30 dagar</option>
         </select>
     </div>
-
-    <p id="newsCount" class="news-stats" role="status" aria-live="polite">@Model.Articles.Count saker frå @Model.Sources.Count kjelder</p>
-    <p class="news-loaded">Sist henta frå kjeldene: @Model.LoadedAt.ToString("dd.MM.yyyy HH:mm:ss") UTC</p>
 
     <div id="newsList" class="news-list">
         @foreach (var article in Model.Articles)
