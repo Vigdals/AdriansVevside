@@ -1713,3 +1713,32 @@
         transition: none;
     }
 }
+
+/* Dashboard's nested surfaces use solid, legible backgrounds in light mode. */
+:root[data-bs-theme="light"] .dashboard-weather-metric,
+:root[data-bs-theme="light"] .dashboard-next-match-teams,
+:root[data-bs-theme="light"] .dashboard-vigdalpi-panel,
+:root[data-bs-theme="light"] .dashboard-service-item,
+:root[data-bs-theme="light"] .dashboard-vigdalpi-metric,
+:root[data-bs-theme="light"] .dashboard-vigdalpi-deploy {
+    background: #f8fbf9;
+    border-color: var(--color-border);
+}
+
+:root[data-bs-theme="light"] .dashboard-weather-temperature {
+    background: #e7f3eb;
+    border-color: #b4d5c2;
+}
+
+:root[data-bs-theme="light"] .dashboard-service-down {
+    background: #fff1f2;
+    border-color: #e8bbc0;
+}
+
+:root[data-bs-theme="light"] .dashboard-waste-item:hover {
+    background: #edf5ef;
+}
+
+:root[data-bs-theme="light"] .dashboard-weather-summary {
+    background: transparent;
+}

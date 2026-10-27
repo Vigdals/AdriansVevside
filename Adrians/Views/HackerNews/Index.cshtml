@@ -6,10 +6,10 @@
         @foreach (var item in Model ?? [])
         {
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm bg-dark text-light">
+                <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="@item.url" class="text-light">@item.title</a>
+                            <a href="@item.url" class="hn-story-link">@item.title</a>
                         </h5>
                         <p class="card-text">Score: <a href="https://news.ycombinator.com/item?id=@item.id" class="text-warning">@item.score</a></p>
                         <p class="card-text">By: <span class="text-info">@item.by</span></p>
@@ -18,5 +18,5 @@
             </div>
         }
     </div>
-    <p class="text-light">*Click the score to get to comments. I think</p>
+    <p>*Click the score to get to comments. I think</p>
 </div>

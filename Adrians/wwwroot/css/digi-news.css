@@ -172,3 +172,88 @@
     outline:2px solid #7ed5ae;
     outline-offset:2px;
 }
+
+/* IT-sec: component contrast in light mode (dark mode is unchanged). */
+:root[data-bs-theme="light"] .news-kicker {
+    color: var(--color-primary);
+}
+
+:root[data-bs-theme="light"] .news-muted,
+:root[data-bs-theme="light"] .news-stats,
+:root[data-bs-theme="light"] .news-empty,
+:root[data-bs-theme="light"] .news-loaded {
+    color: var(--color-text-muted);
+}
+
+:root[data-bs-theme="light"] .news-search,
+:root[data-bs-theme="light"] .news-select {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+    background: #ffffff;
+}
+
+:root[data-bs-theme="light"] .news-search::placeholder {
+    color: var(--color-text-muted);
+}
+
+:root[data-bs-theme="light"] .news-search:focus,
+:root[data-bs-theme="light"] .news-select:focus {
+    outline-color: var(--color-primary);
+}
+
+:root[data-bs-theme="light"] .source-pill {
+    color: var(--color-text-soft);
+    background: #edf5ef;
+    border-color: #c5d9cc;
+}
+
+:root[data-bs-theme="light"] .source-pill.offline {
+    color: #972d3a;
+    background: #fff1f2;
+    border-color: #dba6ad;
+}
+
+:root[data-bs-theme="light"] .news-card {
+    background: #ffffff;
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+:root[data-bs-theme="light"] .news-card:hover {
+    border-color: var(--color-primary);
+}
+
+:root[data-bs-theme="light"] .news-card a {
+    color: var(--color-text);
+}
+
+:root[data-bs-theme="light"] .news-card a:hover {
+    color: var(--color-primary);
+    text-decoration-color: var(--color-primary);
+}
+
+:root[data-bs-theme="light"] .news-card p,
+:root[data-bs-theme="light"] .news-card-meta {
+    color: var(--color-text-muted);
+}
+
+:root[data-bs-theme="light"] .news-category {
+    color: var(--color-primary-strong);
+    background: #e2f1e6;
+}
+
+:root[data-bs-theme="light"] .news-warning {
+    color: #714613;
+    background: #fff4df;
+    border-left-color: #b57721;
+}
+
+:root[data-bs-theme="light"] .news-card:focus-within {
+    outline-color: var(--color-primary);
+}
+
+.news-loaded {
+    margin: -0.35rem 0 0.9rem;
+    color: #a2b4ad;
+    font-size: 0.76rem;
+}

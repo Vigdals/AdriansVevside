@@ -803,3 +803,174 @@ p {
     --bs-btn-active-bg: var(--color-primary-strong);
     --bs-btn-active-border-color: var(--color-primary-strong);
 }
+
+/* ==========================================================
+   Lys/mørk modus
+   ========================================================== */
+.site-theme-toggle {
+    order: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    min-width: 44px;
+    margin-left: auto;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.65rem;
+    background: var(--color-bg-elevated);
+    color: var(--color-text-soft);
+    font-size: 0.82rem;
+    font-weight: 650;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.site-theme-toggle:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background: var(--color-bg-card-hover);
+}
+
+.site-theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+.site-theme-toggle-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+@media (max-width: 1199.98px) {
+    .site-navbar .navbar-toggler {
+        order: 3;
+        margin-left: 0.4rem;
+    }
+
+    .site-navbar .navbar-collapse {
+        order: 4;
+    }
+}
+
+@media (min-width: 1200px) {
+    .site-navbar .navbar-collapse {
+        order: 1;
+    }
+
+    .site-theme-toggle {
+        margin-left: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-theme-toggle-label {
+        display: none;
+    }
+}
+
+/* Light theme overrides shared color tokens and Bootstrap's color scheme. */
+:root[data-bs-theme="light"] {
+    color-scheme: light;
+    --color-bg: #f8faf9;
+    --color-bg-deep: #f5f8f6;
+    --color-bg-elevated: #edf3f0;
+    --color-bg-card: #ffffff;
+    --color-bg-card-hover: #f1f7f3;
+    --color-text: #1d3034;
+    --color-text-soft: #30494b;
+    --color-text-muted: #51676b;
+    --color-border: rgba(38, 72, 72, 0.17);
+    --color-border-strong: rgba(38, 72, 72, 0.32);
+    --color-primary: #216344;
+    --color-primary-strong: #174a33;
+    --color-secondary: #456568;
+    --color-success: #137651;
+    --color-warning: #975807;
+    --color-danger: #b52d41;
+    --shadow-sm: 0 3px 14px rgba(29, 53, 46, 0.055);
+    --shadow-md: 0 10px 28px rgba(29, 53, 46, 0.095);
+    --shadow-lg: 0 18px 44px rgba(29, 53, 46, 0.13);
+}
+
+:root[data-bs-theme="light"] body {
+    background: radial-gradient(ellipse at 50% -14rem, rgba(89, 157, 119, 0.075), transparent 44rem), var(--color-bg-deep);
+}
+
+:root[data-bs-theme="light"] body.bg-dark {
+    background-color: var(--color-bg-deep) !important;
+}
+
+:root[data-bs-theme="light"] ::selection {
+    color: #ffffff;
+}
+
+:root[data-bs-theme="light"] a:hover {
+    color: var(--color-primary-strong);
+}
+
+:root[data-bs-theme="light"] .site-navbar {
+    background: rgba(255, 255, 255, 0.97) !important;
+    box-shadow: 0 6px 22px rgba(27, 59, 46, 0.06);
+}
+
+:root[data-bs-theme="light"] .site-navbar .nav-link:hover,
+:root[data-bs-theme="light"] .site-navbar .nav-link:focus-visible {
+    background: #eaf3ed;
+}
+
+:root[data-bs-theme="light"] .site-navbar .nav-link.active {
+    background: #e2f0e7;
+}
+
+:root[data-bs-theme="light"] .site-navbar .dropdown-menu {
+    background: #ffffff;
+}
+
+:root[data-bs-theme="light"] .site-navbar .dropdown-menu .dropdown-item:hover,
+:root[data-bs-theme="light"] .site-navbar .dropdown-menu .dropdown-item:focus {
+    background: #eaf3ed;
+}
+
+:root[data-bs-theme="light"] .btn-primary,
+:root[data-bs-theme="light"] .btn-primary:hover,
+:root[data-bs-theme="light"] .btn-primary:focus,
+:root[data-bs-theme="light"] .btn-primary:active,
+:root[data-bs-theme="light"] .btn-primary:disabled {
+    color: #ffffff !important;
+}
+
+:root[data-bs-theme="light"] .btn-primary:hover,
+:root[data-bs-theme="light"] .btn-primary:focus {
+    background: var(--color-primary-strong);
+    border-color: var(--color-primary-strong);
+}
+
+:root[data-bs-theme="light"] .btn-outline-dark {
+    background: #ffffff;
+}
+
+:root[data-bs-theme="light"] .btn-outline-dark:hover {
+    border-color: var(--color-primary);
+    background: #eaf3ed;
+}
+
+:root[data-bs-theme="light"] .card-header {
+    background: #f8faf9;
+}
+
+:root[data-bs-theme="light"] .table {
+    --bs-table-striped-bg: #f3f8f5;
+    --bs-table-hover-bg: #eaf3ed;
+}
+
+:root[data-bs-theme="light"] .site-body .btn-outline-success {
+    --bs-btn-focus-shadow-rgb: 33, 99, 68;
+}
+
+:root[data-bs-theme="light"] .form-control:focus,
+:root[data-bs-theme="light"] .form-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(33, 99, 68, 0.15);
+}

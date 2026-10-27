@@ -1,22 +1,19 @@
 using System.Globalization;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Adrians.Controllers;
 
-// All news-specific code lives here. Other controllers and the existing RSS service are untouched.
+// Every page request fetches each RSS feed afresh; no Digi-specific caching.
 public sealed class DigiController(
     IHttpClientFactory httpClientFactory,
-    IMemoryCache cache,
     ILogger<DigiController> logger) : Controller
 {
     private const int MaxFeedBytes = 2_000_000;
-    private static readonly TimeSpan FreshFor = TimeSpan.FromMinutes(10);
-    private static readonly TimeSpan KeepLastGoodFor = TimeSpan.FromHours(12);
 
     // Fixed allowlist: feed addresses are never supplied by a browser user.
     private static readonly DigiFeed[] Feeds =
@@ -30,6 +27,7 @@ public sealed class DigiController(
         new("dotnet", ".NET Blog", "Utvikling", "https://devblogs.microsoft.com/dotnet/feed/")
     ];
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         // A failed feed must never take down the other feeds or the view.
@@ -50,22 +48,13 @@ public sealed class DigiController(
             result.Feed.Category,
             result.Feed.Url,
             result.Articles.Count,
-            result.Available,
-            result.Stale)).ToList();
+            result.Available)).ToList();
 
         return View(new DigiNewsViewModel(articles, sources, DateTimeOffset.UtcNow));
     }
 
     private async Task<FeedResult> ReadFeedAsync(DigiFeed feed, CancellationToken cancellationToken)
     {
-        var freshKey = $"digi:news:{feed.Key}:fresh";
-        var lastGoodKey = $"digi:news:{feed.Key}:last-good";
-
-        if (cache.TryGetValue(freshKey, out List<DigiArticle>? cached) && cached is not null)
-        {
-            return new FeedResult(feed, cached, Available: true, Stale: false);
-        }
-
         try
         {
             using var client = httpClientFactory.CreateClient();
@@ -73,8 +62,17 @@ public sealed class DigiController(
             client.DefaultRequestHeaders.UserAgent.ParseAdd("AdriansVevside/1.0 (RSS reader)");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/rss+xml, application/atom+xml, application/xml, text/xml");
 
-            using var response = await client.GetAsync(
-                feed.Url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var request = new HttpRequestMessage(HttpMethod.Get, feed.Url);
+            // Request a fresh representation even if an upstream intermediary caches RSS.
+            request.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true
+            };
+            request.Headers.Pragma.ParseAdd("no-cache");
+
+            using var response = await client.SendAsync(
+                request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             if (response.Content.Headers.ContentLength is > MaxFeedBytes)
@@ -100,10 +98,7 @@ public sealed class DigiController(
                 throw new InvalidDataException("RSS response has no usable articles.");
             }
 
-            cache.Set(freshKey, articles, FreshFor);
-            cache.Set(lastGoodKey, articles, KeepLastGoodFor);
-
-            return new FeedResult(feed, articles, Available: true, Stale: false);
+            return new FeedResult(feed, articles, Available: true);
         }
         catch (Exception ex) when (
             !cancellationToken.IsCancellationRequested &&
@@ -111,12 +106,8 @@ public sealed class DigiController(
         {
             logger.LogWarning(ex, "Could not read Digi news feed {Feed}", feed.Name);
 
-            if (cache.TryGetValue(lastGoodKey, out List<DigiArticle>? lastGood) && lastGood is not null)
-            {
-                return new FeedResult(feed, lastGood, Available: false, Stale: true);
-            }
-
-            return new FeedResult(feed, [], Available: false, Stale: false);
+            // Do not display old articles as if they were fresh.
+            return new FeedResult(feed, [], Available: false);
         }
     }
 
@@ -192,7 +183,7 @@ public sealed class DigiController(
 
     private sealed record DigiFeed(string Key, string Name, string Category, string Url);
     private sealed record FeedResult(
-        DigiFeed Feed, List<DigiArticle> Articles, bool Available, bool Stale);
+        DigiFeed Feed, List<DigiArticle> Articles, bool Available);
 }
 
 public sealed record DigiArticle(
@@ -210,8 +201,7 @@ public sealed record DigiSourceStatus(
     string Category,
     string FeedUrl,
     int ArticleCount,
-    bool Available,
-    bool Stale);
+    bool Available);
 
 public sealed record DigiNewsViewModel(
     IReadOnlyList<DigiArticle> Articles,
