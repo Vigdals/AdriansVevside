@@ -1742,3 +1742,224 @@
 :root[data-bs-theme="light"] .dashboard-weather-summary {
     background: transparent;
 }
+
+
+
+/* ============================================
+   WEATHER EASTER EGGS
+   ============================================ */
+
+/* Klikkbart MET-ikon */
+.dashboard-weather-effect-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.dashboard-weather-effect-trigger .dashboard-weather-icon {
+    transition: transform 180ms ease;
+}
+
+.dashboard-weather-effect-trigger:hover .dashboard-weather-icon {
+    transform: scale(1.12);
+}
+
+.dashboard-weather-effect-trigger:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 5px;
+}
+
+/* Felles lag over heile skjermen */
+.weather-fx {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    contain: layout paint;
+}
+
+/* --------------------------------------------
+   SOL
+   -------------------------------------------- */
+
+.weather-fx-sun {
+    position: absolute;
+    display: block;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle at 40% 35%,
+        #fff9db 0%,
+        #ffe88b 35%,
+        #ffc54a 75%,
+        #f6a52f 100%
+    );
+
+    box-shadow:
+        0 0 35px rgba(255, 209, 83, 0.6),
+        0 0 90px rgba(255, 191, 62, 0.35);
+}
+
+.weather-fx-sun::before {
+    content: "";
+    position: absolute;
+    inset: -38px;
+
+    background: repeating-conic-gradient(
+        rgba(255, 205, 76, 0.5) 0deg 9deg,
+        transparent 9deg 30deg
+    );
+
+    border-radius: 50%;
+
+    -webkit-mask: radial-gradient(
+        transparent 0 42%,
+        black 45% 100%
+    );
+
+    mask: radial-gradient(
+        transparent 0 42%,
+        black 45% 100%
+    );
+}
+
+.weather-fx-sun-glow {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(255, 218, 108, 0.26),
+        rgba(255, 202, 80, 0.08) 45%,
+        transparent 72%
+    );
+}
+
+.weather-fx-spark {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+
+    background: #ffe799;
+    box-shadow: 0 0 12px #ffcb52;
+}
+
+/* --------------------------------------------
+   REGN
+   -------------------------------------------- */
+
+.weather-fx-raindrop {
+    position: absolute;
+    top: 0;
+    display: block;
+    width: 2px;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(145, 203, 255, 0.5),
+        rgba(145, 203, 255, 0.95)
+    );
+
+    box-shadow: 0 0 4px rgba(116, 189, 255, 0.25);
+}
+
+/* --------------------------------------------
+   SNØ
+   -------------------------------------------- */
+
+.weather-fx-snowflake {
+    position: absolute;
+    top: 0;
+    display: block;
+
+    color: #e5f4ff;
+    text-shadow:
+        0 0 6px rgba(218, 239, 255, 0.65);
+
+    line-height: 1;
+    font-family: system-ui, sans-serif;
+}
+
+/* --------------------------------------------
+   OVERSKYA
+   -------------------------------------------- */
+
+.weather-fx-cloud {
+    position: absolute;
+    display: block;
+    height: 65px;
+
+    background: rgba(176, 192, 207, 0.7);
+    border-radius: 999px;
+
+    filter: blur(3px);
+
+    box-shadow: 0 8px 30px rgba(77, 96, 112, 0.15);
+}
+
+.weather-fx-cloud::before,
+.weather-fx-cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.weather-fx-cloud::before {
+    width: 45%;
+    height: 140%;
+    left: 15%;
+    bottom: 15%;
+}
+
+.weather-fx-cloud::after {
+    width: 36%;
+    height: 115%;
+    right: 12%;
+    bottom: 10%;
+}
+
+/* --------------------------------------------
+   LYS MODUS
+   -------------------------------------------- */
+
+:root[data-bs-theme="light"] .weather-fx-snowflake {
+    color: #62869c;
+    text-shadow: 0 0 5px rgba(70, 110, 140, 0.25);
+}
+
+:root[data-bs-theme="light"] .weather-fx-raindrop {
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(60, 119, 163, 0.45),
+        rgba(43, 104, 155, 0.85)
+    );
+}
+
+:root[data-bs-theme="light"] .weather-fx-cloud {
+    background: rgba(114, 137, 151, 0.5);
+}
+
+/* Respekter systeminnstillinga for redusert rørsle */
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-weather-effect-trigger .dashboard-weather-icon {
+        transition: none;
+    }
+}

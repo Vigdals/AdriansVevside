@@ -1,3 +1,4 @@
+
 @model Adrians.ViewModels.KorttidsvarselViewModel
 @using Adrians.Helpers
 
@@ -9,16 +10,31 @@
 
 <div class="dashboard-weather-compact">
     <div class="dashboard-weather-summary">
-        <img src="@iconUrl" alt="@Model.SymbolCode" class="dashboard-weather-icon" loading="lazy"
-             onerror="this.onerror=null;this.src='@fallbackUrl';" />
+
+        <button type="button"
+                class="dashboard-weather-effect-trigger"
+                data-weather-symbol="@Model.SymbolCode"
+                aria-label="Vis vêranimasjon for @Model.LocationName"
+                title="Klikk for vêranimasjon">
+
+            <img src="@iconUrl"
+                 alt=""
+                 class="dashboard-weather-icon"
+                 loading="lazy"
+                 onerror="this.onerror=null;this.src='@fallbackUrl';" />
+
+        </button>
 
         <div>
             <strong>@Model.LocationName – no</strong>
-            <span>Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")</span>
+            <span>
+                Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")
+            </span>
         </div>
     </div>
 
     <div class="dashboard-weather-metrics dashboard-weather-metrics-three">
+
         <div class="dashboard-weather-metric dashboard-weather-temperature">
             <span>
                 <span class="dashboard-weather-metric-icon" aria-hidden="true">🌡️</span>
@@ -50,5 +66,6 @@
                 <strong>0 mm</strong>
             }
         </div>
+
     </div>
 </div>
