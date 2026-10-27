@@ -2,7 +2,7 @@
 (() => {
     "use strict";
 
-    const logo = String.raw`Hallo ja!`;
+    const logo = String.raw``;
 
     const logoStyle = [
         "color: #73e2a7",
