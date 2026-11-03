@@ -265,9 +265,9 @@
     gap: 0.9rem;
     min-width: 0;
     padding: 0.9rem 1rem;
-    border: 1px solid rgba(184, 233, 134, 0.14);
+    border: 1px solid rgba(99, 49, 251, 0.14);
     border-radius: 1rem;
-    background: rgba(184, 233, 134, 0.06);
+    background: rgba(99, 49, 251, 0.06);
 }
 
     .dashboard-weather-summary strong,
@@ -352,8 +352,8 @@
 }
 
 .dashboard-weather-temperature {
-    border-color: rgba(184, 233, 134, 0.2);
-    background: rgba(184, 233, 134, 0.08);
+    border-color: rgba(99, 49, 251, 0.2);
+    background: rgba(99, 49, 251, 0.08);
 }
 
     .dashboard-weather-temperature strong {
@@ -474,7 +474,7 @@
     height: 1.6rem;
     flex: 0 0 auto;
     border-radius: 0.5rem;
-    background: rgba(184, 233, 134, 0.06);
+    background: rgba(99, 49, 251, 0.06);
     font-size: 0.85rem;
     line-height: 1;
 }
@@ -1040,8 +1040,8 @@
 }
 
     .dashboard-debug-button:hover {
-        border-color: rgba(184, 233, 134, 0.45);
-        background: rgba(184, 233, 134, 0.065);
+        border-color: rgba(99, 49, 251, 0.45);
+        background: rgba(99, 49, 251, 0.065);
     }
 
 
@@ -1431,7 +1431,7 @@
 }
 
 .dashboard-weather-temperature {
-    background: rgba(185, 235, 147, 0.045);
+    background: rgba(99, 49, 251, 0.045);
 }
 
 .dashboard-weather-temperature strong {
@@ -1721,13 +1721,13 @@
 :root[data-bs-theme="light"] .dashboard-service-item,
 :root[data-bs-theme="light"] .dashboard-vigdalpi-metric,
 :root[data-bs-theme="light"] .dashboard-vigdalpi-deploy {
-    background: #f8fbf9;
+    background: #faf9ff;
     border-color: var(--color-border);
 }
 
 :root[data-bs-theme="light"] .dashboard-weather-temperature {
-    background: #e7f3eb;
-    border-color: #b4d5c2;
+    background: #eee8ff;
+    border-color: #c9baf5;
 }
 
 :root[data-bs-theme="light"] .dashboard-service-down {
@@ -1736,7 +1736,7 @@
 }
 
 :root[data-bs-theme="light"] .dashboard-waste-item:hover {
-    background: #edf5ef;
+    background: #f0ebff;
 }
 
 :root[data-bs-theme="light"] .dashboard-weather-summary {
@@ -2204,3 +2204,4 @@
 @media (prefers-reduced-motion: reduce) {
     .christmas-fx { display: none; }
 }
+
