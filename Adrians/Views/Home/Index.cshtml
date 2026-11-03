@@ -7,9 +7,10 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard-redesign.css" asp-append-version="true" />
 }
 
-<section class="public-dashboard fade-in">
+<section class="public-dashboard dashboard-v2 fade-in">
     <div class="dashboard-shell">
 
         <header class="dashboard-header dashboard-header-minimal">
@@ -19,7 +20,10 @@
             </div>
 
             <p class="dashboard-muted dashboard-updated">
-                @Model.Stadnamn · oppdatert @Model.SistOppdatert.ToString("HH:mm")
+                <span class="dashboard-updated-place">@Model.Stadnamn</span>
+                <span class="dashboard-updated-time">Oppdatert
+                    <time datetime="@Model.SistOppdatert.ToString("O")">@TimeZoneInfo.ConvertTime(Model.SistOppdatert, osloTimeZone).ToString("HH:mm")</time>
+                </span>
             </p>
         </header>
 
@@ -34,7 +38,7 @@
             <article class="dashboard-card dashboard-hover-card dashboard-weather-card">
                 <div class="dashboard-card-header dashboard-card-header-tight">
                     <p class="dashboard-card-kicker">Vêr</p>
-                    <span class="dashboard-card-badge">met.no</span>
+                    <span class="dashboard-card-badge">MET.NO</span>
                 </div>
 
                 @if (Model.Korttidsvarsel is not null)
@@ -43,21 +47,17 @@
                 }
                 else
                 {
-                    <p class="dashboard-muted mb-0">
-                        Klarte ikkje hente vêr akkurat no.
-                    </p>
+                    <p class="dashboard-muted mb-0">Klarte ikkje hente vêr akkurat no.</p>
                 }
             </article>
 
+            @if (Model.Tommekalender is not null)
+            {
+                <partial name="_TommekalenderCard" model="Model.Tommekalender" />
+            }
+
             <div class="dashboard-match-card-stack">
-                @if (Model.NesteSogndalKamp is not null)
-                {
-                    <partial name="_NesteKampCard" model="Model.NesteSogndalKamp" />
-                }
-                else
-                {
-                    <partial name="_NesteKampCard" model="null" />
-                }
+                <partial name="_NesteKampCard" model="Model.NesteSogndalKamp" />
 
                 @if (Model.NesteBarcelonaKamp is not null)
                 {
@@ -65,24 +65,15 @@
                 }
                 else
                 {
-                    <article
-                        class="dashboard-card dashboard-hover-card dashboard-next-match-card dashboard-next-match-card-empty">
+                    <article class="dashboard-card dashboard-hover-card dashboard-next-match-card dashboard-next-match-card-empty">
                         <div class="dashboard-card-header dashboard-card-header-tight">
                             <p class="dashboard-card-kicker">Neste Barça-kamp</p>
                             <span class="dashboard-card-badge">NIFS</span>
                         </div>
-
-                        <p class="dashboard-muted mb-0">
-                            Ingen komande kamp funnen akkurat no.
-                        </p>
+                        <p class="dashboard-muted mb-0">Ingen komande kamp funnen akkurat no.</p>
                     </article>
                 }
             </div>
-
-            @if (Model.Tommekalender is not null)
-            {
-                <partial name="_TommekalenderCard" model="Model.Tommekalender" />
-            }
         </div>
 
         <div class="dashboard-grid dashboard-grid-countdowns">
