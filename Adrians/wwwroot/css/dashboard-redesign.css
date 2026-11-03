@@ -1,0 +1,583 @@
+/*
+ * Dashboard redesign (November 2026).
+ * This presentation layer intentionally follows dashboard.css so the existing
+ * weather/Christmas effects, Pi monitoring styles and JavaScript hooks survive.
+ * Dashboard-specific rules are scoped to .dashboard-v2.
+ */
+
+.dashboard-v2 {
+    --dashboard-hairline: rgba(165, 187, 190, 0.13);
+    --dashboard-surface-soft: rgba(255, 255, 255, 0.025);
+    padding-top: clamp(1.25rem, 2.8vw, 2rem);
+}
+
+.dashboard-v2 .dashboard-shell {
+    width: min(1240px, 100%);
+}
+
+.dashboard-v2 .dashboard-header {
+    align-items: end;
+    margin-bottom: 1.2rem;
+    padding: 0.3rem 0 1.3rem;
+    border-bottom: 1px solid var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-clock {
+    min-width: 0;
+}
+
+.dashboard-v2 #DashboardClockTime {
+    display: block;
+    font-size: clamp(3.6rem, 6.5vw, 4.65rem);
+    line-height: 1.04;
+    letter-spacing: -0.075em;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 #DashboardClockDate {
+    margin-top: 0.25rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-transform: none;
+}
+
+.dashboard-v2 .dashboard-updated {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0 0 0.2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: right;
+    font-size: 0.78rem;
+}
+
+.dashboard-v2 .dashboard-updated::before {
+    background: var(--color-primary);
+    width: 0.38rem;
+    height: 0.38rem;
+    margin: 0 0.15rem 0 0;
+}
+
+.dashboard-v2 .dashboard-updated-place {
+    color: var(--color-text-soft);
+    font-weight: 600;
+}
+
+.dashboard-v2 .dashboard-updated-time {
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 .dashboard-updated-time::before {
+    content: "·";
+    margin-right: 0.35rem;
+    color: var(--color-text-muted);
+}
+
+.dashboard-v2 .dashboard-top-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-areas:
+        "weather waste"
+        "matches matches";
+    align-items: start;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+}
+
+.dashboard-v2 .dashboard-top-layout > .dashboard-weather-card { grid-area: weather; }
+.dashboard-v2 .dashboard-top-layout > .dashboard-waste-card { grid-area: waste; }
+.dashboard-v2 .dashboard-top-layout > .dashboard-match-card-stack { grid-area: matches; }
+
+.dashboard-v2 .dashboard-match-card-stack,
+.dashboard-v2 .dashboard-grid,
+.dashboard-v2 .dashboard-grid-countdowns {
+    gap: 0.9rem;
+}
+
+.dashboard-v2 .dashboard-match-card-stack,
+.dashboard-v2 .dashboard-grid-countdowns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-v2 .dashboard-card,
+.dashboard-v2 .dashboard-link-card,
+.dashboard-v2 .dashboard-alert {
+    border: 1px solid var(--dashboard-hairline);
+    border-radius: 0.9rem;
+    background: var(--color-bg-card);
+    box-shadow: none;
+    transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.dashboard-v2 .dashboard-card,
+.dashboard-v2 .dashboard-alert {
+    padding: 1.25rem 1.3rem;
+}
+
+@media (hover: hover) {
+    .dashboard-v2 .dashboard-card:hover,
+    .dashboard-v2 .dashboard-link-card:hover,
+    .dashboard-v2 .dashboard-alert:hover {
+        transform: none;
+        background: var(--color-bg-card-hover);
+        border-color: var(--color-border-strong);
+        box-shadow: none;
+    }
+}
+
+.dashboard-v2 .dashboard-card-kicker {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.115em;
+}
+
+.dashboard-v2 .dashboard-card-badge {
+    padding: 0.15rem 0.45rem;
+    border-color: var(--dashboard-hairline);
+    border-radius: 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.035em;
+}
+
+.dashboard-v2 .dashboard-card-header,
+.dashboard-v2 .dashboard-card-header-tight {
+    margin-bottom: 1.1rem;
+}
+
+.dashboard-v2 .dashboard-weather-card {
+    min-height: 15rem;
+}
+
+.dashboard-v2 .dashboard-weather-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard-v2 .dashboard-weather-main {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.dashboard-v2 .dashboard-weather-effect-trigger {
+    width: 4.5rem;
+    height: 4.5rem;
+    flex: 0 0 4.5rem;
+}
+
+.dashboard-v2 .dashboard-weather-icon {
+    width: 4.3rem;
+    height: 4.3rem;
+    filter: none;
+}
+
+.dashboard-v2 .dashboard-weather-primary {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 0.05rem;
+}
+
+.dashboard-v2 .dashboard-weather-reading {
+    color: var(--color-text);
+    font-size: clamp(3.1rem, 5vw, 3.9rem);
+    font-weight: 620;
+    letter-spacing: -0.07em;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 .dashboard-weather-reading-unit {
+    padding-left: 0.1rem;
+    font-size: 0.48em;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    vertical-align: 0.32em;
+}
+
+.dashboard-v2 .dashboard-weather-place {
+    color: var(--color-text-soft);
+    font-size: 0.84rem;
+    font-weight: 550;
+}
+
+.dashboard-v2 .dashboard-weather-metrics,
+.dashboard-v2 .dashboard-weather-metrics-three {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-weather-metric {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 0.25rem;
+    padding: 0.1rem 0.85rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.dashboard-v2 .dashboard-weather-metric:first-child {
+    padding-left: 0;
+    border-right: 1px solid var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-weather-metric:last-child {
+    padding-right: 0;
+}
+
+.dashboard-v2 .dashboard-weather-metric span {
+    display: block;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.dashboard-v2 .dashboard-weather-metric strong {
+    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+}
+
+.dashboard-v2 .dashboard-weather-updated {
+    margin: 0.85rem 0 0;
+    color: var(--color-text-muted);
+    font-size: 0.71rem;
+}
+
+.dashboard-v2 .dashboard-waste-card {
+    min-height: 15rem;
+}
+
+.dashboard-v2 .dashboard-waste-header {
+    margin-bottom: 1rem;
+}
+
+.dashboard-v2 .dashboard-waste-highlight {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.6rem;
+    align-items: center;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-waste-lead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.23rem;
+    min-width: 0;
+}
+
+.dashboard-v2 .dashboard-waste-lead-label {
+    color: var(--color-text-muted);
+    font-size: 0.69rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 650;
+}
+
+.dashboard-v2 .dashboard-waste-lead-name {
+    color: var(--color-text);
+    font-size: 1.03rem;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-v2 .dashboard-waste-lead-days {
+    color: var(--color-warning);
+    font-size: 0.79rem;
+    font-weight: 650;
+}
+
+.dashboard-v2 .dashboard-waste-lead-date {
+    color: var(--color-text);
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 .dashboard-waste-rest {
+    display: grid;
+    gap: 0;
+    margin-top: 0.2rem;
+}
+
+.dashboard-v2 .dashboard-waste-rest-row {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--dashboard-hairline);
+    min-width: 0;
+}
+
+.dashboard-v2 .dashboard-waste-rest-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.dashboard-v2 .dashboard-waste-rest-row .dashboard-waste-icon {
+    display: inline-flex;
+    flex: 0 0 1.15rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.dashboard-v2 .dashboard-waste-rest-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--color-text-soft);
+    font-size: 0.79rem;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-v2 .dashboard-waste-rest-date {
+    flex: 0 0 auto;
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 .dashboard-waste-rest-days {
+    min-width: 3.75rem;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.dashboard-v2 .dashboard-next-match-card {
+    min-height: 0;
+}
+
+.dashboard-v2 .dashboard-next-match {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+}
+
+.dashboard-v2 .dashboard-next-match-teams {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 4.5rem;
+    padding: 0.1rem 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.dashboard-v2 .dashboard-next-match-team {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    min-width: 0;
+    text-align: left;
+}
+
+.dashboard-v2 .dashboard-next-match-team:last-child {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.dashboard-v2 .dashboard-next-match-logo {
+    flex: 0 0 2.5rem;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    max-width: 2.5rem !important;
+    max-height: 2.5rem !important;
+    filter: none;
+}
+
+.dashboard-v2 .dashboard-next-match-team span {
+    overflow: visible;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    color: var(--color-text);
+    font-size: 0.88rem;
+    font-weight: 670;
+    line-height: 1.25;
+}
+
+.dashboard-v2 .dashboard-next-match-vs {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: lowercase;
+    letter-spacing: 0;
+}
+
+.dashboard-v2 .dashboard-next-match-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-next-match-meta-row {
+    align-items: flex-start;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.dashboard-v2 .dashboard-next-match-meta-row div {
+    min-width: 0;
+}
+
+.dashboard-v2 .dashboard-next-match-meta-row strong {
+    color: var(--color-text-soft);
+    font-size: 0.8rem;
+    font-weight: 620;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-v2 .dashboard-next-match-meta-row span:not(.dashboard-mini-icon) {
+    color: var(--color-text-muted);
+    font-size: 0.71rem;
+    line-height: 1.4;
+}
+
+.dashboard-v2 .dashboard-mini-icon {
+    font-size: 0.82rem;
+}
+
+.dashboard-v2 .dashboard-countdown-card {
+    min-height: 0;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+}
+
+.dashboard-v2 .dashboard-countdown-card h2 {
+    font-size: 1rem;
+    font-weight: 670;
+}
+
+.dashboard-v2 .dashboard-countdown {
+    font-variant-numeric: tabular-nums;
+}
+
+.dashboard-v2 .dashboard-vigdalpi-panel,
+.dashboard-v2 .dashboard-vigdalpi-deploy {
+    border-color: var(--dashboard-hairline);
+    background: var(--dashboard-surface-soft);
+}
+
+.dashboard-v2 .dashboard-service-item,
+.dashboard-v2 .dashboard-vigdalpi-metric {
+    border-color: var(--dashboard-hairline);
+}
+
+.dashboard-v2 .dashboard-link-card {
+    padding: 1.1rem 1.25rem;
+}
+
+.dashboard-v2 .dashboard-footer {
+    margin-top: 1.5rem;
+}
+
+:root[data-bs-theme="light"] .dashboard-v2 {
+    --dashboard-hairline: rgba(38, 72, 72, 0.14);
+    --dashboard-surface-soft: rgba(30, 75, 65, 0.025);
+}
+
+:root[data-bs-theme="light"] .dashboard-v2 .dashboard-weather-metric,
+:root[data-bs-theme="light"] .dashboard-v2 .dashboard-next-match-teams,
+:root[data-bs-theme="light"] .dashboard-v2 .dashboard-vigdalpi-panel,
+:root[data-bs-theme="light"] .dashboard-v2 .dashboard-vigdalpi-deploy {
+    background: transparent;
+}
+
+@media (max-width: 1099.98px) {
+    .dashboard-v2 .dashboard-top-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "weather" "waste" "matches";
+    }
+}
+
+@media (max-width: 720px) {
+    .dashboard-v2 .dashboard-match-card-stack,
+    .dashboard-v2 .dashboard-grid-countdowns {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard-v2 .dashboard-header {
+        align-items: start;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .dashboard-v2 .dashboard-updated {
+        justify-content: flex-start;
+        text-align: left;
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .dashboard-v2 {
+        padding: 1rem 0.75rem 1.75rem;
+    }
+
+    .dashboard-v2 .dashboard-card,
+    .dashboard-v2 .dashboard-alert {
+        padding: 1rem;
+        border-radius: 0.8rem;
+    }
+
+    .dashboard-v2 #DashboardClockTime {
+        font-size: clamp(3.3rem, 14vw, 4.1rem);
+    }
+
+    .dashboard-v2 .dashboard-weather-reading {
+        font-size: 3.1rem;
+    }
+
+    .dashboard-v2 .dashboard-waste-rest-days {
+        min-width: 0;
+        font-size: 0.68rem;
+    }
+
+    .dashboard-v2 .dashboard-next-match-meta {
+        gap: 0.7rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-v2 .dashboard-card,
+    .dashboard-v2 .dashboard-link-card {
+        transition: none;
+    }
+}
