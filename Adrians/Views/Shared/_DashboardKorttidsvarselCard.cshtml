@@ -1,4 +1,3 @@
-
 @model Adrians.ViewModels.KorttidsvarselViewModel
 @using Adrians.Helpers
 
@@ -6,66 +5,44 @@
     var iconCode = MetIconHelper.GetIconFile(Model.SymbolCode);
     var iconUrl = Url.Content($"~/assets/met-icons/svg/{iconCode}.svg");
     var fallbackUrl = Url.Content("~/assets/met-icons/svg/unknown.svg");
+    var osloTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
+    var updatedAt = TimeZoneInfo.ConvertTime(Model.UpdatedAt, osloTimeZone);
 }
 
 <div class="dashboard-weather-compact">
-    <div class="dashboard-weather-summary">
-
+    <div class="dashboard-weather-main">
         <button type="button"
                 class="dashboard-weather-effect-trigger"
                 data-weather-symbol="@Model.SymbolCode"
                 aria-label="Vis vêranimasjon for @Model.LocationName"
-                title="Klikk for vêranimasjon">
-
+                title="Vis vêranimasjon">
             <img src="@iconUrl"
                  alt=""
                  class="dashboard-weather-icon"
                  loading="lazy"
                  onerror="this.onerror=null;this.src='@fallbackUrl';" />
-
         </button>
 
-        <div>
-            <strong>@Model.LocationName – no</strong>
-            <span>
-                Oppdatert @Model.UpdatedAt.ToLocalTime().ToString("HH:mm")
-            </span>
+        <div class="dashboard-weather-primary">
+            <div class="dashboard-weather-reading">
+                @(Model.TemperatureC?.ToString("0.#") ?? "–")<span class="dashboard-weather-reading-unit">°C</span>
+            </div>
+            <span class="dashboard-weather-place">@Model.LocationName · no</span>
         </div>
     </div>
 
     <div class="dashboard-weather-metrics dashboard-weather-metrics-three">
-
-        <div class="dashboard-weather-metric dashboard-weather-temperature">
-            <span>
-                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌡️</span>
-                Temperatur
-            </span>
-            <strong>@Model.TemperatureC?.ToString("0.#") °C</strong>
-        </div>
-
         <div class="dashboard-weather-metric dashboard-weather-wind">
-            <span>
-                <span class="dashboard-weather-metric-icon" aria-hidden="true">💨</span>
-                Vind
-            </span>
-            <strong>@Model.WindSpeedMs?.ToString("0.#") m/s</strong>
+            <span>Vind</span>
+            <strong>@(Model.WindSpeedMs?.ToString("0.#") ?? "–") m/s</strong>
         </div>
-
         <div class="dashboard-weather-metric">
-            <span>
-                <span class="dashboard-weather-metric-icon" aria-hidden="true">🌧️</span>
-                Nedbør neste time
-            </span>
-
-            @if (Model.PrecipNext1hMm is > 0)
-            {
-                <strong>@Model.PrecipNext1hMm?.ToString("0.#") mm</strong>
-            }
-            else
-            {
-                <strong>0 mm</strong>
-            }
+            <span>Nedbør neste time</span>
+            <strong>@(Model.PrecipNext1hMm?.ToString("0.#") ?? "–") mm</strong>
         </div>
-
     </div>
+
+    <p class="dashboard-weather-updated">
+        Oppdatert <time datetime="@Model.UpdatedAt.ToString("O")">@updatedAt.ToString("HH:mm")</time>
+    </p>
 </div>
