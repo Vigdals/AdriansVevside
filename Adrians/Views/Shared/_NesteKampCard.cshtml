@@ -15,15 +15,13 @@
                     {
                         <img src="@Model.HeimelagLogoUrl"
                              alt="@Model.Heimelag logo"
-                             class="dashboard-next-match-logo"/>
+                             class="dashboard-next-match-logo" loading="lazy" decoding="async" referrerpolicy="no-referrer"/>
                     }
 
                     <span>@Model.Heimelag</span>
                 </div>
 
-                <div class="dashboard-next-match-vs">
-                    mot
-                </div>
+                <div class="dashboard-next-match-vs" aria-label="mot">mot</div>
 
                 <div class="dashboard-next-match-team">
                     @if (!string.IsNullOrWhiteSpace(Model.BortelagLogoUrl))
@@ -39,15 +37,15 @@
 
             <div class="dashboard-next-match-meta">
                 <div class="dashboard-next-match-meta-row">
-                    <span class="dashboard-mini-icon">📅</span>
+                    <span class="dashboard-mini-icon" aria-hidden="true">📅</span>
                     <div>
-                        <strong>@Model.DatoTekst</strong>
+                        <strong><time datetime="@Model.Tidspunkt.ToString("O")">@Model.DatoTekst</time></strong>
                         <span>Kl. @Model.KlokkeslettTekst</span>
                     </div>
                 </div>
 
                 <div class="dashboard-next-match-meta-row">
-                    <span class="dashboard-mini-icon">🏟️</span>
+                    <span class="dashboard-mini-icon" aria-hidden="true">🏟️</span>
                     <div>
                         <strong>@Model.Stadion</strong>
 
