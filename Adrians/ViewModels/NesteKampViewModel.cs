@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Adrians.ViewModels;
 
 public sealed class NesteKampViewModel
@@ -18,7 +20,11 @@ public sealed class NesteKampViewModel
 
     public required DateTimeOffset Tidspunkt { get; init; }
 
-    public string DatoTekst => Tidspunkt.ToLocalTime().ToString("dddd d. MMMM");
+    private static readonly CultureInfo NorwegianNynorsk = CultureInfo.GetCultureInfo("nn-NO");
 
-    public string KlokkeslettTekst => Tidspunkt.ToLocalTime().ToString("HH:mm");
+    private static readonly TimeZoneInfo OsloTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
+
+    public string DatoTekst => TimeZoneInfo.ConvertTime(Tidspunkt, OsloTimeZone).ToString("dddd d. MMMM", NorwegianNynorsk);
+
+    public string KlokkeslettTekst => TimeZoneInfo.ConvertTime(Tidspunkt, OsloTimeZone).ToString("HH:mm", NorwegianNynorsk);
 }
