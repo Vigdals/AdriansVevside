@@ -1,0 +1,33 @@
+name: Dashboard build and JavaScript checks
+
+on:
+  pull_request:
+    paths:
+      - 'Adrians/**'
+      - 'Adrians.sln'
+      - '.github/workflows/dashboard-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore and build
+        run: dotnet build Adrians.sln -c Release --nologo
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find Adrians/wwwroot/js -maxdepth 1 -type f -name '*.js' -print0)
