@@ -5,6 +5,51 @@
  * Dashboard-specific rules are scoped to .dashboard-v2.
  */
 
+/* The personal homepage uses a cooler graphite/mint palette.
+   Scoped to the dashboard so other MVC pages keep their established theme. */
+:root[data-bs-theme="dark"] body.dashboard-page {
+    --color-bg: #111b21;
+    --color-bg-deep: #0b1216;
+    --color-bg-elevated: #1c2a31;
+    --color-bg-card: #151f25;
+    --color-bg-card-hover: #1a272e;
+    --color-text: #eaf0f1;
+    --color-text-soft: #cbd9dd;
+    --color-text-muted: #a5b5bc;
+    --color-border: rgba(165, 187, 190, 0.15);
+    --color-border-strong: rgba(165, 187, 190, 0.29);
+    --color-primary: #85c9b1;
+    --color-primary-strong: #70b69e;
+    --color-success: #76c7ab;
+}
+
+:root[data-bs-theme="dark"] body.dashboard-page .site-navbar {
+    background: rgba(21, 31, 37, 0.98) !important;
+    box-shadow: none;
+}
+
+body.dashboard-page .site-navbar {
+    border-radius: 0.9rem;
+    padding-block: 0.25rem;
+}
+
+body.dashboard-page .site-navbar .navbar-brand::after {
+    background: var(--color-primary);
+}
+
+body.dashboard-page .site-navbar .nav-link {
+    font-weight: 550;
+}
+
+body.dashboard-page .site-theme-toggle {
+    border-color: var(--color-border);
+    background: transparent;
+}
+
+body.dashboard-page .site-theme-toggle:hover {
+    background: var(--color-bg-elevated);
+}
+
 .dashboard-v2 {
     --dashboard-hairline: rgba(165, 187, 190, 0.13);
     --dashboard-surface-soft: rgba(255, 255, 255, 0.025);
