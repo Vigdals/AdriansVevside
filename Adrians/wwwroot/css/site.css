@@ -6,12 +6,12 @@
     --color-accent-hover: #5424de;
     --color-bg: #0b0b1c;
     --color-bg-deep: #01010d;
-    --color-bg-elevated: #1b1730;
-    --color-bg-card: #111120;
-    --color-bg-card-hover: #211b38;
-    --color-text: #f5f4fb;
-    --color-text-soft: #dedbea;
-    --color-text-muted: #b6b1ca;
+    --color-bg-elevated: #191923;
+    --color-bg-card: #101019;
+    --color-bg-card-hover: #191925;
+    --color-text: #f7f7fa;
+    --color-text-soft: #dedee5;
+    --color-text-muted: #adadbd;
     --color-border: rgba(190, 180, 220, 0.16);
     --color-border-strong: rgba(190, 180, 220, 0.31);
     /* Lighter indigo keeps small links readable on Onyx surfaces. */
