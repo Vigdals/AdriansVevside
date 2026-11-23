@@ -16,7 +16,7 @@ services:
       Frost__ClientSecret: ${FROST_CLIENT_SECRET:-}
       FootballData__ApiKey: ${FOOTBALLDATA_API_KEY:-}
       UptimeKuma__Enabled: "true"
-      UptimeKuma__BaseUrl: "http://host.docker.internal:3001/"
+      UptimeKuma__BaseUrl: "http://uptime-kuma:3001/"
       UptimeKuma__StatusPageSlug: "vigdalpi"
       UptimeKuma__CacheSeconds: "60"
     expose:
@@ -26,7 +26,7 @@ services:
       - ./Adrians/wwwroot/status:/app/wwwroot/status:ro
 
   nginx:
-    image: nginx:1.29-alpine
+    image: nginx:1.30.7-alpine
     container_name: nginx
     restart: unless-stopped
     depends_on:
